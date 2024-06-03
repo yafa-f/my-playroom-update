@@ -17,6 +17,9 @@ import { FinesForMissingParts } from "./components/finesForMissingParts";
 // import { ForAge } from "./components/forAge";
 import { setTypesGames } from "./app/slices/typeGameSlice";
 import { TypeGame } from "./components/typeGame";
+import { BrowserRouter } from 'react-router-dom';
+import './App.css';
+import { BaseScreen } from './components/BaseScreen';
 
 function App() {
   // const [allUsers, setAllUsers] = useState([]);
@@ -67,15 +70,6 @@ function App() {
         console.error(error);
       }
     };
-    // const fetchAges = async () => {
-    //   try {
-        
-    //     const response = await fetchGetForAges();
-    //     dispatch(setAges(response));
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
     const fetchTypesOfGames = async () => {
       try {
         const response = await fetchGetTypesGames();
@@ -94,9 +88,10 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <TypeGame />
-    </div>
+   
+    <BrowserRouter>
+      <BaseScreen/>  
+  </BrowserRouter>
   );
 }
 
