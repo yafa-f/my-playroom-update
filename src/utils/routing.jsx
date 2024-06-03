@@ -5,6 +5,7 @@ import { NewGame } from "../components/NewGame/newGame";
 import { GamesList } from "../components/GamesList/gamesList";
 import { GameBack } from "../components/GameBack/gameBack";
 import { HomePage } from "../components/HomePage/homePage";
+import { List } from "../components/list";
 
 export const Routing = () => {
   return (
@@ -15,6 +16,9 @@ export const Routing = () => {
         <Route path="/NewGame" element={<NewGame/>}></Route>
         <Route path="/GameBack" element={<GameBack/>}></Route>
         <Route path="/GamesList" element={<GamesList/>}></Route>
+        
+        <Route path="/list" element={<List/>}></Route>
+
       </Routes>
     </div>
   );

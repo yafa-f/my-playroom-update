@@ -39,8 +39,8 @@ export const NavBar = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleCloseWithNavigate = (to) => {
-    navigate(to);
+  const handleCloseWithNavigate = (name) => {
+    navigate('/list' ,{ state: { name } });
     setAnchorEl(null);
   };
   const handleClose = () => {
@@ -74,7 +74,7 @@ export const NavBar = () => {
                   TransitionComponent={Fade}
                 >
                   {lists.map((list) => (
-                    <MenuItem onClick={() => handleCloseWithNavigate(list.to)}>
+                    <MenuItem onClick={() => handleCloseWithNavigate(list.name)}>
                       {list.name}
                     </MenuItem>
                   ))}
