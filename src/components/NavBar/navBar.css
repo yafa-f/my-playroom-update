@@ -1,0 +1,30 @@
+.nav-bar {
+  width: 100vw;
+  height: 9vh;
+  background: var(--main-blue, #00f);
+}
+.links {
+  display: inline-block;
+  text-align: center;
+  padding-left: 15vw;
+  margin-top: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: #fff;
+}
+.links-style {
+  color: #fff;
+  margin-left: 2vh;
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+}
+.lists-style {
+  color: #fff;
+  margin-left: 2vh;
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+  font-size: large;
+}
