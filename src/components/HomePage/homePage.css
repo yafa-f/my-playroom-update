@@ -1,0 +1,7 @@
+.image{
+    background-image: url('../../assets/logo-good.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    background-size: 100% 100%;
+    height: 100vh;
+  }
