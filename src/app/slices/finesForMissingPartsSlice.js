@@ -7,7 +7,7 @@ const initialState = {
 
 export const FinesForMissingPartsSlice = createSlice({
   name: "finesForMissingParts",
-  
+
   initialState: initialState,
   reducers: {
     setFineForMissingPart: (state, action) => {
@@ -18,4 +18,5 @@ export const FinesForMissingPartsSlice = createSlice({
     },
   },
 });
-export const { setFineForMissingPart, setFinesForMissingParts } = FinesForMissingPartsSlice.actions;
+export const { setFineForMissingPart, setFinesForMissingParts } =
+  FinesForMissingPartsSlice.actions;

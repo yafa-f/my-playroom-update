@@ -1,36 +1,34 @@
-import logo from "./logo.svg";
 import "./App.css";
-import { User } from "./components/user";
-import { useState, useEffect } from "react";
-import { useDispatch} from "react-redux";
-import { fetchGetClosets, fetchGetFines, fetchGetFinesForMissingParts, fetchGetForAges, fetchGetGames, fetchGetTypesGames, fetchGetUsers } from "./utils/server";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import {
+  fetchGetClosets,
+  fetchGetFines,
+  fetchGetFinesForMissingParts,
+  fetchGetForAges,
+  fetchGetGames,
+  fetchGetTakingOrReturning,
+  fetchGetTypesGames,
+  fetchGetUsers,
+} from "./utils/server";
+import { BrowserRouter } from "react-router-dom";
 import { setUsers } from "./app/slices/usersSlice";
 import { setGames } from "./app/slices/gameSlice";
-import { Game } from "./components/game";
 import { setClosets } from "./app/slices/closetSlice";
-import { Closet } from "./components/closet";
 import { setFines } from "./app/slices/fineSlice";
-import { Fine } from "./components/fine";
 import { setFinesForMissingParts } from "./app/slices/finesForMissingPartsSlice";
-import { FinesForMissingParts } from "./components/finesForMissingParts";
-// import { setAges } from "./app/slices/forAgeSlice";
-// import { ForAge } from "./components/forAge";
 import { setTypesGames } from "./app/slices/typeGameSlice";
-import { TypeGame } from "./components/typeGame";
-import { BrowserRouter } from 'react-router-dom';
-import './App.css';
-import { BaseScreen } from './components/BaseScreen';
+import { setTakingOrReturning } from "./app/slices/takeOrReturnSlice";
+import { setForAges } from "./app/slices/forAgeSlice";
+import { BaseScreen } from "./components/BaseScreen";
+
 
 function App() {
-  // const [allUsers, setAllUsers] = useState([]);
-  // const [allGames, setAllGames] = useState([]);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-      
         const response = await fetchGetUsers();
         dispatch(setUsers(response));
       } catch (error) {
@@ -39,7 +37,6 @@ function App() {
     };
     const fetchGames = async () => {
       try {
-       
         const response = await fetchGetGames();
         dispatch(setGames(response));
       } catch (error) {
@@ -78,20 +75,36 @@ function App() {
         console.error(error);
       }
     };
+    const fetchTakingOrReturning = async () => {
+      try {
+        const response = await fetchGetTakingOrReturning();
+        dispatch(setTakingOrReturning(response));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const fetchForAges = async () => {
+      try {
+        const response = await fetchGetForAges();
+        dispatch(setForAges(response));
+      } catch (error) {
+        console.error(error);
+      }
+    };
     fetchUsers();
     fetchGames();
     fetchClosets();
     fetchFines();
     fetchFinesForMissingParts();
-    // fetchAges();
     fetchTypesOfGames();
+    fetchTakingOrReturning();
+    fetchForAges();
   }, []);
 
   return (
-   
     <BrowserRouter>
-      <BaseScreen/>  
-  </BrowserRouter>
+      <BaseScreen />
+    </BrowserRouter>
   );
 }
 
