@@ -5,17 +5,19 @@ import { GameSlice } from "./slices/gameSlice";
 import { ClosetSlice } from "./slices/closetSlice";
 import { FineSlice } from "./slices/fineSlice";
 import { FinesForMissingPartsSlice } from "./slices/finesForMissingPartsSlice";
-// import { AgeSlice } from "./slices/forAgeSlice";
-import { TypeGame, TypeGameSlice } from "./slices/typeGameSlice";
+import { TypeGameSlice } from "./slices/typeGameSlice";
+import { TORSlice } from "./slices/takeOrReturnSlice";
+import { ForAgeSlice } from "./slices/forAgeSlice";
 
 export const reduxStore = configureStore({
   reducer: {
     user: UserSlice.reducer,
     game: GameSlice.reducer,
-    closet:ClosetSlice.reducer,
-    fine:FineSlice.reducer,
-    fineForMissingParts:FinesForMissingPartsSlice.reducer,
-    // forAge:AgeSlice.reducer,
-    typeGame:TypeGameSlice.reducer
+    closet: ClosetSlice.reducer,
+    fine: FineSlice.reducer,
+    fineForMissingParts: FinesForMissingPartsSlice.reducer,
+    typeGame: TypeGameSlice.reducer,
+    takingOrReturning: TORSlice.reducer,
+    forAge: ForAgeSlice.reducer,
   },
 });
