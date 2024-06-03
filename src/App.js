@@ -1,12 +1,12 @@
-import logo from './logo.svg';
+import { BrowserRouter } from 'react-router-dom';
 import './App.css';
-import { User } from './components/user';
+import { BaseScreen } from './components/BaseScreen';
 
 function App() {
   return (
-    <div className="App">
-     <User/>
-    </div>
+    <BrowserRouter>
+      <BaseScreen/>  
+  </BrowserRouter>
   );
 }
 
