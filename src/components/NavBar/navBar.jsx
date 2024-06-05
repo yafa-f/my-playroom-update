@@ -30,8 +30,8 @@ export const NavBar = () => {
     { name: "רשימת משחקים", to: "/GamesList" },
     { name: "רשימת משתמשים", to: "/UsersList" },
     { name: "רשימת טווח גילאים", to: "/AgesList" },
-    { name: "רשימת תחומי משחקים ", to: "/GameTopicList" },
-    { name: "רשימת  ארונות במשחקיה", to: "/ClosetsList" },
+    { name: "רשימת תחומי משחק", to: "/GameTopicList" },
+    { name: "רשימת ארונות במשחקיה", to: "/ClosetsList" },
   ];
   let navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -39,8 +39,8 @@ export const NavBar = () => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleCloseWithNavigate = (to) => {
-    navigate(to);
+  const handleCloseWithNavigate = (name) => {
+    navigate('/List' ,{ state: { name } });    
     setAnchorEl(null);
   };
   const handleClose = () => {
@@ -74,7 +74,7 @@ export const NavBar = () => {
                   TransitionComponent={Fade}
                 >
                   {lists.map((list) => (
-                    <MenuItem onClick={() => handleCloseWithNavigate(list.to)}>
+                    <MenuItem onClick={() => handleCloseWithNavigate(list.name)}>
                       {list.name}
                     </MenuItem>
                   ))}

@@ -1,10 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
   currentForAge: {},
   forAges: [],
 };
-
 export const ForAgeSlice = createSlice({
   name: "forAge",
   initialState: initialState,

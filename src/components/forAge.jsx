@@ -4,7 +4,7 @@ export const ForAge = () => {
   const forAgesFromStore = useSelector((state) => state.forAge.forAges);
   return (
     <div>
-      {forAgesFromStore?.data.map((currentForAge) => (
+      {forAgesFromStore?.data?.map((currentForAge) => (
         <div>{currentForAge.stickerColor}</div>
       ))}
     </div>
