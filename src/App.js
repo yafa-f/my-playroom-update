@@ -22,7 +22,6 @@ import { setTakingOrReturning } from "./app/slices/takeOrReturnSlice";
 import { setForAges } from "./app/slices/forAgeSlice";
 import { BaseScreen } from "./components/BaseScreen";
 
-
 function App() {
   const dispatch = useDispatch();
 
