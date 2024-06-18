@@ -1,8 +1,9 @@
 import { Box, TextField, Button } from "@mui/material";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
-
+import { setUsers } from "../../app/slices/usersSlice";
+import { useNavigate } from "react-router-dom";
 export const NewUser = () => {
   const [styleName, setStyleName] = useState(false);
   const [stylePhone, setStylePhone] = useState(false);
@@ -17,10 +18,19 @@ export const NewUser = () => {
   const [clicked, setClicked] = useState("");
   const [phoneErrorText, setPhoneErrorText] = useState("");
   const [codeErrorText, setCodeErrorText] = useState("");
-  const [users, setUsers] = useState(useSelector((state) => state.user.users));
+  debugger;
+  const [localUsers, setLocalUsers] = useState(
+    useSelector((state) => state.user.users)
+  );
+  debugger;
   const selector = useSelector((state) => state.user.users);
   const [text, setText] = useState("להוספה");
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  useEffect(() => {
+    debugger;
+    dispatch(setUsers(localUsers));
+  }, [localUsers]);
   const handleNameChange = (event) => {
     setTextFieldNameValue(event.target.value);
     setStyleName(false);
@@ -35,6 +45,9 @@ export const NewUser = () => {
   const handleCodeChange = (event) => {
     setTextCodeValue(event.target.value);
     setStyleCode(false);
+  };
+  const navToHomePage = () => {
+    navigate("/");
   };
   const checkValue = async () => {
     let valid = true;
@@ -60,7 +73,7 @@ export const NewUser = () => {
       valid = false;
     }
 
-    const allUsers = selector.data.map((obj) => {
+    const allUsers = localUsers.data.map((obj) => {
       if (textCodeValue === obj.userCode) {
         setCodeErrorText("הקוד קיים אנא הכנס קוד אחר");
         setStyleCode(true);
@@ -95,22 +108,34 @@ export const NewUser = () => {
       }),
     });
     if (response.ok) {
-      console.log("User added successfully!");
       setTextFieldPhoneValue("");
       setTextFieldNameValue("");
       setTextFieldAdditionalPhoneValue("");
       setTextCodeValue("");
       setText("המשתמש נוסף בהצלחה");
+      debugger;
+
+      const userData = await response.json();
+      const rearrangedUserData = {
+        id: userData._id,
+        userCode: userData.userCode,
+        userName: userData.userName,
+        cellphone: userData.cellphone,
+        phone: userData.phone,
+      };
+      debugger;
+      setLocalUsers((prevUsers) => {
+        return { data: [...prevUsers.data, rearrangedUserData] };
+      });
+
       setTimeout(() => {
         setText("להוספה");
       }, 2000);
     } else {
       setText("ההוספה נכשלה");
-      console.error("Failed to add user.");
     }
-    const userData = await response.json();
-    setUsers(...users.data, userData);
   };
+
   return (
     <div>
       <Box
@@ -124,6 +149,20 @@ export const NewUser = () => {
         p={2}
         sx={{ border: "2px solid grey", display: "table" }}
       >
+        <Button
+          onClick={navToHomePage}
+          sx={{
+            fontFamily: "sans-serif",
+            fontSize: "22px",
+            color: "red",
+            marginLeft: "-18px",
+            marginTop: "-11px",
+            borderRadius: "0px",
+            marginBottom: "-10px",
+          }}
+        >
+          x
+        </Button>
         <TextField
           margin="normal"
           required
