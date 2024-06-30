@@ -10,8 +10,13 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useSelector } from "react-redux";
 import { TableVirtuoso } from "react-virtuoso";
-
+import { TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 import "./genericLists.css";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Fade from "@mui/material/Fade";
+import { Button } from "@mui/material";
 
 export const List = () => {
   const location = useLocation();
@@ -22,7 +27,9 @@ export const List = () => {
   const forAges = useSelector((state) => state.forAge.forAges);
   const typesGames = useSelector((state) => state.typeGame.typesGames);
   const closets = useSelector((state) => state.closet.closets);
-
+  const [currentField, setCurrentField] = useState("");
+  const [onSearch, setOnSearch] = useState(false);
+  const [fieldValue, setFieldValue] = useState("");
   useEffect(() => {
     switch (name) {
       case "רשימת משחקים":
@@ -47,18 +54,35 @@ export const List = () => {
       default:
         setNameOfList([]);
     }
+    setOnSearch(false);
+    setFieldValue("");
+    setCurrentField("");
   }, [name, games, users, forAges, typesGames, closets]);
 
   const headers = Array.from(
     new Set(nameOfList.flatMap((item) => (item ? Object.keys(item) : [])))
   );
- 
   const rows =
     nameOfList.length > 0 && headers.length > 0
       ? nameOfList.map((item, index) =>
           createData(index, ...Object.values(item))
         )
       : [];
+
+  const updatedRows = rows.map((row) => {
+    const updatedRow = {};
+    headers.forEach((header, index) => {
+      updatedRow[header] = row[index];
+    });
+    return updatedRow;
+  });
+
+  const filteredRows = updatedRows.filter((row) =>
+    row[currentField]?.includes(fieldValue)
+  );
+  const handleSearch = (e) => {
+    setFieldValue(e.target.value);
+  };
   const columns = headers.map((header, index) => ({
     width: 200,
     label: header,
@@ -72,6 +96,21 @@ export const List = () => {
     });
     return { id, ...data };
   }
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleFilter = (name) => {
+    setOnSearch(true);
+    setCurrentField(name);
+    setAnchorEl(null);
+    setFieldValue("");
+  };
+
   const VirtuosoTableComponents = {
     Scroller: React.forwardRef((props, ref) => (
       <TableContainer component={Paper} {...props} ref={ref} />
@@ -111,14 +150,14 @@ export const List = () => {
   function rowContent(_index, row) {
     return (
       <React.Fragment>
-        {columns.map((column) => (
+        {headers.map((header) => (
           <TableCell
-            key={column.dataKey}
-            align={column.numeric || false ? "right" : "left"}
+            key={header}
+            align={typeof row[header] === "number" ? "right" : "left"}
           >
-            {typeof row[column.dataKey] === "object"
-              ? JSON.stringify(row[column.dataKey])
-              : row[column.dataKey]}
+            {typeof row[header] === "object"
+              ? JSON.stringify(row[header])
+              : row[header]}
           </TableCell>
         ))}
       </React.Fragment>
@@ -127,9 +166,55 @@ export const List = () => {
 
   return (
     <div className="table-container">
-      <Paper style={{ height: 500, width: "90%"}}>
+      <div>
+        <div className="buttonAndTextField">
+          <Button
+            sx={{ backgroundColor: "black" }}
+            id="fade-button"
+            aria-controls={open ? "fade-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onMouseOver={handleClick}
+          >
+            <div className="list-style">
+              חיפוש
+              <SearchIcon />
+            </div>
+          </Button>
+          {onSearch && (
+            <TextField
+              value={fieldValue}
+              onChange={handleSearch}
+              placeholder={currentField}
+              sx={{ backgroundColor: "white" }}
+            ></TextField>
+          )}
+        </div>
+        <Menu
+          id="fade-menu"
+          MenuListProps={{
+            "aria-labelledby": "fade-button",
+          }}
+          anchorEl={anchorEl}
+          open={open}
+          TransitionComponent={Fade}
+          onClose={handleClose}
+        >
+          {columns.map((column) => {
+            if (column.label !== "Parts" && column.label !== "emptyPlace") {
+              return (
+                <MenuItem onClick={() => handleFilter(column.label)}>
+                  {column.label}
+                </MenuItem>
+              );
+            }
+            return null;
+          })}
+        </Menu>
+      </div>
+      <Paper style={{ height: 500, width: "90%" }}>
         <TableVirtuoso
-          data={rows}
+          data={currentField ? filteredRows : updatedRows}
           components={VirtuosoTableComponents}
           fixedHeaderContent={fixedHeaderContent}
           itemContent={(index, row) => rowContent(index, row)}
