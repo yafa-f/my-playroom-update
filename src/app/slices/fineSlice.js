@@ -15,6 +15,15 @@ export const FineSlice = createSlice({
     setFines: (state, action) => {
       state.fines = action.payload;
     },
+    ADD_FINE: (state, action) => {
+      state.fines.push(action.payload);
+    },
+    DELETE_FINE: (state, action) => {
+      state.fines = state.fines.filter(
+        (fine) => fine._id !== action.payload._id
+      );
+    },
   },
 });
-export const { setCurrentFine, setFines } = FineSlice.actions;
+export const { setCurrentFine, setFines, ADD_FINE, DELETE_FINE } =
+  FineSlice.actions;

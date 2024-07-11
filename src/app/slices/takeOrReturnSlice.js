@@ -16,6 +16,19 @@ export const TORSlice = createSlice({
     setTakingOrReturning: (state, action) => {
       state.takingsOrReturnings = action.payload;
     },
+    ADD_TOR: (state, action) => {
+      state.takingsOrReturnings.push(action.payload);
+    },
+    DELETE_TOR: (state, action) => {
+      state.takingsOrReturnings = state.takingsOrReturnings.filter(
+        (tOr) => tOr._id !== action.payload._id
+      );
+    },
   },
 });
-export const { setCurrentTOR, setTakingOrReturning } = TORSlice.actions;
+export const {
+  setCurrentTOR,
+  setTakingOrReturning,
+  ADD_TOR,
+  DELETE_TOR,
+} = TORSlice.actions;
