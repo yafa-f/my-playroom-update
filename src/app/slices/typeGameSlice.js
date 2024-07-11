@@ -15,6 +15,15 @@ export const TypeGameSlice = createSlice({
     setTypesGames: (state, action) => {
       state.typesGames = action.payload;
     },
+    ADD_TYPE_GAME: (state, action) => {
+      state.typesGames.push(action.payload);
+    },
+    DELETE_TYPE_GAME: (state, action) => {
+      state.typesGames = state.typesGames.filter(
+        (type) => type._id !== action.payload._id
+      );
+    },
   },
 });
-export const { setTypeGame, setTypesGames } = TypeGameSlice.actions;
+export const { setTypeGame, setTypesGames, ADD_TYPE_GAME, DELETE_TYPE_GAME } =
+  TypeGameSlice.actions;

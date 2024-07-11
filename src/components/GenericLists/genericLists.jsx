@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -8,17 +9,30 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useSelector } from "react-redux";
 import { TableVirtuoso } from "react-virtuoso";
 import { TextField } from "@mui/material";
+import { Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import "./genericLists.css";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
-import { Button } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ButtonGroup from "@mui/material/ButtonGroup";
+import { DELETE_USER } from "../../app/slices/usersSlice";
+import { DELETE_GAME } from "../../app/slices/gameSlice";
+import { DELETE_CLOSET } from "../../app/slices/closetSlice";
+import { DELETE_FOR_AGE } from "../../app/slices/forAgeSlice";
+import { DELETE_TYPE_GAME } from "../../app/slices/typeGameSlice";
+import deleteUser from "../DeleteFunctions/DeleteUser/deleteUser";
+import deleteGame from "../DeleteFunctions/DeleteGame/deleteGame";
+import deleteForAge from "../DeleteFunctions/DeleteForAge/deleteForAge";
+import deleteTypeGame from "../DeleteFunctions/DeleteTypeGame/deleteTypeGame";
+import deleteCloset from "../DeleteFunctions/DeleteCloset/deleteCloset";
 
 export const List = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const { name } = location.state || {};
   const [nameOfList, setNameOfList] = useState([]);
@@ -28,29 +42,27 @@ export const List = () => {
   const typesGames = useSelector((state) => state.typeGame.typesGames);
   const closets = useSelector((state) => state.closet.closets);
   const [currentField, setCurrentField] = useState("");
-  const [onSearch, setOnSearch] = useState(false);
   const [fieldValue, setFieldValue] = useState("");
+  const [currentStore, setCurrentStore] = useState(null);
+  const [currentDelete, setCurrentDelete] = useState("");
+  const [onSearch, setOnSearch] = useState(false);
   useEffect(() => {
     switch (name) {
       case "רשימת משחקים":
         setNameOfList(games);
         break;
-
       case "רשימת משתמשים":
         setNameOfList(users.data);
         break;
       case "רשימת טווח גילאים":
         setNameOfList(forAges.data);
         break;
-
       case "רשימת תחומי משחק":
         setNameOfList(typesGames);
         break;
-
       case "רשימת ארונות במשחקיה":
         setNameOfList(closets);
         break;
-
       default:
         setNameOfList([]);
     }
@@ -58,7 +70,7 @@ export const List = () => {
     setFieldValue("");
     setCurrentField("");
   }, [name, games, users, forAges, typesGames, closets]);
-
+  useEffect(() => {}, [dispatch, currentStore]);
   const headers = Array.from(
     new Set(nameOfList.flatMap((item) => (item ? Object.keys(item) : [])))
   );
@@ -77,8 +89,9 @@ export const List = () => {
     return updatedRow;
   });
 
-  const filteredRows = updatedRows.filter((row) =>
-    row[currentField]?.includes(fieldValue)
+  const filteredRows = updatedRows.filter(
+    (row) =>
+      Array.isArray(row[currentField]) && row[currentField].includes(fieldValue)
   );
   const handleSearch = (e) => {
     setFieldValue(e.target.value);
@@ -109,6 +122,39 @@ export const List = () => {
     setCurrentField(name);
     setAnchorEl(null);
     setFieldValue("");
+  };
+  const editCurrent = (current) => {};
+  const deleteCurrent = async (row) => {
+    setCurrentDelete(row);
+    switch (name) {
+      case "רשימת משחקים":
+        const deletedGameRow = await deleteGame(row);
+        dispatch(DELETE_GAME(currentDelete));
+        setCurrentStore(() => DELETE_GAME);
+        break;
+      case "רשימת משתמשים":
+        const deletedUserRow = await deleteUser(row);
+        dispatch(DELETE_USER(currentDelete));
+        setCurrentStore(() => DELETE_USER);
+        break;
+      case "רשימת טווח גילאים":
+        const deletedAgeRow = await deleteForAge(row);
+        setCurrentStore(() => DELETE_FOR_AGE);
+        dispatch(DELETE_FOR_AGE(currentDelete));
+        break;
+      case "רשימת תחומי משחק":
+        const deletedTypeRow = await deleteTypeGame(row);
+        setCurrentStore(() => DELETE_TYPE_GAME);
+        dispatch(DELETE_TYPE_GAME(currentDelete));
+        break;
+      case "רשימת ארונות במשחקיה":
+        const deletedClosetRow = await deleteCloset(row);
+        setCurrentStore(() => DELETE_CLOSET);
+        dispatch(DELETE_CLOSET(currentDelete));
+        break;
+      default:
+        console.error(`no delete function found for ${nameOfList} `);
+    }
   };
 
   const VirtuosoTableComponents = {
@@ -160,6 +206,20 @@ export const List = () => {
               : row[header]}
           </TableCell>
         ))}
+        <TableCell>
+          <ButtonGroup variant="outlined" aria-label="Basic button group">
+            <Button onClick={editCurrent}>
+              עריכה <EditIcon></EditIcon>
+            </Button>
+            <Button
+              onClick={() => {
+                deleteCurrent(row);
+              }}
+            >
+              מחיקה<DeleteForeverIcon></DeleteForeverIcon>
+            </Button>
+          </ButtonGroup>
+        </TableCell>
       </React.Fragment>
     );
   }
