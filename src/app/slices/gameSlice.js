@@ -7,7 +7,7 @@ const initialState = {
 
 export const GameSlice = createSlice({
   name: "game",
-  
+
   initialState: initialState,
   reducers: {
     setCurrentGame: (state, action) => {
@@ -19,6 +19,12 @@ export const GameSlice = createSlice({
     ADD_GAME: (state, action) => {
       state.games.push(action.payload);
     },
+    DELETE_GAME: (state, action) => {
+      state.games = state.games.filter(
+        (game) => game._id !== action.payload._id
+      );
+    },
   },
 });
-export const { setCurrentGame, setGames,ADD_GAME } = GameSlice.actions;
+export const { setCurrentGame, setGames, ADD_GAME, DELETE_GAME } =
+  GameSlice.actions;

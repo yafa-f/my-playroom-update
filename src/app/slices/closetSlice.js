@@ -18,6 +18,12 @@ export const ClosetSlice = createSlice({
     ADD_CLOSET: (state, action) => {
       state.closets.push(action.payload);
     },
+    DELETE_CLOSET: (state, action) => {
+      state.closets = state.closets.filter(
+        (closet) => closet._id !== action.payload._id
+      );
+    },
   },
 });
-export const { setCurrentCloset, setClosets ,ADD_CLOSET} = ClosetSlice.actions;
+export const { setCurrentCloset, setClosets, ADD_CLOSET, DELETE_CLOSET } =
+  ClosetSlice.actions;

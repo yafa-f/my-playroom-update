@@ -13,6 +13,15 @@ export const ForAgeSlice = createSlice({
     setForAges: (state, action) => {
       state.forAges = action.payload;
     },
+    ADD_FOR_AGE: (state, action) => {
+      state.forAges.push(action.payload);
+    },
+    DELETE_FOR_AGE: (state, action) => {
+      state.forAges = state.forAges.filter(
+        (age) => age._id !== action.payload._id
+      );
+    },
   },
 });
-export const { setCurrentForAge, setForAges } = ForAgeSlice.actions;
+export const { setCurrentForAge, setForAges, ADD_FOR_AGE, DELETE_FOR_AGE } =
+  ForAgeSlice.actions;

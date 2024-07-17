@@ -1,5 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { NewUser } from "../components/AddFunctions/NewUser/newUser";
+import { NewGame } from "../components/NewGame/newGame";
 import { NewUser } from "../components/NewUser/newUser";
 import { GamesList } from "../components/GamesList/gamesList";
 import { GameBack } from "../components/GameBack/gameBack";

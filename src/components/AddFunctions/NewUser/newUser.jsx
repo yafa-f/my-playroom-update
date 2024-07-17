@@ -2,7 +2,7 @@ import { Box, TextField, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
-import { setUsers } from "../../app/slices/usersSlice";
+import { ADD_USER } from "../../../app/slices/usersSlice";
 import { useNavigate } from "react-router-dom";
 export const NewUser = () => {
   const [styleName, setStyleName] = useState(false);
@@ -13,23 +13,18 @@ export const NewUser = () => {
   const [textFieldAdditionalPhoneValue, setTextFieldAdditionalPhoneValue] =
     useState("");
   const [textCodeValue, setTextCodeValue] = useState("");
-
   const [circleFlag, setCircleFlag] = useState(false);
   const [clicked, setClicked] = useState("");
   const [phoneErrorText, setPhoneErrorText] = useState("");
   const [codeErrorText, setCodeErrorText] = useState("");
-  debugger;
   const [localUsers, setLocalUsers] = useState(
     useSelector((state) => state.user.users)
   );
-  debugger;
-  const selector = useSelector((state) => state.user.users);
+  const [localUser, setLocalUser] = useState("");
   const [text, setText] = useState("להוספה");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   useEffect(() => {
-    debugger;
-    dispatch(setUsers(localUsers));
   }, [localUsers]);
   const handleNameChange = (event) => {
     setTextFieldNameValue(event.target.value);
@@ -113,7 +108,6 @@ export const NewUser = () => {
       setTextFieldAdditionalPhoneValue("");
       setTextCodeValue("");
       setText("המשתמש נוסף בהצלחה");
-      debugger;
 
       const userData = await response.json();
       const rearrangedUserData = {
@@ -123,7 +117,8 @@ export const NewUser = () => {
         cellphone: userData.cellphone,
         phone: userData.phone,
       };
-      debugger;
+      dispatch(ADD_USER(rearrangedUserData));
+      setLocalUser(rearrangedUserData);
       setLocalUsers((prevUsers) => {
         return { data: [...prevUsers.data, rearrangedUserData] };
       });
