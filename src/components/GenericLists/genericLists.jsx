@@ -72,11 +72,11 @@ export const List = () => {
   }, [name, games, users, forAges, typesGames, closets]);
   useEffect(() => {}, [dispatch, currentStore]);
   const headers = Array.from(
-    new Set(nameOfList.flatMap((item) => (item ? Object.keys(item) : [])))
+    new Set(Array.isArray(nameOfList)&& nameOfList?.flatMap((item) => (item ? Object.keys(item) : [])))
   );
   const rows =
-    nameOfList.length > 0 && headers.length > 0
-      ? nameOfList.map((item, index) =>
+    nameOfList?.length > 0 && headers.length > 0
+      ? nameOfList?.map((item, index) =>
           createData(index, ...Object.values(item))
         )
       : [];
