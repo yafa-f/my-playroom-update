@@ -16,6 +16,9 @@ export const GameSlice = createSlice({
     setGames: (state, action) => {
       state.games = action.payload;
     },
+    ADD_GAME: (state, action) => {
+      state.games.push(action.payload);
+    },
   },
 });
-export const { setCurrentGame, setGames } = GameSlice.actions;
+export const { setCurrentGame, setGames,ADD_GAME } = GameSlice.actions;
