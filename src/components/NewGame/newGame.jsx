@@ -11,12 +11,10 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import { styled } from "@mui/material/styles";
 import AddIcon from "@mui/icons-material/Add";
-import FormHelperText from '@mui/material/FormHelperText';
+import FormHelperText from "@mui/material/FormHelperText";
 import { useNavigate } from "react-router-dom";
-import { setGames } from "../../app/slices/gameSlice";
 import { ADD_GAME } from "../../app/slices/gameSlice";
-import{ ADD_CLOSET } from "../../app/slices/closetSlice"
-import { setClosets } from "../../app/slices/closetSlice";
+import { UPDATE_CLOSET } from "../../app/slices/closetSlice";
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
   height: 16,
@@ -83,7 +81,6 @@ export const NewGame = () => {
   const typesGames = useSelector((state) => state.typeGame.typesGames);
   const [textTypeOfPartValue, setTextTypeOfPartValue] = useState("");
   const [textAmountOfPartValue, setTextAmountOfPartValue] = useState();
-  debugger
   const [localClosets, setLocalClosets] = useState(
     useSelector((state) => state.closet.closets)
   );
@@ -99,15 +96,8 @@ export const NewGame = () => {
   const [localGames, setLocalGames] = useState(
     useSelector((state) => state.game.games)
   );
-
-  useEffect(() => {
-
-  }, [localGames]);
-
-  useEffect(() => {
-    
-  }, [localClosets]);
-debugger
+  useEffect(() => {}, [localGames]);
+  useEffect(() => {}, [localClosets]);
   useEffect(() => {
     const selectedClosetArray =
       Array.isArray(localClosets) &&
@@ -115,17 +105,29 @@ debugger
         (closet) => closet?.closetCode === textClosetNumberValue
       )[0]?.emptyPlace;
     if (selectedClosetArray) {
-      if (textLocationInClosetValue === Math.max(...selectedClosetArray)) {
-        let newPlace = textLocationInClosetValue + 1;
-        const updatedNumbers = [
-          ...selectedClosetArray?.slice(0, selectedClosetArray?.lenth - 1),
-          newPlace,
-        ];
+      if (
+        Array.isArray(selectedClosetArray) &&
+        selectedClosetArray.length === 1
+      ) {
+        const updatedNumbers = [textLocationInClosetValue + 1];
         setUpdateLocation(updatedNumbers);
-      } else {
-        const updatedNumbers = selectedClosetArray?.filter(
+      } else if (
+        textLocationInClosetValue !== Math.max(...selectedClosetArray)
+      ) {
+        const updatedNumbers = selectedClosetArray.filter(
           (number) => number !== textLocationInClosetValue
         );
+        setUpdateLocation(updatedNumbers);
+      } else if (
+        Array.isArray(selectedClosetArray) &&
+        textLocationInClosetValue === Math.max(...selectedClosetArray)
+      ) {
+        const updatedNumbers = [
+          ...selectedClosetArray.filter(
+            (number) => number !== textLocationInClosetValue
+          ),
+          textLocationInClosetValue + 1,
+        ];
         setUpdateLocation(updatedNumbers);
       }
     }
@@ -139,22 +141,18 @@ debugger
     setStyleGameCode(false);
   };
   const handleClosetNumberChange = (event) => {
-
     setTextClosetNumberValue(event.target.value);
-
     const isClosetEmpty = localClosets.find(
       (closet) => closet.closetCode === event.target.value
     );
-    alert(isClosetEmpty.emptyPlace.length);
     isClosetEmpty.emptyPlace.length > 0
       ? setIsLocationInClosetDisabled(true)
       : setIsLocationInClosetDisabled(false);
-      setStyleClosetCode(false);
-
+    setStyleClosetCode(false);
   };
   const handleGameNameChange = (event) => {
     setTextGameNameValue(event.target.value);
-    setStyleGameName(false)
+    setStyleGameName(false);
   };
   const handleAgeCodeChange = (event) => {
     setTextAgeCodeValue(event.target.value);
@@ -165,31 +163,29 @@ debugger
   const handleHaveComplementaryGameChange = (event) => {
     setTextHaveComplementaryGameValue(event.target.checked);
   };
-  
   const handlePrintStickerChange = (event) => {
     setTextPrintStickerValue(event.target.checked);
   };
   const handleLocationInClosetChange = (event) => {
     setTextLocationInClosetValue(event.target.value);
   };
-
   const checkValue = async () => {
-  
     let valid = true;
     setClicked(true);
-    const isGameCodeUnique = !localGames.some(
-      (game) => game.GameCode === textGameCodeValue
-    );
-    if (!textGameCodeValue) {
-      setGameCodeErrorText("שדה חובה");
-      setStyleGameCode(true);
-      valid = false;
-    } else if (!isGameCodeUnique) {
-      setGameCodeErrorText("קוד קיים בחרי קוד אחר");
-      setStyleGameCode(true);
-      valid = false;
+    if (Array.isArray(localGames)) {
+      const isGameCodeUnique = !localGames?.some(
+        (game) => game.GameCode === textGameCodeValue
+      );
+      if (!textGameCodeValue) {
+        setGameCodeErrorText("שדה חובה");
+        setStyleGameCode(true);
+        valid = false;
+      } else if (!isGameCodeUnique) {
+        setGameCodeErrorText("קוד קיים בחרי קוד אחר");
+        setStyleGameCode(true);
+        valid = false;
+      }
     }
-
     if (!textClosetNumberValue) {
       setClosetCodeErrorText("שדה חובה");
       setStyleClosetCode(true);
@@ -208,104 +204,96 @@ debugger
       }, 1000);
     }
   };
-
   const addNewGame = async () => {
-    const responseclosetsRoutes = await fetch(
-      `http://localhost:5000/closetsRoutes/${textClosetNumberValue}`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          emptyPlace: updateLocation,
-        }),
-      }
-    );
-
-    if (responseclosetsRoutes.ok) {
-      setUpdateLocation([]);
-      const closetData = await responseclosetsRoutes.json();
-      const rearrangedClosetData = {
-        closetCode: closetData.closetCode,
-        IsKlinait: closetData.IsKlinait,
-        emptyPlace: closetData.emptyPlace,
-        closetLocation: closetData.closetLocation,
-      };
-      dispatch(ADD_CLOSET(rearrangedClosetData));
-
-    
-      setLocalClosets((prevClosets) => {
-        const updatedClosets = prevClosets.map((closet) =>
-          closet.closetCode === rearrangedClosetData.closetCode
-            ? rearrangedClosetData
-            : closet
-        );
-        return updatedClosets;
-      });
-    
-      
-    } 
-   else{alert("no update the closet")}
-    
     const response = await fetch("http://localhost:5000/gamesListRoutes", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        Id:"?",
+        Id: "?",
         GameCode: textGameCodeValue,
         ClosetNumber: textClosetNumberValue,
         GameName: textGameNameValue,
         GameTypeCode: textGameTypeCodeValue,
         Parts: arrayOfParts,
         AgeCode: textAgeCodeValue,
-        CurrentStateOfGame: "?", 
+        CurrentStateOfGame: "?",
+        Location: textLocationInClosetValue,
         PrintSticker: textPrintStickerValue,
         HaveComplementaryGame: textHaveComplementaryGameValue,
-        Location: textLocationInClosetValue,
-        IsAvailable:true,
-      })
-
+        IsAvailable: true,
+      }),
     });
-    console.log(response.body);
     if (response.ok) {
+      const responseclosetsRoutes = await fetch(
+        `http://localhost:5000/closetsRoutes/${textClosetNumberValue}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+
+          body: JSON.stringify({
+            emptyPlace: updateLocation,
+          }),
+        }
+      );
+      if (responseclosetsRoutes.ok) {
+        setUpdateLocation([]);
+        const updatedObject = await responseclosetsRoutes.json();
+        dispatch(UPDATE_CLOSET(updatedObject));
+        setLocalClosets((prevClosets) => {
+          const updatedClosets = prevClosets.map((closet) =>
+            closet.closetCode === updatedObject.closetCode
+              ? updatedObject
+              : closet
+          );
+          return updatedClosets;
+        });
+      } else {
+        console.error("Failed to update object");
+      }
       setTextGameCodeValue("");
       setTextClosetNumberValue("");
       setTextGameNameValue("");
       setTextGameTypeCodeValue("");
       setArrayOfParts([]);
-      setIsLocationInClosetDisabled(false)
+      setIsLocationInClosetDisabled(false);
       setTextAgeCodeValue("");
       setComps([]);
       setTextLocationInClosetValue("");
       setTextGameTypeCodeValue("");
       setTextAmountOfPartValue("");
-    setTextTypeOfPartValue("");
+      setTextTypeOfPartValue("");
       setText("המשחק נוסף בהצלחה");
       const gameData = await response.json();
+      const transformedParts = gameData.Parts.map((part) => {
+        const { name, amount } = JSON.parse(part);
+        return `${name} ${amount}`;
+      });
       const rearrangedGameData = {
         id: gameData._id,
         Id: gameData.Id,
-        GameCode:gameData.GameCode,
+        GameCode: gameData.GameCode,
         ClosetNumber: gameData.ClosetNumber,
         GameName: gameData.GameName,
         GameTypeCode: gameData.GameTypeCode,
-        Parts: gameData.Parts,
+        Parts: transformedParts,
         AgeCode: gameData.AgeCode,
-        CurrentStateOfGame: gameData.CurrentStateOfGame, 
-        PrintSticker: gameData.PrintSticker==true?"כן":"לא",
-        HaveComplementaryGame: gameData.HaveComplementaryGame==true?"כן":"לא",
+        CurrentStateOfGame: gameData.CurrentStateOfGame,
         Location: gameData.Location,
-        IsAvailable: gameData.IsAvailable==true?"כן":"לא",
+        PrintSticker: gameData.PrintSticker == true ? "כן" : "לא",
+        HaveComplementaryGame:
+          gameData.HaveComplementaryGame == true ? "כן" : "לא",
+        IsAvailable: gameData.IsAvailable == true ? "כן" : "לא",
       };
       dispatch(ADD_GAME(rearrangedGameData));
       setLocalGames((prevGames) => {
-        return { data: [...prevGames, rearrangedGameData] };
+        if (Array.isArray(prevGames)) {
+          return { data: [...prevGames, rearrangedGameData] };
+        }
       });
-
       setTimeout(() => {
         setText("להוספה");
       }, 2000);
@@ -329,13 +317,7 @@ debugger
     setTextAmountOfPartValue("");
     setTextTypeOfPartValue("");
   };
-  const addFinalParts = () => {
-  
-    const part = {
-      name: textTypeOfPartValue,
-      amount: textAmountOfPartValue,
-    };
-  };
+
   return (
     <div>
       <Box
@@ -376,26 +358,27 @@ debugger
           helperText={styleGameCode && clicked ? gameCodeErrorText : ""}
         />
 
-     <FormControl fullWidth error={styleClosetCode && clicked}>
-        <InputLabel id="demo-simple-select-error-label">קוד ארון</InputLabel>
-        <Select
-          labelId="demo-simple-select-error-label"
-          required
-          id="demo-simple-select-error"
-          value={textClosetNumberValue}
-          label="ClosetNumberValue"
-          onChange={handleClosetNumberChange}
-        >
-          {Array.isArray(localClosets) &&
+        <FormControl fullWidth error={styleClosetCode && clicked}>
+          <InputLabel id="demo-simple-select-error-label">קוד ארון</InputLabel>
+          <Select
+            labelId="demo-simple-select-error-label"
+            required
+            id="demo-simple-select-error"
+            value={textClosetNumberValue}
+            label="ClosetNumberValue"
+            onChange={handleClosetNumberChange}
+          >
+            {Array.isArray(localClosets) &&
               localClosets?.map((closet) => (
                 <MenuItem value={closet.closetCode}>
                   {closet.closetCode}
                 </MenuItem>
               ))}
-        </Select>
-        {styleClosetCode&&<FormHelperText>{closetCodeErrorText}</FormHelperText>}
-    
-      </FormControl>
+          </Select>
+          {styleClosetCode && (
+            <FormHelperText>{closetCodeErrorText}</FormHelperText>
+          )}
+        </FormControl>
         {isLocationInClosetDisabled && (
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">מיקום בארון</InputLabel>
@@ -459,7 +442,6 @@ debugger
           />
           {comps.map((c) => c)}
           <AddIcon onClick={addParts} />
-          <button onClick={addFinalParts} >שמירה חלקי המשחק</button>
         </div>
         <FormControl fullWidth>
           <InputLabel id="demo-simple-select-label">

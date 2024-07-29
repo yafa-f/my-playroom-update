@@ -71,16 +71,27 @@ export const List = () => {
     setCurrentField("");
   }, [name, games, users, forAges, typesGames, closets]);
   useEffect(() => {}, [dispatch, currentStore]);
+  debugger;
   const headers = Array.from(
-    new Set(Array.isArray(nameOfList)&& nameOfList?.flatMap((item) => (item ? Object.keys(item) : [])))
+    new Set(
+      Array.isArray(nameOfList) &&
+        nameOfList
+          ?.flatMap((item) => (item ? Object.keys(item) : []))
+          .filter(
+            (header) =>
+              header &&
+              Object.keys(nameOfList[0]) != "id" &&
+              Object.keys(nameOfList[0]) != ""
+          )
+    )
   );
+  useEffect(() => {}, [nameOfList]);
   const rows =
     nameOfList?.length > 0 && headers.length > 0
       ? nameOfList?.map((item, index) =>
           createData(index, ...Object.values(item))
         )
       : [];
-
   const updatedRows = rows.map((row) => {
     const updatedRow = {};
     headers.forEach((header, index) => {
@@ -88,7 +99,6 @@ export const List = () => {
     });
     return updatedRow;
   });
-
   const filteredRows = updatedRows.filter(
     (row) =>
       Array.isArray(row[currentField]) && row[currentField].includes(fieldValue)
