@@ -1,0 +1,25 @@
+.login-card {
+  width: 28vw;
+  height: 65vh;
+  background-color: rgba(250, 252, 255, 0.9);
+  border-radius: 20px;
+}
+.welcome {
+  font-family: Poppins;
+  font-size: 55px;
+  font-weight: 800;
+  line-height: 82.5px;
+  text-align: right;
+  color: rgba(6, 120, 252, 1);
+  margin-right: 20px;
+}
+.name-code {
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 30px;
+  text-align: right;
+  color: rgba(0, 0, 0, 1);
+  margin-right: 20px;
+  margin-top: 5vh;
+}

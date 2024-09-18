@@ -1,0 +1,163 @@
+.games {
+  position: absolute;
+}
+.title {
+  display: inline-flex;
+  direction: rtl;
+  margin-left: 7vw;
+}
+.game-logo {
+  background-image: url("../../assets/משחקים2.svg");
+  width: 65px;
+  height: 65px;
+  margin-top: 10px;
+}
+.title-name {
+  direction: rtl;
+  font-family: Poppins;
+  font-size: 55px;
+  font-weight: 900;
+  line-height: 82.5px;
+  color: rgba(6, 120, 252, 1);
+  margin-right: 20px;
+  margin-left: 45vw;
+  text-align: center;
+}
+.table-title {
+  width: 75vw;
+  height: 60.09px;
+  margin-top: 10vh;
+  margin-left: 3vw;
+  gap: 0px;
+  border-radius: 28px 28px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(239, 239, 239, 1);
+  display: inline-flex;
+  direction: rtl;
+}
+h3 {
+  font-family: "Poppins";
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 27px;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 7vw;
+  margin-right: 50px;
+}
+.table {
+  width: 75vw;
+  height: 42vh;
+  margin-top: 5px;
+  margin-left: 3vw;
+  gap: 0px;
+  border-radius: 0px 0px 28px 28px;
+  border: 1px 0px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(255, 255, 255, 1);
+  overflow: scroll;
+  overflow-x: hidden;
+  scrollbar-color: red;
+}
+.section {
+  height: 100vh;
+  margin-left: 2px;
+}
+.game-column {
+  display: inline-flex;
+  gap: 3vw;
+}
+.game-name {
+  font-family: Poppins;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 25.5px;
+  text-align: right;
+  color: rgba(0, 0, 0, 1);
+}
+.game-details {
+  width: 10vw;
+}
+.game-name-second {
+  display: inline-flex;
+  font-size: 17px;
+  gap: 15px;
+}
+.child-logo {
+  background-image: url("../../assets/child.svg");
+  width: 20px;
+  height: 20px;
+  gap: 9px;
+  opacity: 0px;
+  color: rgba(122, 122, 122, 1);
+}
+.type {
+  display: inline-flex;
+  gap: 5px;
+}
+.age {
+  display: inline-flex;
+  gap: 5px;
+}
+.tchum {
+  color: rgba(122, 122, 122, 1);
+}
+.pas {
+  width: 1px;
+  height: 10px;
+  color: rgba(217, 217, 217, 1);
+}
+.place {
+  width: 10vw;
+  display: inline-flex;
+  gap: 10px;
+}
+.closet-logo {
+  background-image: url("../../assets/closet.svg");
+  width: 20px;
+  height: 19px;
+}
+.game-status {
+  width: 10vw;
+}
+.game-mushal {
+  display: inline-flex;
+  gap: 10px;
+}
+.mushal-logo {
+  background-image: url("../../assets/mushal.svg");
+  width: 20px;
+  height: 20px;
+}
+.Complementar-Available {
+  width: 10vw;
+}
+.v-logo {
+  background-image: url("../../assets/V.svg");
+  width: 20px;
+  height: 15px;
+}
+.Available {
+  font-size: 12px;
+  display: inline-flex;
+  gap: 10px;
+}
+.Complementar {
+  font-size: 12px;
+  display: inline-flex;
+  gap: 10px;
+}
+.update-delete-icons {
+  display: inline-flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+.update-icon {
+  background-image: url("../../assets/pen.svg");
+  width: 19px;
+  height: 19px;
+}
+.delete-icon {
+  background-image: url("../../assets/garbage.svg");
+  width: 13px;
+  height: 17px;
+}

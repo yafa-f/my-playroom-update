@@ -1,7 +1,7 @@
 .nav-bar {
   width: 100vw;
   height: 9vh;
-  background: var(--main-blue, #00f);
+  background: rgba(240, 21, 87, 1);
 }
 .links {
   display: inline-block;

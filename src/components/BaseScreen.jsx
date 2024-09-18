@@ -1,12 +1,23 @@
-import React from 'react'
-import { NavBar } from './NavBar/navBar'
-import { Routing } from '../utils/routing'
+import React from "react";
+import { NavBar } from "./NavBar/navBar";
+import { Routing } from "../utils/routing";
+import { HomePage } from "./HomePage/homePage";
+import { SideBar } from "./SideBar/sideBar";
 
-export const BaseScreen=()=> {
+export const BaseScreen = () => {
   return (
     <div>
-        <NavBar/>
-        <Routing/>
+      <HomePage />
+      <div
+        style={{
+          position: "absolute",
+          top: "20vh",
+          width: "70vw",
+          height: "30vh",
+        }}
+      >
+        <Routing />
+      </div>
     </div>
-  )
-}
+  );
+};
