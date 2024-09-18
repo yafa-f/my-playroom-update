@@ -2,7 +2,6 @@ import React from "react";
 import { NavBar } from "./NavBar/navBar";
 import { Routing } from "../utils/routing";
 import { HomePage } from "./HomePage/homePage";
-import { SideBar } from "./SideBar/sideBar";
 
 export const BaseScreen = () => {
   return (

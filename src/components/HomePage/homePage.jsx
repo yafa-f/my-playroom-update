@@ -3,6 +3,7 @@ import "./homePage.css";
 import { Login } from "../Login/login";
 import { SideBar } from "../SideBar/sideBar";
 import { useLocation } from "react-router-dom";
+
 export const HomePage = () => {
   const location = useLocation();
   const myLocation = location.pathname;

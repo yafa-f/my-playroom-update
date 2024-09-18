@@ -7,6 +7,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Link } from "react-router-dom";
 
 export const GamesList = () => {
+  
   const games = useSelector((state) => state.game.games);
   return (
     <div className="games">

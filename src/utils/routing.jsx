@@ -6,6 +6,7 @@ import { GameBack } from "../components/GameBack/gameBack";
 import { List } from "../components/GenericLists/genericLists.jsx";
 import { NewGame, AddParts } from "../components/NewGame/newGame.jsx";
 import { SideBar } from "../components/SideBar/sideBar.jsx";
+
 export const Routing = () => {
   return (
     <div style={{ display: "revert" }}>
