@@ -1,0 +1,51 @@
+.side-bar {
+  width: 230px;
+  height: 76vh;
+  gap: 0px;
+  border-radius: 28px 28px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(6, 120, 252, 0.6);
+}
+.side-bar.login {
+  width: 230px;
+  height: 76vh;
+  gap: 0px;
+  border-radius: 28px 28px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(6, 120, 252, 0.6);
+  visibility: hidden;
+}
+.list-position {
+  margin-top: 150vh;
+  margin-right: 50vw;
+}
+.side-list {
+  direction: rtl;
+  width: 230px;
+  height: 5vh;
+  font-weight: 500;
+  margin-top: 4vh;
+  display: inline-flex;
+  color: rgba(255, 255, 255, 1);
+}
+.img-icon {
+  margin-right: 20px;
+}
+.side-names {
+  margin-right: 10px;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 1);
+}
+.side-names.choosen {
+  margin-right: 10px;
+  text-decoration: none;
+  color: rgba(6, 120, 252, 0.6);
+}
+.side-list.choosen {
+  direction: rtl;
+  width: 230px;
+  margin-top: 6vh;
+  display: inline-flex;
+  background-color: rgba(255, 255, 255, 1);
+}
+
