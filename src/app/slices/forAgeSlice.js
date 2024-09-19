@@ -21,7 +21,22 @@ export const ForAgeSlice = createSlice({
         (age) => age._id !== action.payload._id
       );
     },
+    UPDATE_FOR_AGE: (state, action) => {
+      const { _id, ...newValues } = action.payload;
+      const updatedForAges = state.forAges.data.map((age) => {
+        if (age._id === _id) {
+          return { ...age, ...newValues };
+        }
+        return age;
+      });
+      state.forAges.data = updatedForAges;
+    },
   },
 });
-export const { setCurrentForAge, setForAges, ADD_FOR_AGE, DELETE_FOR_AGE } =
-  ForAgeSlice.actions;
+export const {
+  setCurrentForAge,
+  setForAges,
+  ADD_FOR_AGE,
+  DELETE_FOR_AGE,
+  UPDATE_FOR_AGE,
+} = ForAgeSlice.actions;
