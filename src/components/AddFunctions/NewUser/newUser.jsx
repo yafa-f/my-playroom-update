@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ADD_USER } from "../../../app/slices/usersSlice";
 import { useNavigate } from "react-router-dom";
+import { isIsraeliPhoneNumber } from "../../CheckValues/checkPhone";
+import { checkIsCode } from "../../CheckValues/checkCode";
 export const NewUser = () => {
   const [styleName, setStyleName] = useState(false);
   const [stylePhone, setStylePhone] = useState(false);
@@ -24,8 +26,7 @@ export const NewUser = () => {
   const [text, setText] = useState("להוספה");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-  }, [localUsers]);
+  useEffect(() => {}, [localUsers]);
   const handleNameChange = (event) => {
     setTextFieldNameValue(event.target.value);
     setStyleName(false);
@@ -62,7 +63,7 @@ export const NewUser = () => {
       setStylePhone(true);
       valid = false;
     }
-    if (!textCodeValue) {
+    if (!checkIsCode(textCodeValue)) {
       setCodeErrorText("הכנס קוד");
       setStyleCode(true);
       valid = false;
@@ -70,7 +71,7 @@ export const NewUser = () => {
 
     const allUsers = localUsers.data.map((obj) => {
       if (textCodeValue === obj.userCode) {
-        setCodeErrorText("הקוד קיים אנא הכנס קוד אחר");
+        setCodeErrorText("הקוד קיים נא הכנס קוד אחר");
         setStyleCode(true);
         valid = false;
       }
@@ -84,11 +85,7 @@ export const NewUser = () => {
     }
   };
 
-  const isIsraeliPhoneNumber = (phone) => {
-    const regex = /^05\d{8}$/;
-    return regex.test(phone);
-  };
-
+  
   const addNewUser = async () => {
     const response = await fetch("http://localhost:5000/userRoutes", {
       method: "POST",
