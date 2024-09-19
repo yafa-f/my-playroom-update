@@ -15,8 +15,8 @@ export const Routing = () => {
         <Route path="/NewUser" element={<NewUser />}></Route>
         <Route path="/GameBack" element={<GameBack />}></Route>
         <Route path="/GamesList" element={<GamesList />}></Route>
-        <Route path="/List" element={<UsersList />}></Route>
-        <Route path="/NewGame" element={<NewGame />}></Route>
+        <Route path="/List" element={<UsersList/>}></Route>
+        <Route path="/NewGame" element={<NewGame/>}></Route>
         <Route path="/AddParts" element={<AddParts />}></Route>
         <Route path="/SideBar" element={<SideBar />}></Route>
       </Routes>
