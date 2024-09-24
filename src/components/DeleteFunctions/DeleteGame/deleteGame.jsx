@@ -1,10 +1,10 @@
 import React from "react";
 
-const deleteGame = async (row) => {
+const DeleteGame = async (game) => {
 
-  const { _id } = row;
+  const { _id,GameName } = game;
   const isConfirmed = window.confirm(
-    `Are you sure you want to delete: ${JSON.stringify(row)}?`
+    `האם את בטוחה שברצונך למחוק את המשחק : ${GameName}?`
   );
   if (isConfirmed) {
     try {
@@ -25,4 +25,4 @@ const deleteGame = async (row) => {
   }
 };
 
-export default deleteGame;
+export default DeleteGame;
