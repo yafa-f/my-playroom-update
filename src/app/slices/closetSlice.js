@@ -4,6 +4,7 @@ const initialState = {
   currentCloset: {},
   closets: [],
 };
+
 export const ClosetSlice = createSlice({
   name: "closet",
   initialState: initialState,
@@ -14,6 +15,15 @@ export const ClosetSlice = createSlice({
     setClosets: (state, action) => {
       state.closets = action.payload;
     },
+    ADD_CLOSET: (state, action) => {
+      state.closets.push(action.payload);
+    },
+    DELETE_CLOSET: (state, action) => {
+      state.closets = state.closets.filter(
+        (closet) => closet._id !== action.payload._id
+      );
+    },
+
     UPDATE_CLOSET: (state, action) => {
       const { _id, ...newValues } = action.payload;
       const updatedClosets = state.closets.map((closet) => {
@@ -23,15 +33,6 @@ export const ClosetSlice = createSlice({
         return closet;
       });
       state.closets = updatedClosets;
-    },
-    ADD_CLOSET: (state, action) => {
-      debugger;
-      state.closets.push(action.payload);
-    },
-    DELETE_CLOSET: (state, action) => {
-      state.closets = state.closets.filter(
-        (closet) => closet._id !== action.payload._id
-      );
     },
   },
 });

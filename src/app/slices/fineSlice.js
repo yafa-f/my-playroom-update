@@ -23,7 +23,17 @@ export const FineSlice = createSlice({
         (fine) => fine._id !== action.payload._id
       );
     },
+    UPDATE_FINE: (state, action) => {
+      const { _id, ...newValues } = action.payload;
+      const updatedFines = state.fines.map((fine) => {
+        if (fine._id === _id) {
+          return { ...fine, ...newValues };
+        }
+        return fine;
+      });
+      state.fines = updatedFines;
+    },
   },
 });
-export const { setCurrentFine, setFines, ADD_FINE, DELETE_FINE } =
+export const { setCurrentFine, setFines, ADD_FINE, DELETE_FINE, UPDATE_FINE } =
   FineSlice.actions;
