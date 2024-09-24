@@ -14,7 +14,6 @@
 }
 .title-name {
   direction: rtl;
-  font-family: Poppins;
   font-size: 55px;
   font-weight: 900;
   line-height: 82.5px;
@@ -24,11 +23,10 @@
   text-align: center;
 }
 .table-title {
-  width: 75vw;
+  width: 77vw;
   height: 60.09px;
   margin-top: 10vh;
   margin-left: 3vw;
-  gap: 0px;
   border-radius: 28px 28px 0px 0px;
   opacity: 0px;
   background-color: rgba(239, 239, 239, 1);
@@ -36,17 +34,16 @@
   direction: rtl;
 }
 h3 {
-  font-family: "Poppins";
   font-size: 18px;
   font-weight: 600;
   line-height: 27px;
   color: rgba(6, 120, 252, 1);
-  margin-left: 7vw;
+  margin-left: 6vw;
   margin-right: 50px;
 }
 .table {
-  width: 75vw;
-  height: 42vh;
+  width: 77vw;
+  height: 46vh;
   margin-top: 5px;
   margin-left: 3vw;
   gap: 0px;
@@ -56,7 +53,6 @@ h3 {
   background-color: rgba(255, 255, 255, 1);
   overflow: scroll;
   overflow-x: hidden;
-  scrollbar-color: red;
 }
 .section {
   height: 100vh;
@@ -64,10 +60,9 @@ h3 {
 }
 .game-column {
   display: inline-flex;
-  gap: 3vw;
+  gap: 1vw;
 }
-.game-name {
-  font-family: Poppins;
+.game-names {
   font-size: 17px;
   font-weight: 600;
   line-height: 25.5px;
@@ -75,9 +70,9 @@ h3 {
   color: rgba(0, 0, 0, 1);
 }
 .game-details {
-  width: 10vw;
+  width: 14vw;
 }
-.game-name-second {
+.game-names-second {
   display: inline-flex;
   font-size: 17px;
   gap: 15px;
@@ -107,21 +102,44 @@ h3 {
   color: rgba(217, 217, 217, 1);
 }
 .place {
-  width: 10vw;
+  width: 12vw;
   display: inline-flex;
   gap: 10px;
+  font-size: 12px;
+  align-items: center;
 }
 .closet-logo {
   background-image: url("../../assets/closet.svg");
   width: 20px;
   height: 19px;
 }
-.game-status {
-  width: 10vw;
-}
-.game-mushal {
+.status {
+  width: 12vw;
   display: inline-flex;
   gap: 10px;
+  align-items: center;
+  font-size: 12px;
+}
+.CurrentStateOfGame.green {
+  width: 10.83px;
+  height: 10.83px;
+  margin: 6px;
+  border-radius: 20px;
+  background: rgba(59, 156, 63, 1);
+}
+.CurrentStateOfGame.red {
+  width: 10.83px;
+  height: 10.83px;
+  margin: 6px;
+  background: rgba(255, 0, 0, 1);
+  border-radius: 20px;
+}
+.game-mushal {
+  width: 12vw;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
 }
 .mushal-logo {
   background-image: url("../../assets/mushal.svg");
@@ -129,7 +147,7 @@ h3 {
   height: 20px;
 }
 .Complementar-Available {
-  width: 10vw;
+  width: 9vw;
 }
 .v-logo {
   background-image: url("../../assets/V.svg");
@@ -148,8 +166,6 @@ h3 {
 }
 .update-delete-icons {
   display: inline-flex;
-  gap: 10px;
-  margin-top: 15px;
 }
 .update-icon {
   background-image: url("../../assets/pen.svg");
@@ -161,4 +177,44 @@ h3 {
   width: 13px;
   height: 17px;
 }
-
+.game-parts-name {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: right;
+  color: rgba(122, 122, 122, 1);
+}
+.game-parts {
+  display: inline-flex;
+  width: 30vw;
+  border-top: 3px #e6e6e6 dotted;
+  border-radius: 180;
+}
+.parts-table {
+  display: grid;
+  grid-template-columns: 100px 100px 100px;
+}
+.parts {
+  display: inline-flex;
+  font-size: 12px;
+  gap: 10px;
+}
+.sum {
+  margin-top: 20px;
+  color: #676767;
+  font-size: 12px;
+  display: inline-flex;
+}
+.sum-number {
+  margin-right: 10px;
+  font-weight: 600;
+  color: black;
+}
+.AccordionDetails {
+  display: inline-flex;
+}
+.acordi-comment {
+  margin-right: 10vw;
+  margin-top: 20px;
+  font-size: 15px;
+}

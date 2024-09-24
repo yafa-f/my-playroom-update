@@ -5,7 +5,6 @@
   border-radius: 20px;
 }
 .welcome {
-  font-family: Poppins;
   font-size: 55px;
   font-weight: 800;
   line-height: 82.5px;
@@ -14,7 +13,6 @@
   margin-right: 20px;
 }
 .name-code {
-  font-family: Poppins;
   font-size: 20px;
   font-weight: 700;
   line-height: 30px;
