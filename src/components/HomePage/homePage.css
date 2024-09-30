@@ -1,7 +1,36 @@
-.image{
-    background-image: url('../../assets/logo-good.png');
-    background-repeat: no-repeat;
-    background-attachment: fixed; 
-    background-size: 100% 100%;
-    height: 100vh;
-  }
+.image {
+  background-image: url("../../assets/reka.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  height: 100vh;
+}
+.nav-bar {
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 100vw;
+  height: 9vh;
+  background: rgba(240, 21, 87, 1);
+  gap: 0px;
+  opacity: 0px;
+}
+.logo {
+  background-image: url("../../assets/המשחקיה.png");
+  width: 240px;
+  height: 90px;
+  gap: 0px;
+  opacity: 0px;
+  position: absolute;
+  top: 5vh;
+  left: 82vw;
+}
+.login-comp {
+  margin-left: 60vw;
+  margin-top: 18vh;
+}
+.side-bar-comp {
+  margin-left: 82vw;
+  margin-top: 15vh;
+  position: fixed;
+}
+
