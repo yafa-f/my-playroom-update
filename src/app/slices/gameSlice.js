@@ -34,17 +34,8 @@ export const GameSlice = createSlice({
       });
       state.games = updatedGames;
     },
-    UPDATE_GAME: (state, action) => {
-      const { _id, ...newValues } = action.payload;
-      const updatedGames = state.games.map((game) => {
-        if (game._id === _id) {
-          return { ...game, ...newValues };
-        }
-        return game;
-      });
-      state.games = updatedGames;
-    },
+   
   },
 });
-export const { setCurrentGame, setGames, ADD_GAME, DELETE_GAME, UPDATE_GAME ,UPDATE_GAME} =
+export const { setCurrentGame, setGames, ADD_GAME, DELETE_GAME, UPDATE_GAME } =
   GameSlice.actions;
