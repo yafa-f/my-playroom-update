@@ -2,7 +2,6 @@ import { Box, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate } from "react-router-dom";
 import { ADD_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_CLOSET } from "../../app/slices/closetSlice";
 import UpdateGame from "../UpdateFunction/UpdateGame";
@@ -13,20 +12,38 @@ import { useLocation } from "react-router-dom";
 import NewGameFunction from "../AddFunctions/NewGameFunction/NewGameFunction";
 import UpdateCloset from "../UpdateFunction/UpdateCloset";
 
-export const NewGame = (props) => {
+export const NewGame = () => {
+
   const { bool } = useParams();
   const location = useLocation();
   const { gameToUpdate } = location.state || {};
+
+  const [codeOfCloset, setCodeOfCloset] = useState("");
+  const [placeInCloset, setPlaceInCloset] = useState("");
+
   useEffect(() => {
-    if (bool && gameToUpdate) {
+    if (bool === "true" && gameToUpdate) {
       setFormData(gameToUpdate);
+      setCodeOfCloset(gameToUpdate.ClosetNumber);
+      setPlaceInCloset(gameToUpdate.PlaceInCloset);
+    } else {
+      let randomNumber;
+      const codes = localGames.map((game) => Number(game.GameCode));
+      do {
+        randomNumber = Math.floor(Math.random() * 10000) + 1;
+      } while (codes.includes(randomNumber));
+
+      setFormData({
+        ...formData,
+        GameCode: randomNumber,
+      });
     }
   }, [bool, gameToUpdate]);
-
   const [formData, setFormData] = useState({
     Id: "",
     GameCode: "",
     ClosetNumber: "",
+    PlaceInCloset: "",
     GameName: "",
     GameTypeCode: "",
     Parts: [{ name: "", amount: 0 }],
@@ -38,7 +55,7 @@ export const NewGame = (props) => {
     IsAvailable: "",
     Comment: "",
   });
-  const [textGameCodeValue, setTextGameCodeValue] = useState("");
+
   const [textLocationInClosetValue, setTextLocationInClosetValue] =
     useState("");
   const [circleFlag, setCircleFlag] = useState(false);
@@ -50,47 +67,68 @@ export const NewGame = (props) => {
     useSelector((state) => state.closet.closets)
   );
   const [updateLocation, setUpdateLocation] = useState([]);
-  const navigate = useNavigate();
+  const [updateLocation2, setUpdateLocation2] = useState([]);
+
   const [localGames, setLocalGames] = useState(
     useSelector((state) => state.game.games)
   );
   useEffect(() => {}, [localGames]);
   useEffect(() => {}, [localClosets]);
+
   useEffect(() => {
+    if (bool === "true") {
+      const selectedClosetArray2 =
+        (Array.isArray(localClosets) &&
+          localClosets?.filter(
+            (closet) => closet?.closetCode === codeOfCloset
+          )[0]?.emptyPlace) ||
+        [];
+      const updateNumbers2 = [...selectedClosetArray2, Number(placeInCloset)];
+      updateNumbers2.sort((a, b) => a - b);
+      setUpdateLocation2(updateNumbers2);
+    }
     const selectedClosetArray =
       Array.isArray(localClosets) &&
       localClosets?.filter(
         (closet) => closet?.closetCode === formData.ClosetNumber
       )[0]?.emptyPlace;
+
     if (selectedClosetArray) {
       if (
         Array.isArray(selectedClosetArray) &&
         selectedClosetArray.length === 1
       ) {
-        const updatedNumbers = [textLocationInClosetValue + 1];
+        const updatedNumbers = [Number(textLocationInClosetValue) + 1];
         setUpdateLocation(updatedNumbers);
       } else if (
-        textLocationInClosetValue !== Math.max(...selectedClosetArray)
+        Number(textLocationInClosetValue) !== Math.max(...selectedClosetArray)
       ) {
         const updatedNumbers = selectedClosetArray.filter(
-          (number) => number !== textLocationInClosetValue
+          (number) => number !== Number(textLocationInClosetValue)
         );
+
         setUpdateLocation(updatedNumbers);
       } else if (
         Array.isArray(selectedClosetArray) &&
-        textLocationInClosetValue === Math.max(...selectedClosetArray)
+        Number(textLocationInClosetValue) === Math.max(...selectedClosetArray)
       ) {
         const updatedNumbers = [
           ...selectedClosetArray.filter(
-            (number) => number !== textLocationInClosetValue
+            (number) => number !== Number(textLocationInClosetValue)
           ),
-          textLocationInClosetValue + 1,
+          Number(textLocationInClosetValue) + 1,
         ];
         setUpdateLocation(updatedNumbers);
       }
     }
   }, [textLocationInClosetValue]);
-
+  const handleChangeTextLocationInClosetValue = (event) => {
+    setTextLocationInClosetValue(event.target.value);
+    setFormData({
+      ...formData,
+      PlaceInCloset: event.target.value,
+    });
+  };
   const handleAddRow = () => {
     setFormData({
       ...formData,
@@ -107,51 +145,11 @@ export const NewGame = (props) => {
     setFormData({ ...formData, Parts: newRows });
   };
 
-  const handleClosetNumberChange = (event) => {
-    // setTextClosetNumberValue(event.target.value);
-    setFormData({ ...formData, ClosetNumber: event.target.value });
-
-    // const isClosetEmpty = localClosets.find(
-    //   (closet) => closet.closetCode === event.target.value
-    // );
-    // isClosetEmpty.emptyPlace.length > 0
-    //   ? setIsLocationInClosetDisabled(true)
-    //   : setIsLocationInClosetDisabled(false);
-    // setStyleClosetCode(false);
-  };
-  const handleGameNameChange = (event) => {
-    setFormData({ ...formData, GameName: event.target.value });
-  };
-  const handleGameStatusChange = (event) => {
-    setFormData({ ...formData, CurrentStateOfGame: event.target.value });
-  };
-  const handleClosetLocationChange = (event) => {
-    setFormData({ ...formData, Location: event.target.value });
-  };
-  const handleAgeCodeChange = (event) => {
-    setFormData({ ...formData, AgeCode: event.target.value });
-  };
-  const handleGameTypeCodeChange = (event) => {
-    setFormData({ ...formData, GameTypeCode: event.target.value });
-  };
-  const handleHaveComplementaryGameChange = (event) => {
-    setFormData({ ...formData, HaveComplementaryGame: event.target.value });
-  };
-  const handleIsAvailableChange = (event) => {
-    setFormData({ ...formData, IsAvailable: event.target.value });
-  };
-
-  const handleLocationInClosetChange = (event) => {
-    setTextLocationInClosetValue(event.target.value);
-  };
-  const handleGameCommentChange = (event) => {
-    setFormData({ ...formData, Comment: event.target.value });
-  };
-
   const handleUpdateClick = () => {
-    console.log("Current bool value:", bool);
-
     if (bool === "true") {
+      console.log("updateLocation", updateLocation);
+      console.log("updateLocation2", updateLocation2);
+
       handleUpdateGame();
     } else {
       handleAddGame();
@@ -164,7 +162,32 @@ export const NewGame = (props) => {
     setTimeout(() => {
       setCircleFlag(false);
     }, 1000);
-    if (update && update.ok) {
+    if (update) {
+      //2
+      const updateResponse2 = await UpdateCloset(codeOfCloset, updateLocation2);
+
+      if (updateResponse2) {
+        const updatedData2 = await updateResponse2;
+        dispatch(UPDATE_CLOSET(updatedData2));
+        setUpdateLocation2([]);
+
+        //1
+        const updateResponse = await UpdateCloset(
+          formData.ClosetNumber,
+          updateLocation
+        );
+
+        if (updateResponse) {
+          const updatedData = await updateResponse;
+          dispatch(UPDATE_CLOSET(updatedData));
+          setUpdateLocation([]);
+        } else {
+          console.error("Failed to add object");
+        }
+      } else {
+        console.error("Failed to add object for the second closet");
+      }
+
       dispatch(UPDATE_GAME(formData));
       setButtonText("המשחק עודכן בהצלחה");
       setTimeout(() => {
@@ -187,15 +210,14 @@ export const NewGame = (props) => {
         updateLocation
       );
 
-      if (updateResponse && updateResponse.ok) {
-        // const updatedObject = await updateResponse.json();
-        dispatch(UPDATE_CLOSET(updateResponse.json()));
+      if (updateResponse) {
+        const updatedData = await updateResponse;
+        dispatch(UPDATE_CLOSET(updatedData));
         setUpdateLocation([]);
       } else {
         console.error("Failed to add object");
       }
-      setTextGameCodeValue("");
-      setTextLocationInClosetValue("");
+      setTextLocationInClosetValue(0);
       setButtonText("המשחק נוסף בהצלחה");
 
       dispatch(ADD_GAME(formData));
@@ -245,7 +267,9 @@ export const NewGame = (props) => {
                   className="game-name"
                   id="GameName"
                   value={formData.GameName}
-                  onChange={handleGameNameChange}
+                  onChange={(event) =>
+                    setFormData({ ...formData, GameName: event.target.value })
+                  }
                 />
               </div>
               <div className="status-of-game">
@@ -256,7 +280,12 @@ export const NewGame = (props) => {
                   id="GameStatus"
                   className="game-status"
                   value={formData.CurrentStateOfGame}
-                  onChange={handleGameStatusChange}
+                  onChange={(event) =>
+                    setFormData({
+                      ...formData,
+                      CurrentStateOfGame: event.target.value,
+                    })
+                  }
                 >
                   <option></option>
                   <option value="תקין">תקין</option>
@@ -272,7 +301,9 @@ export const NewGame = (props) => {
                   name="age"
                   id="age"
                   value={formData.AgeCode}
-                  onChange={handleAgeCodeChange}
+                  onChange={(event) =>
+                    setFormData({ ...formData, AgeCode: event.target.value })
+                  }
                 >
                   <option></option>
                   {forAges?.data?.map((age, i) => (
@@ -287,7 +318,12 @@ export const NewGame = (props) => {
                   id="closetCode"
                   name="closetCode"
                   value={formData.ClosetNumber}
-                  onChange={handleClosetNumberChange}
+                  onChange={(event) =>
+                    setFormData({
+                      ...formData,
+                      ClosetNumber: event.target.value,
+                    })
+                  }
                 >
                   <option></option>
                   {Array.isArray(localClosets) &&
@@ -301,7 +337,12 @@ export const NewGame = (props) => {
                   type="radio"
                   className="is-availible"
                   checked={formData.IsAvailable}
-                  onChange={handleIsAvailableChange}
+                  onChange={(event) =>
+                    setFormData({
+                      ...formData,
+                      IsAvailable: event.target.value,
+                    })
+                  }
                 />{" "}
                 זמין להשאלה{" "}
               </div>
@@ -314,7 +355,12 @@ export const NewGame = (props) => {
                   name="type"
                   id="type"
                   value={formData.GameTypeCode}
-                  onChange={handleGameTypeCodeChange}
+                  onChange={(event) =>
+                    setFormData({
+                      ...formData,
+                      GameTypeCode: event.target.value,
+                    })
+                  }
                 >
                   <option></option>
                   {typesGames?.map((type, i) => (
@@ -329,7 +375,9 @@ export const NewGame = (props) => {
                   id="placeincloset"
                   name="placeincloset"
                   value={textLocationInClosetValue}
-                  onChange={handleLocationInClosetChange}
+                  onChange={
+                    handleChangeTextLocationInClosetValue
+                  }
                 >
                   <option></option>
                   {Array.isArray(localClosets) &&
@@ -351,7 +399,9 @@ export const NewGame = (props) => {
                   type="text"
                   id="closetLocation"
                   value={formData.Location}
-                  onChange={handleClosetLocationChange}
+                  onChange={(event) =>
+                    setFormData({ ...formData, Location: event.target.value })
+                  }
                 />
               </div>
               <div className="Complementary-Game">
@@ -359,7 +409,12 @@ export const NewGame = (props) => {
                   type="radio"
                   className="Complementary-Game"
                   checked={formData.HaveComplementaryGame}
-                  onChange={handleHaveComplementaryGameChange}
+                  onChange={(event) =>
+                    setFormData({
+                      ...formData,
+                      HaveComplementaryGame: event.target.value,
+                    })
+                  }
                 />
                 קיים משחק משלים
               </div>
@@ -369,7 +424,9 @@ export const NewGame = (props) => {
                 type="text"
                 className="comment"
                 value={formData.Comment}
-                onChange={handleGameCommentChange}
+                onChange={(event) =>
+                  setFormData({ ...formData, Comment: event.target.value })
+                }
               />
             </div>
           </Box>
@@ -389,7 +446,6 @@ export const NewGame = (props) => {
               <div className="new-game-title-name">חלקים למשחק </div>
             </div>
             <br />
-
             <div className="part-table-title">
               <div>שם החלק</div>
               <div>כמות</div>
@@ -434,7 +490,6 @@ export const NewGame = (props) => {
               </section>
             </div>
           </Box>
-
           <Button
             variant="contained"
             onClick={handleUpdateClick}

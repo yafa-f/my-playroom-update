@@ -25,7 +25,7 @@
 .table-title {
   width: 77vw;
   height: 60.09px;
-  margin-top: 10vh;
+  margin-top: 2vh;
   margin-left: 3vw;
   border-radius: 28px 28px 0px 0px;
   opacity: 0px;
@@ -88,10 +88,12 @@ h3 {
 .type {
   display: inline-flex;
   gap: 5px;
+  font-size: 13px;
 }
 .age {
   display: inline-flex;
   gap: 5px;
+  font-size: 13px;
 }
 .tchum {
   color: rgba(122, 122, 122, 1);
@@ -148,6 +150,7 @@ h3 {
 }
 .Complementar-Available {
   width: 9vw;
+  align-items: center;
 }
 .v-logo {
   background-image: url("../../assets/V.svg");
@@ -204,6 +207,7 @@ h3 {
   color: #676767;
   font-size: 12px;
   display: inline-flex;
+  margin-right: 6vw;
 }
 .sum-number {
   margin-right: 10px;
@@ -218,3 +222,10 @@ h3 {
   margin-top: 20px;
   font-size: 15px;
 }
+.search-buttons {
+  display: inline-flex;
+  gap: 10px;
+  direction: rtl;
+  margin-left: 10vw;
+}
+

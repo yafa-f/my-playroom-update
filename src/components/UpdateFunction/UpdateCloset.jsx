@@ -1,4 +1,3 @@
-
 const UpdateCloset = async (id, updateLocation) => {
   try {
     const response = await fetch(`http://localhost:5000/closetsRoutes/${id}`, {
@@ -18,7 +17,7 @@ const UpdateCloset = async (id, updateLocation) => {
 
     const data = await response.json();
     console.log("Update successful:", data);
-    return response; // Return the response object
+    return data; // Return the response object
   } catch (error) {
     console.error("Error updating game:", error);
     return null; // Return null in case of an error

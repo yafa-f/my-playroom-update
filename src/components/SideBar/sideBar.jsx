@@ -10,7 +10,6 @@ import other from "../../assets/אחר.svg";
 import { Link, useLocation } from "react-router-dom";
 
 export const SideBar = () => {
-    
   const location = useLocation();
   const myLocation = location.pathname;
   const namesArr = [
@@ -62,3 +61,4 @@ export const SideBar = () => {
     </div>
   );
 };
+
