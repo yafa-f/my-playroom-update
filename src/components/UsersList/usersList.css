@@ -1,0 +1,91 @@
+.usersTitle{
+  gap: 15px;  
+}
+.usersCaptionWithIcon{
+    display: inline-flex;
+    padding-left: 580px;
+    /* padding-top: -1110px; */
+margin-top: -17px;}
+.menuim{
+    padding-right: 25px;
+}
+.addBorder {
+  width: 62px;
+  height: 20px;
+  padding-left: 38px;
+  padding-right: 38px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-radius: 28px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  display: inline-flex;
+  background-color: #0678fc;
+}
+.addCaption {
+  text-align: center;
+  color: white;
+  font-size: 18px;
+  font-family: Open Sans Hebrew;
+  font-weight: 700;
+  line-height: 22px;
+  word-wrap: break-word;
+}
+.searchBorder {
+  width: 170px;
+  height: 20px;
+  padding-left: 17px;
+  padding-right: 17px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: white;
+  /* background: linear-gradient(0deg, 0%, 100%),
+    linear-gradient(0deg, white 0%, white 100%); */
+  border-radius: 28px;
+  border: 0.3px #9a9a9a solid;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  display: inline-flex;
+}
+.searchCaption {
+  color: #393939;
+  font-size: 18px;
+  font-weight: 400;
+  word-wrap: break-word;
+  /* fontFamily: "Poppins", */
+}
+.searchByName {
+  width: 170px;
+  height: 20px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background: white;
+  border-radius: 28px;
+  border: 0.3px #9a9a9a solid;
+  justify-content: "flex-end";
+  align-items: center;
+  gap: 80px;
+  display: inline-flex;
+}
+.userNameCaption {
+  color: #393939;
+  font-size: 18px;
+  /* font-family: "Poppins", */
+  font-weight: 400;
+  word-wrap: break-word;
+}
+.searchButton{
+  text-align: center;
+  font-size: 18;
+  font-family: "Open Sans Hebrew";
+  color: "black";
+  border-radius: 28px;
+  width:180px;
+  height: 38px;
+  font-weight: 700;
+  word-wrap:  "break-word"
+}

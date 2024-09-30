@@ -1,12 +1,6 @@
-import React from "react";
-import "./homePage.css";
-import { Login } from "../Login/login";
-import { SideBar } from "../SideBar/sideBar";
-import { useLocation } from "react-router-dom";
-
-export const HomePage = () => {
-  const location = useLocation();
-  const myLocation = location.pathname;
+import React from 'react'
+import './homePage.css'
+export const HomePage=()=> {
   return (
     <div className="image">
       <div className="nav-bar"></div>
@@ -24,3 +18,4 @@ export const HomePage = () => {
   );
 };
 
+ 

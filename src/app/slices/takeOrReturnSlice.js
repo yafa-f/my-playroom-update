@@ -24,6 +24,16 @@ export const TORSlice = createSlice({
         (tOr) => tOr._id !== action.payload._id
       );
     },
+    UPDATE_TOR: (state, action) => {
+      const { _id, ...newValues } = action.payload;
+      const updatedTors = state.takingsOrReturnings.map((tOr) => {
+        if (tOr._id === _id) {
+          return { ...tOr, ...newValues };
+        }
+        return tOr;
+      });
+      state.takingsOrReturnings = updatedTors;
+    },
   },
 });
 export const {
@@ -31,4 +41,5 @@ export const {
   setTakingOrReturning,
   ADD_TOR,
   DELETE_TOR,
+  UPDATE_TOR,
 } = TORSlice.actions;
