@@ -28,10 +28,10 @@ export const GamesList = () => {
   useEffect(() => {}, [games]);
   const dispatch = useDispatch();
   const navToNewGame = (gameToUpdate) => {
-    navigate(`/NewGame/bool/${"true"}`, { state: { gameToUpdate } });
+    navigate(`/GamesList/NewGame/bool/${"true"}`, { state: { gameToUpdate } });
   };
   const NewGame = () => {
-    navigate(`/NewGame/bool/${"false"}`);
+    navigate(`/GamesList/NewGame/bool/${"false"}`);
   };
   const deleteAgame = async (game) => {
     const deletedGameRow = await DeleteGame(game);

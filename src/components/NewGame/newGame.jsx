@@ -11,9 +11,11 @@ import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import NewGameFunction from "../AddFunctions/NewGameFunction/NewGameFunction";
 import UpdateCloset from "../UpdateFunction/UpdateCloset";
+import { useNavigate } from "react-router-dom";
 
 export const NewGame = () => {
 
+  const navigate = useNavigate();
   const { bool } = useParams();
   const location = useLocation();
   const { gameToUpdate } = location.state || {};
@@ -147,9 +149,6 @@ export const NewGame = () => {
 
   const handleUpdateClick = () => {
     if (bool === "true") {
-      console.log("updateLocation", updateLocation);
-      console.log("updateLocation2", updateLocation2);
-
       handleUpdateGame();
     } else {
       handleAddGame();
@@ -163,15 +162,13 @@ export const NewGame = () => {
       setCircleFlag(false);
     }, 1000);
     if (update) {
-      //2
+      
       const updateResponse2 = await UpdateCloset(codeOfCloset, updateLocation2);
-
       if (updateResponse2) {
         const updatedData2 = await updateResponse2;
         dispatch(UPDATE_CLOSET(updatedData2));
         setUpdateLocation2([]);
 
-        //1
         const updateResponse = await UpdateCloset(
           formData.ClosetNumber,
           updateLocation
@@ -191,8 +188,8 @@ export const NewGame = () => {
       dispatch(UPDATE_GAME(formData));
       setButtonText("המשחק עודכן בהצלחה");
       setTimeout(() => {
-        setButtonText("עדכון");
-      }, 2000);
+        navigate("/GamesList");
+      }, 3000);
     } else {
       setButtonText("העדכון נכשל");
     }
@@ -222,8 +219,9 @@ export const NewGame = () => {
 
       dispatch(ADD_GAME(formData));
       setTimeout(() => {
-        setButtonText("הוספה");
-      }, 2000);
+        navigate("/GamesList");
+
+      }, 3000);
     } else {
       setButtonText("ההוספה נכשלה");
     }
