@@ -7,8 +7,9 @@ import users2 from "../../assets/מנויים2.svg";
 import take from "../../assets/השאלות.svg";
 import take2 from "../../assets/השאלות2.svg";
 import other from "../../assets/אחר.svg";
-import { Link, useLocation } from "react-router-dom";
+import other2 from "../../assets/אחר2.svg";
 
+import { Link, useLocation } from "react-router-dom";
 export const SideBar = () => {
   const location = useLocation();
   const myLocation = location.pathname;
@@ -16,15 +17,15 @@ export const SideBar = () => {
     { name: "מנויים", src: users, srcChoosen: users2, to: "UsersList" },
     { name: "משחקים", src: games, srcChoosen: games2, to: "GamesList" },
     { name: "השאלות ", src: take, srcChoosen: take2, to: "TakeList" },
-    { name: "ארונות", src: other, srcChoosen: other, to: "ClosetsList" },
-    { name: "תחומי משחק", src: other, srcChoosen: other, to: "GameTopicList" },
+    { name: "ארונות", src: other, srcChoosen: other2, to: "ClosetsList" },
+    { name: "תחומי משחק", src: other, srcChoosen: other2, to: "GameTopicList" },
     {
       name: "קנסות לחלקים חסרים",
       src: other,
-      srcChoosen: other,
+      srcChoosen: other2,
       to: "PartList",
     },
-    { name: "טווח גילאים", src: other, srcChoosen: other, to: "AgesList" },
+    { name: "טווח גילאים", src: other, srcChoosen: other2, to: "AgesList" },
   ];
 
   return (
@@ -39,7 +40,7 @@ export const SideBar = () => {
           key={i}
         >
           <img
-            className="img-icon"
+            className={"img-icon"}
             src={
               myLocation == `/${name.to}` || myLocation.includes(name.to)
                 ? name.srcChoosen
