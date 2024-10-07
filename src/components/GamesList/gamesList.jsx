@@ -25,7 +25,7 @@ export const GamesList = () => {
   useEffect(() => {
     setTableArr(games);
   }, [games]);
-  useEffect(() => {}, [games]);
+  // useEffect(() => {}, [games]);
   const dispatch = useDispatch();
   const navToNewGame = (gameToUpdate) => {
     navigate(`/GamesList/NewGame/bool/${"true"}`, { state: { gameToUpdate } });
@@ -58,9 +58,9 @@ export const GamesList = () => {
           </Button>
         </div>
         <div className="search-buttons">
-          {searchNames?.map((search, i) => (
+          {Array.isArray(searchNames) && searchNames?.map((search, i) => (
             <div id={i}>
-              <SearchButtons name={search.name} setTableArr={setTableArr} />{" "}
+              <SearchButtons name={search.name} list={games} setTableArr={setTableArr} />{" "}
             </div>
           ))}
         </div>

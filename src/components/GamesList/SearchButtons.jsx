@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 export const SearchButtons = (props) => {
   const [selectArray, setSelectArray] = useState();
   const [selectArrayFilter, setSelectArrayFilter] = useState();
-  const games = useSelector((state) => state.game.games);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [arrowUpAndDown, setArrowUpAndDown] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -19,9 +18,28 @@ export const SearchButtons = (props) => {
   const forAges = useSelector((state) => state.forAge.forAges).data;
   const closets = useSelector((state) => state.closet.closets);
   const buttonRef = useRef(null);
+  const take = useSelector((state) => state.takingOrReturning.takingsOrReturnings);
+  const users = useSelector((state) => state.user.users).data;
+  const games = useSelector((state) => state.game.games);
 
   useEffect(() => {
     switch (props.name) {
+      case "שם מנוי":
+        {
+          const userCodes = take.map(item => item.UserCode);
+          const filteredUsers = users ? users.filter(user => userCodes.includes(user.userCode)) : [];
+          const userNames = filteredUsers.map(user => user.userName);
+          setSelectArray(userNames);
+        }
+        break;
+        case "שם המשחק":
+          {
+            const gameCodes = take.map(item => item.GameCode);
+            const filteredGames = games ? games.filter(item => gameCodes.includes(String(item.GameCode))) : [];
+            const gameNames = filteredGames.map(item => item.GameName);
+            setSelectArray(gameNames);
+          }
+          break;
       case "תחום":
         {
           const type = typesGames.map((item) => item.gameTipeName);
@@ -49,64 +67,94 @@ export const SearchButtons = (props) => {
       default:
         setSelectArray([]);
     }
-  }, [props.name, typesGames, forAges, closets]);
+  }, [props.name, typesGames, forAges, closets,take,users,games]);
+
+
+
 
   useEffect(() => {
-    switch (props.name) {
-      case "תחום":
-        {
+    if(chosenUser!==""){
+      switch (props.name) {
+        case "שם מנוי":
+          {  
+            const filteredUsers = users?.find(user => user.userName === chosenUser).userCode;
+            const filteredRows = take.filter((row) => {
+              return (
+                typeof row["UserCode"] === "string" &&
+                row["UserCode"]===filteredUsers
+              );
+            });
+            setSelectArrayFilter(filteredRows);
+          }
+          break;
+          case "שם המשחק":
+          {
+            const filteredGame = games?.filter(game => game.GameName === chosenUser);
+            const gameCodesAsStrings = filteredGame?.map(game => game?.Id?.toString());
+            const filteredGames = take.filter(game => gameCodesAsStrings.includes(game.GameCode));
+            setSelectArrayFilter(filteredGames);
+          }
+          break;
+        case "תחום":
+          {
+            const filteredRows = games.filter((row) => {
+              return (
+                typeof row["GameTypeCode"] === "string" &&
+                row["GameTypeCode"]===chosenUser
+              );
+            });
+            setSelectArrayFilter(filteredRows);
+          }
+          break;
+        case "טווח גילאים":
+          {
+            const filteredRows = games.filter((row) => {
+              return (
+                typeof row["AgeCode"] === "string" &&
+                row["AgeCode"]===chosenUser
+              );
+            });
+            setSelectArrayFilter(filteredRows);
+          }
+          break;
+        case "סטטוס משחק":
           const filteredRows = games.filter((row) => {
             return (
-              typeof row["GameTypeCode"] === "string" &&
-              row["GameTypeCode"].includes(chosenUser)
+              typeof row["CurrentStateOfGame"] === "string" &&
+              row["CurrentStateOfGame"]===chosenUser
             );
           });
           setSelectArrayFilter(filteredRows);
+          break;
+        case "מס’ ארון":
+          {
+            const filteredRows = games.filter((row) => {
+              return (
+                typeof row["ClosetNumber"] === "string" &&
+                row["ClosetNumber"] === chosenUser
+              );
+            });
+            setSelectArrayFilter(filteredRows);
+          }
+          break;
+        // צריך לעדכן בדאטה בייס ולשנות
+        // case "סטטוס השאלה":
+        //   setSelectArray(["מושאל", "במשחקייה"]);
+  
+        //   break;
+        default:
+          setSelectArrayFilter([]);
         }
-        break;
-      case "טווח גילאים":
-        {
-          const filteredRows = games.filter((row) => {
-            return (
-              typeof row["AgeCode"] === "string" &&
-              row["AgeCode"].includes(chosenUser)
-            );
-          });
-          setSelectArrayFilter(filteredRows);
-        }
-        break;
-      case "סטטוס משחק":
-        const filteredRows = games.filter((row) => {
-          return (
-            typeof row["CurrentStateOfGame"] === "string" &&
-            row["CurrentStateOfGame"].includes(chosenUser)
-          );
-        });
-        setSelectArrayFilter(filteredRows);
-        break;
-      case "מס’ ארון":
-        {
-          const filteredRows = games.filter((row) => {
-            return (
-              typeof row["ClosetNumber"] === "string" &&
-              row["ClosetNumber"].includes(chosenUser)
-            );
-          });
-          setSelectArrayFilter(filteredRows);
-        }
-        break;
-      // צריך לעדכן בדאטה בייס ולשנות
-      case "סטטוס השאלה":
-        setSelectArray(["מושאל", "במשחקייה"]);
-
-        break;
-      default:
-        setSelectArray([]);
+    }
+    else{
+      setSelectArrayFilter(props.list);
     }
   }, [chosenUser]);
+
   useEffect(() => {
     props.setTableArr(selectArrayFilter);
   }, [selectArrayFilter]);
+
   const closeMenu = (user) => {
     setChosenUser(user);
     setMenuAnchor(null);

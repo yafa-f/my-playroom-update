@@ -9,7 +9,7 @@ export const BaseScreen = () => {
       <div
         style={{
           position: "absolute",
-          top: "20vh",
+          top: "15vh",
           width: "70vw",
           height: "30vh",
         }}
