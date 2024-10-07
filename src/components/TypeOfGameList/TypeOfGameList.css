@@ -1,25 +1,26 @@
-.closets {
+.types {
   position: absolute;
 }
-.close-title {
+.types-title {
   display: inline-flex;
   direction: rtl;
   margin-left: 7vw;
 }
-.close-logo {
+.type-logo {
   background-image: url("../../assets/אחר2.svg");
   width: 65px;
   height: 65px;
   margin-top: 10px;
 }
-.titleClose {
+.titleType {
   direction: rtl;
   font-size: 55px;
   font-weight: 900;
   line-height: 82.5px;
   color: rgba(6, 120, 252, 1);
-  margin-left: 56vw;
+  margin-left: 48vw;
   text-align: center;
+  width: 20vw;
 }
 .table-title {
   width: 77vw;
@@ -32,7 +33,7 @@
   display: inline-flex;
   direction: rtl;
 }
-.closet-table {
+.types-table {
   width: 77vw;
   height: 55vh;
   margin-top: 5px;
@@ -54,7 +55,7 @@ h3 {
   font-weight: 600;
   line-height: 27px;
   color: rgba(6, 120, 252, 1);
-  margin-left: 5vw;
+  margin-left: 7vw;
   margin-right: 50px;
 }
 .one-item {
@@ -69,16 +70,13 @@ h3 {
   font-weight: 600;
   line-height: 25.5px;
 }
-.close-code {
-  width: 11vw;
+.type-code {
+  width: 13vw;
   margin-right: 4vw;
 }
-.type-game-in-closet {
-  width: 18vw;
+.type-game {
+  width: 12vw;
 }
-.is-empty-place {
-  width: 15vw;
-}
-.position-of-closet {
+.sticker-Color {
   width: 9vw;
 }
