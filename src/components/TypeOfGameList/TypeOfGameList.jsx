@@ -11,9 +11,9 @@ export const TypeOfGameList = () => {
         <div className="titleType">תחומי משחק</div>
       </div>
       <div className="table-title">
-        <h3>קוד תחום</h3>
-        <h3>תחום</h3>
-        <h3>צבע מדבקה</h3>
+        <div className="h-3">קוד תחום</div>
+        <div className="h-3">תחום</div>
+        <div className="h-3">צבע מדבקה</div>
       </div>
       <div className="types-table">
         <section className="section">
