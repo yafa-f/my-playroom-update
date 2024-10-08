@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import "./gamesList.css";
+import "./GamesList.css";
 import { Button, MenuItem, Menu } from "@mui/material";
 import { styled } from "@mui/system";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";

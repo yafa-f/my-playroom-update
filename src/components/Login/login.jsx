@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./login.css";
+import "./Login.css";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
@@ -47,7 +47,7 @@ export const Login = (props) => {
         }}
       />
       <br />
-      <Link to="/homepage">
+      <Link to="/Homepage">
         <Button
           onClick={setProps}
           variant="contained"

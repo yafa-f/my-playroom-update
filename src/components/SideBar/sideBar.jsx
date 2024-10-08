@@ -1,5 +1,5 @@
 import React from "react";
-import "./sideBar.css";
+import "./SideBar.css";
 import games from "../../assets/משחקים.svg";
 import games2 from "../../assets/משחקים2.svg";
 import users from "../../assets/מנויים.svg";
@@ -23,7 +23,7 @@ export const SideBar = () => {
       name: "קנסות לחלקים חסרים",
       src: other,
       srcChoosen: other2,
-      to: "PartList",
+      to: "FinesList",
     },
     { name: "טווח גילאים", src: other, srcChoosen: other2, to: "AgesList" },
   ];

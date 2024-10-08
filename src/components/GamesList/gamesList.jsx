@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import "./gamesList.css";
+import "./GamesList.css";
 import { Button } from "@mui/material";
 import { useSelector } from "react-redux";
 import { AccordionDetails, AccordionSummary, Accordion } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import DeleteGame from "../DeleteFunctions/DeleteGame/deleteGame";
+import DeleteGame from "../DeleteFunctions/DeleteGame/DeleteGame";
 import { DELETE_GAME } from "../../app/slices/gameSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
