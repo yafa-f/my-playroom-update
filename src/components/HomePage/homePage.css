@@ -33,4 +33,22 @@
   margin-top: 15vh;
   position: fixed;
 }
-
+.display-login-name{
+  direction: rtl;
+  display: inline-flex;
+  margin-left: 15vw;
+  gap: 10px;
+  margin-top: 20px;
+}
+.user-icon {
+  background-image: url("../../assets/user.svg");
+  width: 20px;
+  height: 21px;
+}
+.login-user-name {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 20.43px;
+  text-align: left;
+  color: rgba(255, 255, 255, 1);
+}
