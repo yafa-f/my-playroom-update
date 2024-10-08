@@ -1,7 +1,7 @@
 import React from "react";
-import "./homePage.css";
-import { Login } from "../Login/login";
-import { SideBar } from "../SideBar/sideBar";
+import "./HomePage.css";
+import { Login } from "../Login/Login";
+import { SideBar } from "../SideBar/SideBar";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 export const HomePage = () => {
