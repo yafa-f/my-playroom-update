@@ -85,7 +85,6 @@ export const NewUser = () => {
     }
   };
 
-  
   const addNewUser = async () => {
     const response = await fetch("http://localhost:5000/userRoutes", {
       method: "POST",
