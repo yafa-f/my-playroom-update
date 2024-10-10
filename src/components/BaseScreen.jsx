@@ -9,7 +9,18 @@ export const BaseScreen = () => {
       <div
         style={{
           position: "absolute",
-          top: "15vh",
+          top: "20vh",
+          width: "70vw",
+          height: "30vh",
+        }}
+      >
+        <Routing />
+      </div>
+      <HomePage />
+      <div
+        style={{
+          position: "absolute",
+          top: "20vh",
           width: "70vw",
           height: "30vh",
         }}
