@@ -16,9 +16,9 @@ const addPartFine=()=>{
           {" "}
           <FontAwesomeIcon
             icon={faPlusCircle}
-            color=" rgba(6, 120, 252, 1)"
+            color="rgba(255, 255, 255, 1) "
             size="2x"
-            style={{borderRadius:"150px" ,border:" rgba(255, 255, 255, 1) solid"}}
+            style={{borderRadius:"150px" ,border:" rgba(6, 120, 252, 1) solid"}}
            onClick={addPartFine}
           />
         </div>
