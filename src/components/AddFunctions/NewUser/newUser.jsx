@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
 import { ADD_USER } from "../../../app/slices/usersSlice";
 import { useNavigate } from "react-router-dom";
-import { isIsraeliPhoneNumber } from "../../CheckValues/CheckPhone";
-import { checkIsCode } from "../../CheckValues/CheckCode";
+import { isIsraeliPhoneNumber } from "../../CheckValues/checkPhone";
+import { checkIsCode } from "../../CheckValues/checkCode";
 export const NewUser = () => {
   const [styleName, setStyleName] = useState(false);
   const [stylePhone, setStylePhone] = useState(false);
@@ -85,7 +85,6 @@ export const NewUser = () => {
     }
   };
 
-  
   const addNewUser = async () => {
     const response = await fetch("http://localhost:5000/userRoutes", {
       method: "POST",
