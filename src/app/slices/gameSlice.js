@@ -34,7 +34,6 @@ export const GameSlice = createSlice({
       });
       state.games = updatedGames;
     },
-   
   },
 });
 export const { setCurrentGame, setGames, ADD_GAME, DELETE_GAME, UPDATE_GAME } =

@@ -30,6 +30,8 @@
 }
 .img-icon {
   margin-right: 20px;
+  width:22px ;
+  height: 22px;
 }
 .side-names {
   margin-right: 10px;
@@ -44,9 +46,10 @@
 .side-list.choosen {
   direction: rtl;
   width: 230px;
-  margin-top: 6vh;
+  /* margin-top: 6vh; */
   display: inline-flex;
   background-color: rgba(255, 255, 255, 1);
-
+  align-items: center;
+  align-content: center;
 }
 

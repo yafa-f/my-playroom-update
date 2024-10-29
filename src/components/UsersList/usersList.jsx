@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -16,22 +16,22 @@ import SearchIcon from "@mui/icons-material/Search";
 import "../../components/GenericLists/genericLists.css";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Fade from "@mui/material/Fade";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { DELETE_USER } from "../../app/slices/usersSlice";
-import { Edit } from "../EditFunctions/Edit/edit";
 import deleteUser from "../DeleteFunctions/DeleteUser/deleteUser";
 import Supervisor from "../../assets/supervisor_account.svg";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-
 import "./usersList.css";
+import PersonIcon from "@mui/icons-material/Person";
 import { styled } from "@mui/system";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import DoneIcon from "@mui/icons-material/Done";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 export const UsersList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -50,9 +50,10 @@ export const UsersList = () => {
   const [arrowUpAndDown, setArrowUpAndDown] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [chosenUser, setChosenUser] = useState("");
-  const [position, setPosition] = useState({ top: 0, left: 0 });
   const buttonRef = useRef(null);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
+const navigate=useNavigate();
   useEffect(() => {
     setNameOfList(users.data);
     setOnSearch(false);
@@ -103,35 +104,36 @@ export const UsersList = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const CustomButton = styled(Button)(({ theme }) => ({
-    border: "1px solid black",
+    borderColor: "transparent",
     backgroundColor: "white",
     "&:hover": {
-      border: "2px solid black", 
-      backgroundColor: "white", 
-      boxShadow: "none", 
-    },
-  }));
-  const CustomIconButton = styled(IconButton)(({ theme }) => ({
-    backgroundColor: "transparent", 
-    border: "1px solid black", 
-    "&:hover": {
-      backgroundColor: "transparent", 
+      borderColor: "transparent",
+      backgroundColor: "white",
+      boxShadow: "none",
     },
   }));
   const CustomTextField = styled(TextField)({
     "& .MuiOutlinedInput-root": {
       "& fieldset": {
-        borderColor: "black", 
+        borderColor: "transparent",
       },
       "&:hover fieldset": {
-        borderColor: "black", 
+        borderColor: "transparent",
       },
       "&.Mui-focused fieldset": {
-        borderColor: "black",
-        boxShadow: "none", 
+        borderColor: "transparent",
+        boxShadow: "none",
       },
+      backgroundColor: "white",
     },
   });
+  const CustomIconButton = styled(IconButton)(({ theme }) => ({
+    backgroundColor: "transparent",
+    border: "1px solid black",
+    "&:hover": {
+      backgroundColor: "transparent",
+    },
+  }));
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -146,9 +148,11 @@ export const UsersList = () => {
     setAnchorEl(null);
     setFieldValue("");
   };
-  const handleEditClick = (row) => {
+  const handleEditClick = (user) => {
     setIsEditClicked(true);
-    setClickedRow(row);
+    setClickedRow(user);
+    navigate("editUser", { state: { user } });
+
   };
   const updateEditState = () => {
     setIsEdit(!isEdit);
@@ -162,6 +166,13 @@ export const UsersList = () => {
     dispatch(DELETE_USER(currentDelete));
     setCurrentStore(() => DELETE_USER);
   };
+  const handleDoubleClick = (user) => {
+    navigate("singleUser", { state: { user } });
+  };
+  // const editCurrent = (current) => {
+  //   navigate("editUser", { state: { current } });
+  // };
+
   const openMenu = (event) => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
@@ -260,6 +271,7 @@ export const UsersList = () => {
             height: 38,
             fontWeight: 700,
             wordWrap: "break-word",
+            marginLeft: "-23.2vw",
           }}
         >
           מנוי +
@@ -272,8 +284,6 @@ export const UsersList = () => {
             fontSize: 18,
             fontFamily: "Open Sans Hebrew",
             color: "black",
-            borderColor: "black",
-            borderStyle: "200px",
             borderRadius: 28,
             width: 220,
             height: 20,
@@ -304,8 +314,6 @@ export const UsersList = () => {
               fontSize: 18,
               fontFamily: "Open Sans Hebrew",
               color: "black",
-              borderColor: "black",
-              borderStyle: "200px",
               borderRadius: 28,
               width: 220,
               height: 38,
@@ -389,79 +397,127 @@ export const UsersList = () => {
           <img src={Supervisor.toString()}></img>
         </div>
       </div>
-      <div>
-        <div className="buttonAndTextField">
-          <Button
-            sx={{ backgroundColor: "black" }}
-            id="fade-button"
-            aria-controls={open ? "fade-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onMouseOver={handleClick}
-          >
-            <div className="list-style">
-              חיפוש
-              <SearchIcon />
-            </div>
-          </Button>
-          {onSearch && (
-            <TextField
-              value={fieldValue}
-              onChange={handleSearch}
-              placeholder={currentField}
-              sx={{ backgroundColor: "white" }}
-            ></TextField>
-          )}
-          <Button
-            sx={{
-              backgroundColor: "black",
-              color: "#fff",
-              marginRight: "200px",
-            }}
-          >
-            להוספה
-          </Button>
-        </div>
-
-        <Menu
-          id="fade-menu"
-          MenuListProps={{
-            "aria-labelledby": "fade-button",
-          }}
-          anchorEl={anchorEl}
-          open={open}
-          TransitionComponent={Fade}
-          onClose={handleClose}
-        >
-          {columns.map((column) => {
-            if (column.label !== "Parts" && column.label !== "emptyPlace") {
-              return (
-                <MenuItem onClick={() => handleFilter(column.label)}>
-                  {column.label}
-                </MenuItem>
-              );
-            }
-            return null;
-          })}
-        </Menu>
+      <div className="table-title">
+        <h3 style={{ marginRight: "105px" }}> שם</h3>
+        <h3 style={{ marginRight: "-27px" }}>תאריך מנוי</h3>
+        <h3 style={{ marginRight: "17px" }}>טלפון 1</h3>
+        <h3 style={{ marginRight: "14px" }}>טלפון 2 </h3>
+        <h3> </h3>
+        <h3> </h3>
+        <h3 style={{ marginRight: "100px" }}> פרטי בנק</h3>
+        <h3 style={{ marginRight: "60px" }}>מס' שק</h3>
       </div>
-      <Paper style={{ height: 500, width: "90%" }}>
-        <TableVirtuoso
-          data={chosenUser ? filteredRows : updatedRows}
-          components={VirtuosoTableComponents}
-          fixedHeaderContent={fixedHeaderContent}
-          itemContent={(index, row) => rowContent(index, row)}
-        />
-      </Paper>
-      {isEditClicked && (
-        <Edit
-          currentList={name}
-          row={clickedRow}
-          hideComponent={hide}
-          edit={isEdit}
-          editState={updateEditState}
-        />
-      )}
+      <div className="table">
+        <section className="section">
+          {(chosenUser ? filteredRows : updatedRows)?.map((user, i) => (
+            <div key={i}>
+              <div
+                sx={{
+                  height: "15vh",
+                  direction: "rtl",
+                  borderBottom: "2px rgba(6, 120, 252, 0.20) solid",
+                }}
+              >
+                <div className="user-column">
+                  <div className="user-details">
+                    <div>
+                      <div style={{ marginRight: "12px" }}>
+                        <PersonIcon color="#686464"></PersonIcon>
+                      </div>
+                    </div>
+                    <button
+                      className="user-attribute"
+                      style={{
+                        fontWeight: 600,
+                        marginRight: "0px",
+                        fontSize: "17px",
+                        width: "155px",
+                        backgroundColor: "white",
+                        borderColor: "transparent",
+                      }}
+                      onDoubleClick={()=>handleDoubleClick(user)}
+                    >
+                      {user.userName}
+                    </button>
+                    <div
+                      className="user-attribute"
+                      style={{ width: "150px", marginRight: "10px" }}
+                    >
+                      {user.userDate}
+                    </div>
+                    <div
+                      className="user-attribute"
+                      style={{ marginRight: "-47px" }}
+                    >
+                      {user.cellphone}
+                    </div>
+                    <div className="user-attribute">{user.phone}</div>
+                    {user.depositPaid == "TRUE" ? (
+                      <div
+                        className="user-attribute"
+                        style={{ display: "inline-flex", marginLeft: "40px" }}
+                      >
+                        {" "}
+                        <DoneIcon color="success"></DoneIcon>שולם פקדון
+                      </div>
+                    ) : (
+                      <div
+                        className="user-attribute"
+                        style={{
+                          display: "inline-flex",
+                          marginLeft: "40px",
+                        }}
+                      >
+                        {" "}
+                        <CloseRoundedIcon
+                          sx={{ color: "red" }}
+                        ></CloseRoundedIcon>
+                        לא שולם פקדון{" "}
+                      </div>
+                    )}
+                    <div
+                      className="user-attribute"
+                      style={{ display: "inline-flex", width: "160px" }}
+                    >
+                      <div className="coinsImg"></div>
+                      <div className="total">
+                        {user.totalPayment ? user.totalPayment : "0.00"} ש"ח
+                      </div>
+                      <div className="line"> </div>
+                      <div className="type">{user.paymentType}</div>
+                    </div>
+                    <div
+                      className="user-attribute"
+                      style={{ width: "180px", marginRight: "40px" }}
+                    >
+                      {user.bankNumber}-{user.branchNumber}-{user.accountNumber}
+                    </div>
+                    <div className="user-attribute">{user.checkNumber}</div>
+                    <Button
+                      style={{
+                        width: "1px",
+                        height: "2px",
+                        marginRight: "-50px",
+                      }}
+                      onClick={()=>{handleEditClick(user)}}>                    
+                      <EditIcon></EditIcon>{" "}
+                    </Button>{" "}
+                    <Button
+                      style={{
+                        width: "1px",
+                        height: "2px",
+                        marginRight: "-10px",
+                      }}
+                    >
+                      <DeleteOutlineIcon></DeleteOutlineIcon>{" "}
+                    </Button>{" "}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </section>
+      </div>
     </div>
   );
 };

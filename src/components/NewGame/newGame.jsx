@@ -510,3 +510,8 @@ export const NewGame = () => {
     </div>
   );
 };
+
+  return (
+    <div>NewGame</div>
+  )
+}

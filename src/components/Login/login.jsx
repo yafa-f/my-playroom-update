@@ -4,18 +4,10 @@ import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export const Login = (props) => {
-  const [nameToLogin, setNameToLogin] = useState();
-  const [codeToLogin, setCodeToLogin] = useState();
-  const name = (e) => {
-    setNameToLogin(e.target.value);
-  };
-  const code = (e) => {
-    setCodeToLogin(e.target.value);
-  };
-  const setProps = () => {
-    props.setName(nameToLogin);
-  };
+export const Login = () => {
+  const [name, setName] = useState();
+  const [code, setCode] = useState();
+
   return (
     <div className="login-card">
       <div className="welcome">ברוכים הבאים למערכת משחקולנו</div>
@@ -24,7 +16,9 @@ export const Login = (props) => {
       <TextField
         defaultValue="שם משתמש"
         size="small"
-        onChange={name}
+        onChange={(e) => {
+          setName(e.target.value);
+        }}
         sx={{
           direction: "rtl",
           width: "22vw",
@@ -37,7 +31,9 @@ export const Login = (props) => {
       <TextField
         defaultValue="סיסמא"
         size="small"
-        onChange={code}
+        onChange={(e) => {
+          setCode(e.target.value);
+        }}
         sx={{
           direction: "rtl",
           width: "22vw",
@@ -47,9 +43,8 @@ export const Login = (props) => {
         }}
       />
       <br />
-      <Link to="/Homepage">
+      <Link to="/homepage">
         <Button
-          onClick={setProps}
           variant="contained"
           sx={{ marginTop: "5vh", marginLeft: "5vw", width: "9vw" }}
         >
