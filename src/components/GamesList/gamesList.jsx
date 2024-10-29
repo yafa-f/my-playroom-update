@@ -38,6 +38,6 @@ export const GamesList = () => {
     dispatch(DELETE_GAME(game));
   };
   return (
-    <div>GamesList</div>
+    <div></div>
   )
 }

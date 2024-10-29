@@ -11,10 +11,10 @@ export const ClosetList = () => {
         <div className="titleClose">ארונות</div>
       </div>
       <div className="table-title">
-        <h3>קוד ארון</h3>
-        <h3>תחום משחקים בארון</h3>
-        <h3>קיימים מקומות פנויים?</h3>
-        <h3>מיקום הארון</h3>
+        <div className="tt-h3">קוד ארון</div>
+        <div className="tt-h3">תחום משחקים בארון</div>
+        <div className="tt-h3">קיימים מקומות פנויים?</div>
+        <div className="tt-h3">מיקום הארון</div>
       </div>
       <div className="closet-table">
         <section className="section">
