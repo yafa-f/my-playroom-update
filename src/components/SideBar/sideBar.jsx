@@ -1,5 +1,5 @@
 import React from "react";
-import "./SideBar.css";
+import "./sideBar.css";
 import games from "../../assets/משחקים.svg";
 import games2 from "../../assets/משחקים2.svg";
 import users from "../../assets/מנויים.svg";

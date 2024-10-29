@@ -6,7 +6,7 @@ import { ADD_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_CLOSET } from "../../app/slices/closetSlice";
 import UpdateGame from "../UpdateFunction/UpdateGame";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
-import "./NewGame.css";
+import "./newGame.css";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import NewGameFunction from "../AddFunctions/NewGameFunction/NewGameFunction";

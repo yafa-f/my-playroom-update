@@ -26,7 +26,7 @@ import { DELETE_CLOSET } from "../../app/slices/closetSlice";
 import { DELETE_FOR_AGE } from "../../app/slices/forAgeSlice";
 import { DELETE_TYPE_GAME } from "../../app/slices/typeGameSlice";
 import deleteUser from "../DeleteFunctions/DeleteUser/DeleteUser";
-import deleteGame from "../DeleteFunctions/DeleteGame/DeleteGame";
+import deleteGame from "../DeleteFunctions/DeleteGame/deleteGame";
 import deleteForAge from "../DeleteFunctions/DeleteForAge/DeleteForAge";
 import deleteTypeGame from "../DeleteFunctions/DeleteTypeGame/DeleteTypeGame";
 import deleteCloset from "../DeleteFunctions/DeleteCloset/DeleteCloset";
