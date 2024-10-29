@@ -1,0 +1,122 @@
+.takes {
+  position: absolute;
+}
+.take-title {
+  display: inline-flex;
+  direction: rtl;
+  margin-left: 7vw;
+}
+.take-logo {
+  background-image: url("../../assets/השאלות2.svg");
+  width: 65px;
+  height: 65px;
+  margin-top: 10px;
+}
+.titleTake {
+  direction: rtl;
+  font-size: 55px;
+  font-weight: 900;
+  line-height: 82.5px;
+  color: rgba(6, 120, 252, 1);
+  /* margin-right: 20px; */
+  margin-left: 56vw;
+  text-align: center;
+}
+.table-title {
+  width: 77vw;
+  height: 60.09px;
+  margin-top: 2vh;
+  margin-left: 3vw;
+  border-radius: 28px 28px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(239, 239, 239, 1);
+  display: inline-flex;
+  direction: rtl;
+}
+.take-table {
+  width: 77vw;
+  height: 55vh;
+  margin-top: 5px;
+  margin-left: 3vw;
+  gap: 0px;
+  border-radius: 0px 0px 28px 28px;
+  border: 1px 0px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(255, 255, 255, 1);
+  overflow: scroll;
+    overflow-x: hidden;
+}
+.section {
+  height: 100vh;
+  margin-left: 2px;
+}
+h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 27px;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 5vw;
+  margin-right: 50px;
+}
+.one-item {
+  /* margin-right: 10px; */
+  direction: rtl;
+  display: inline-flex;
+  width: 77vw;
+  height: 8vh;
+  gap: 1vw;
+  border-bottom: 2px rgba(6, 120, 252, 0.20) solid;
+align-items: center;}
+.back-date,
+.take-date,
+.found-at,
+.details,
+.makav {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 25.5px;
+  text-align: right;
+}
+.makav {
+  width:1vw;
+}
+.back-date,
+.take-date{
+  width: 9vw;
+}
+.back-date
+{
+margin-right: 3vw;
+}
+.found-at{
+  width: 15vw;
+
+}
+.details{
+  margin-right: 3vw;
+  width: 13vw;
+}
+.delay-message{
+font-size: 14px;
+font-weight: 400;
+line-height: 25.5px;
+text-align: right;
+color: (188, 55, 55, 1);
+}
+.delay-message2{
+font-size: 14px;
+font-weight: 700;
+line-height: 25.5px;
+text-align: right;
+color: rgba(188, 55, 55, 1);
+}
+.delay-icon{
+  background-image: url("../../assets/delay.svg");
+  width: 20px;
+  height: 20px;
+}
+.delay{
+  display: inline-flex;
+  width:  9vw;
+  gap: 10px;
+}
