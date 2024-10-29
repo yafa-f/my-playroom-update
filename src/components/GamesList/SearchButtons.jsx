@@ -269,3 +269,4 @@ export const SearchButtons = (props) => {
     </div>
   );
 };
+

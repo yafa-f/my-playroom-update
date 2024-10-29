@@ -1,7 +1,6 @@
 import React from "react";
 import { Routing } from "../utils/routing";
 import { HomePage } from "./HomePage/homePage.jsx";
-
 export const BaseScreen = () => {
   return (
     <div>

@@ -9,7 +9,6 @@ import { TakeList } from "../components/TakeList/TakeList.jsx";
 import { ClosetList } from "../components/ClosetsList/ClosetList.jsx";
 import { TypeOfGameList } from "../components/TypeOfGameList/TypeOfGameList.jsx";
 import { FinesList } from "../components/FinesList/FinesList.jsx";
-
 export const Routing = () => {
   return (
     <div style={{ display: "revert" }}>

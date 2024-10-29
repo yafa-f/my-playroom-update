@@ -19,7 +19,6 @@ export const NewGame = () => {
   const { bool } = useParams();
   const location = useLocation();
   const { gameToUpdate } = location.state || {};
-
   const [codeOfCloset, setCodeOfCloset] = useState("");
   const [placeInCloset, setPlaceInCloset] = useState("");
 
