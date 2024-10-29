@@ -49,10 +49,10 @@ export const TakeList = () => {
         <SearchButtons name="שם המשחק"  list={take}setTableArr={setTableArr} />{" "}
       </div>
       <div className="table-title">
-        <h3>פרטי המשחק</h3>
-        <h3>בהשאלה אצל</h3>
-        <h3>תאריך השאלה</h3>
-        <h3>תאריך החזרה</h3>
+        <div className="taket-h3">פרטי המשחק</div>
+        <div className="taket-h3">בהשאלה אצל</div>
+        <div className="taket-h3">תאריך השאלה</div>
+        <div className="taket-h3">תאריך החזרה</div>
       </div>
       <div className="take-table">
         <section className="section">
