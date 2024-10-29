@@ -1,5 +1,5 @@
 import React from "react";
-import "./SideBar.css";
+import "./sideBar.css";
 import games from "../../assets/משחקים.svg";
 import games2 from "../../assets/משחקים2.svg";
 import users from "../../assets/מנויים.svg";
@@ -8,7 +8,6 @@ import take from "../../assets/השאלות.svg";
 import take2 from "../../assets/השאלות2.svg";
 import other from "../../assets/אחר.svg";
 import other2 from "../../assets/אחר2.svg";
-
 import { Link, useLocation } from "react-router-dom";
 export const SideBar = () => {
   const location = useLocation();
