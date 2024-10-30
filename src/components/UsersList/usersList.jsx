@@ -397,7 +397,7 @@ const navigate=useNavigate();
           <img src={Supervisor.toString()}></img>
         </div>
       </div>
-      <div className="table-title">
+      <div className="u-table-title">
         <h3 style={{ marginRight: "105px" }}> שם</h3>
         <h3 style={{ marginRight: "-27px" }}>תאריך מנוי</h3>
         <h3 style={{ marginRight: "17px" }}>טלפון 1</h3>

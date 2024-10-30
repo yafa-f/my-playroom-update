@@ -11,11 +11,15 @@ import { useState } from "react";
 import { UserTitle } from "./userTitle";
 import { DepositAndDetailsComp } from "./deposit-and-details";
 export const UserScreen = () => {
+  const navigate=useNavigate();
+
   const location = useLocation();
   const user = location.state?.user;
 
   const [isChecked, setIsChecked] = useState(false);
-
+const editUser=()=>{
+    navigate("/UsersList/editUser", { state: { user } });
+}
   const handleChange = () => {
     setIsChecked(!isChecked);
   };
@@ -34,9 +38,10 @@ export const UserScreen = () => {
           borderColor: "#0678FC",
           backgroundColor: "white",
           borderRadius: "9999px",
-          marginLeft: "110px",
-          marginTop: "50px",
+          marginLeft: "50px",
+          marginTop: "10px",
         }}
+        onClick={editUser}
       >
         <EditIcon sx={{ color: "#0678FC" }}></EditIcon>
       </button>

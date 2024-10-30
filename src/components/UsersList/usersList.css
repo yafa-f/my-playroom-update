@@ -18,7 +18,7 @@
   font-size: 55px;
   font-weight: 900;
   margin-right: -15px;
-  padding-left: 485px;
+  padding-left: 320px;
 }
 .addBorder {
   width: 62px;
@@ -96,7 +96,7 @@
   font-weight: 700;
   word-wrap: "break-word";
 }
-.table-title {
+.u-table-title {
   width: 78vw;
   height: 60.09px;
   margin-top: 5vh;
