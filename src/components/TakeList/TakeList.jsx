@@ -71,7 +71,7 @@ export const TakeList = () => {
               );
               return (
                 <div className="one-item" key={i}>
-                  <div className="details">
+                  <div className="t-details">
                     {currentGame ? currentGame.GameName : "Game not found"}
                   </div>
                   <div className="found-at">

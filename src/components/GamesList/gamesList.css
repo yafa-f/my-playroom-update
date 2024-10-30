@@ -24,7 +24,7 @@
   text-align: center;
 }
 .table-title {
-  width: 75vw;
+  width: 77vw;
   height: 60.09px;
   margin-top: 10vh;
   margin-left: 3vw;
@@ -35,17 +35,17 @@
   display: inline-flex;
   direction: rtl;
 }
-h3 {
-  font-family: "Poppins";
-  font-size: 18px;
+.h-3 {
+  margin-top: 15px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 27px;
   color: rgba(6, 120, 252, 1);
   margin-left: 7vw;
   margin-right: 50px;
 }
-.table {
-  width: 75vw;
+.G-table {
+  width: 77vw;
   height: 42vh;
   margin-top: 5px;
   margin-left: 3vw;
@@ -65,9 +65,9 @@ h3 {
 .game-column {
   display: inline-flex;
   gap: 3vw;
+  font-size: 13px
 }
 .game-name {
-  font-family: Poppins;
   font-size: 17px;
   font-weight: 600;
   line-height: 25.5px;
@@ -77,9 +77,9 @@ h3 {
 .game-details {
   width: 10vw;
 }
-.game-name-second {
+.game-names-second {
   display: inline-flex;
-  font-size: 17px;
+  font-size: 13px;
   gap: 15px;
 }
 .child-logo {
@@ -161,4 +161,5 @@ h3 {
   width: 13px;
   height: 17px;
 }
+
 
