@@ -12,7 +12,7 @@ export const UserTitle = ({ name, phone, cellphone,email }) => {
         width: "850px",
         height: "104px",
         borderRadius: "28px",
-        marginLeft: "110px",
+        marginLeft: "50px",
         marginTop: "-41px",
         display: "inline-flex",
         direction: "rtl",

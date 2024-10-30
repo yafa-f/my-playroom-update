@@ -27,9 +27,9 @@ export const DepositAndDetailsEditAndAddComp = ({
         className="depositDiv"
         style={{
           width: "700px",
-          height: "410px",
-          marginTop: "20px",
-          marginLeft: "110px",
+          height: "380px",
+          marginTop: "10px",
+          marginLeft: "50px",
           gap: "0px",
           borderRadius: "28px",
           border: "1px 0px 0px 0px",
@@ -130,8 +130,8 @@ export const DepositAndDetailsEditAndAddComp = ({
         className="personalDetails"
         style={{
           width: "420px",
-          height: "410px",
-          marginTop: "20px",
+          height: "380px",
+          marginTop: "10px",
           marginLeft: "45px",
           gap: "0px",
           borderRadius: "28px",

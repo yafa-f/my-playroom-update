@@ -50,13 +50,15 @@
   height: 100vh;
   margin-left: 2px;
 }
-h3 {
+.taket-h3 { 
+   margin-top: 15px;
   font-size: 16px;
   font-weight: 600;
   line-height: 27px;
   color: rgba(6, 120, 252, 1);
   margin-left: 5vw;
   margin-right: 50px;
+  margin-top: 12px;
 }
 .one-item {
   /* margin-right: 10px; */
@@ -70,7 +72,7 @@ align-items: center;}
 .back-date,
 .take-date,
 .found-at,
-.details,
+.t-details,
 .makav {
   font-size: 14px;
   font-weight: 600;
@@ -92,7 +94,7 @@ margin-right: 3vw;
   width: 15vw;
 
 }
-.details{
+.t-details{
   margin-right: 3vw;
   width: 13vw;
 }
@@ -119,4 +121,10 @@ color: rgba(188, 55, 55, 1);
   display: inline-flex;
   width:  9vw;
   gap: 10px;
+}
+.search-buttons {
+  display: inline-flex;
+  gap: 10px;
+  direction: rtl;
+  margin-left: 10vw;
 }
