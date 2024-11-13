@@ -32,6 +32,7 @@ import { styled } from "@mui/system";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {setSingleUser} from  "../../app/slices/singleUserSlice"
 export const UsersList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -167,7 +168,9 @@ const navigate=useNavigate();
     setCurrentStore(() => DELETE_USER);
   };
   const handleDoubleClick = (user) => {
-    navigate("singleUser", { state: { user } });
+    dispatch(setSingleUser(user));
+    navigate("/singleUser", { state: { user } });
+
   };
   // const editCurrent = (current) => {
   //   navigate("editUser", { state: { current } });

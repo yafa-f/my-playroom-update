@@ -8,7 +8,7 @@ import { FinesForMissingPartsSlice } from "./slices/finesForMissingPartsSlice";
 import { TypeGameSlice } from "./slices/typeGameSlice";
 import { TORSlice } from "./slices/takeOrReturnSlice";
 import { ForAgeSlice } from "./slices/forAgeSlice";
-
+import { SingleUserSlice } from "./slices/singleUserSlice";
 export const reduxStore = configureStore({
   reducer: {
     user: UserSlice.reducer,
@@ -19,5 +19,6 @@ export const reduxStore = configureStore({
     typeGame: TypeGameSlice.reducer,
     takingOrReturning: TORSlice.reducer,
     forAge: ForAgeSlice.reducer,
+    singleUser: SingleUserSlice.reducer
   },
 });

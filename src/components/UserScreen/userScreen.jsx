@@ -6,14 +6,18 @@ import MailIcon from "@mui/icons-material/Mail";
 import "./userScreen.css";
 import Checkbox from "@mui/material/Checkbox";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
 import { UserTitle } from "./userTitle";
 import { DepositAndDetailsComp } from "./deposit-and-details";
+import { SideBar } from "../SideBar/sideBar";
 export const UserScreen = () => {
-  const navigate=useNavigate();
 
+  const navigate=useNavigate();
   const location = useLocation();
+  const myLocation = location.pathname;
+  const singleUser = useSelector((state) => state.singleUser.singleUser);
+
   const user = location.state?.user;
 
   const [isChecked, setIsChecked] = useState(false);
@@ -24,13 +28,14 @@ const editUser=()=>{
     setIsChecked(!isChecked);
   };
   return (
-    <div className="screen" style={{ display: "grid" }}>
-      <UserTitle
-        name={user.userName}
-        phone={user.phone}
-        cellphone={user.cellphone}
+    <div className="screen" style={{ display: "grid" ,  position: "absolute"
+  }}>
+     
+   <UserTitle
+        name={singleUser.userName}
+        phone={singleUser.phone}
+        cellphone={singleUser.cellphone}
       ></UserTitle>
-
       <button
         style={{
           height: "44px",
@@ -46,19 +51,19 @@ const editUser=()=>{
         <EditIcon sx={{ color: "#0678FC" }}></EditIcon>
       </button>
       <DepositAndDetailsComp
-        userCode={user.userCode}
-        userName={user.userName}
-        userDate={user.userDate}
-        phone={user.phone}
-        cellphone={user.cellphone}
-        email={user.email}
-        branchNumber={user.branchNumber}
-        checkNumber={user.checkNumber}
-        accountNumber={user.accountNumber}
-        bankNumber={user.bankNumber}
-        totalPayment={user.totalPayment}
-        depositPaid={user.depositPaid}
-        paymentType={user.paymentType}
+        userCode={singleUser.userCode}
+        userName={singleUser.userName}
+        userDate={singleUser.userDate}
+        phone={singleUser.phone}
+        cellphone={singleUser.cellphone}
+        email={singleUser.email}
+        branchNumber={singleUser.branchNumber}
+        checkNumber={singleUser.checkNumber}
+        accountNumber={singleUser.accountNumber}
+        bankNumber={singleUser.bankNumber}
+        totalPayment={singleUser.totalPayment}
+        depositPaid={singleUser.depositPaid}
+        paymentType={singleUser.paymentType}
       ></DepositAndDetailsComp>
 
       <div
@@ -78,7 +83,7 @@ const editUser=()=>{
       >
         אישור
       </div>
-      <div className="userSideBar"></div>
+    
     </div>
   );
 };

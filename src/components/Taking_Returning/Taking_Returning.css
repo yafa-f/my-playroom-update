@@ -1,0 +1,242 @@
+.single-user {
+  position: absolute;
+}
+.single-user-take-title {
+  display: inline-flex;
+  direction: rtl;
+}
+.single-user-take-logo {
+  background-image: url("../../assets/השאלות2.svg");
+  width: 4vw;
+  height: 9vh;
+  margin-top: 20px;
+}
+.single-user-titleTake {
+  width: 30vw;
+  height: 7vh;
+  font-size: 55px;
+  font-weight: 900;
+  line-height: 82.5px;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 32vw;
+}
+.btn-hashala {
+  margin-left: 4vw;
+  margin-top: 5vh;
+}
+.single-table-title {
+  width: 77vw;
+  height: 60.09px;
+  margin-top: 2vh;
+  margin-left: 3vw;
+  border-radius: 28px 28px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(239, 239, 239, 1);
+  display: inline-flex;
+  direction: rtl;
+}
+.single-taket-h3 {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 27px;
+  color: rgba(0, 0, 0, 1);
+  margin-left: 5vw;
+  margin-right: 50px;
+  margin-top: 12px;
+}
+.single-user-table {
+  width: 77vw;
+  height: 50vh;
+  margin-top: 5px;
+  margin-left: 3vw;
+  gap: 0px;
+  opacity: 0px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.single-section {
+  height: 100vh;
+  margin-left: 2px;
+}
+
+.one-item-SU {
+  direction: rtl;
+  display: inline-flex;
+  width: 70vw;
+  height: 10vh;
+  gap: 1vw;
+}
+.date-SU {
+  border-left: 1px rgba(6, 120, 252, 0.2) solid;
+  display: inline-flex;
+}
+.makav-SU {
+  width: 1vw;
+  margin-top: 2vh;
+}
+.take-date-SU {
+  margin-right: 3vw;
+}
+.back-date-SU {
+  margin-right: 3vw;
+}
+.back-date-SU,
+.take-date-SU {
+  width: 9vw;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 25.5px;
+  align-items: center;
+  margin-top: 2vh;
+}
+.return-btn {
+  width: 8vw;
+  height: 6vh;
+  border-radius: 28px;
+  border: 2px rgba(6, 120, 252, 1) solid;
+  background-color: rgba(255, 255, 255, 1);
+  margin-right: 1vw;
+  font-weight: 500;
+}
+.return-btn-text {
+  display: inline-flex;
+  color: rgba(6, 120, 252, 1);
+  font-weight: 600;
+}
+.game-names-SU {
+  width: 9vw;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 25.5px;
+  text-align: center;
+  color: rgba(0, 0, 0, 1);
+}
+.type-SU {
+  display: inline-flex;
+  gap: 5px;
+}
+.age-SU {
+  display: inline-flex;
+  gap: 5px;
+}
+.tchum-SU {
+  color: rgba(122, 122, 122, 1);
+}
+.pas-SU {
+  width: 1px;
+  height: 10px;
+  color: rgba(217, 217, 217, 1);
+}
+.game-details-SU {
+  width: 12vw;
+  border-left: 1px rgba(6, 120, 252, 0.2) solid;
+}
+.game-names-second-SU {
+  display: inline-flex;
+  font-size: 13px;
+  gap: 15px;
+  text-align: center;
+}
+.child-logo-SU {
+  background-image: url("../../assets/child.svg");
+  width: 20px;
+  height: 20px;
+  gap: 9px;
+  opacity: 0px;
+  color: rgba(122, 122, 122, 1);
+}
+.delay-message-SU {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25.5px;
+  text-align: right;
+  color: (188, 55, 55, 1);
+}
+.delay-message2-SU {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 25.5px;
+  text-align: right;
+  color: rgba(188, 55, 55, 1);
+}
+.delay-icon-SU {
+  background-image: url("../../assets/delay.svg");
+  width: 20px;
+  height: 20px;
+}
+.delay-SU {
+  display: inline-flex;
+  width: 9vw;
+  gap: 10px;
+}
+.status-SU {
+  width: 11vw;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+  border-left: 1px rgba(6, 120, 252, 0.2) solid;
+}
+.SU-CurrentStateOfGame.green {
+  width: 10.83px;
+  height: 10.83px;
+  margin: 6px;
+  border-radius: 20px;
+  background: rgba(59, 156, 63, 1);
+}
+.SU-CurrentStateOfGame.red {
+  width: 10.83px;
+  height: 10.83px;
+  margin: 6px;
+  background: rgba(255, 0, 0, 1);
+  border-radius: 20px;
+}
+.return-details {
+  border-top: 1px rgba(230, 230, 230, 1) solid;
+}
+.return-details-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 25.5px;
+  text-align: right;
+  color: rgba(104, 100, 100, 1);
+}
+.return-details-status {
+  display: inline-flex;
+  direction: rtl;
+  width: 40vw;
+  font-size: 14px;
+  font-weight: 400;
+}
+.status-in-return {
+  margin-top: 10px;
+}
+.calculate-inputs {
+  display: flex;
+  gap: 20px;
+}
+.heart-container {
+  position: relative;
+  display: inline-block;
+}
+.heart {
+  width: 50px;
+  height: 50px;
+  border: 1px black solid;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 75%,
+    59% 75%,
+    51% 92%,
+    43% 75%,
+    0% 75%
+  );
+  position: absolute;
+}
+.content {
+  position: relative;
+  z-index: 1;
+  color: black;
+}

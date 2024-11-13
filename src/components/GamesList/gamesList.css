@@ -14,7 +14,6 @@
 }
 .title-name {
   direction: rtl;
-  /* font-family: Poppins; */
   font-size: 55px;
   font-weight: 900;
   line-height: 82.5px;
@@ -67,7 +66,7 @@
   gap: 3vw;
   font-size: 13px
 }
-.game-name {
+.game-names {
   font-size: 17px;
   font-weight: 600;
   line-height: 25.5px;
@@ -116,8 +115,26 @@
   width: 20px;
   height: 19px;
 }
-.game-status {
+.status {
   width: 10vw;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12px;
+}
+.CurrentStateOfGame.green {
+  width: 10.83px;
+  height: 10.83px;
+  margin: 6px;
+  border-radius: 20px;
+  background: rgba(59, 156, 63, 1);
+}
+.CurrentStateOfGame.red {
+  width: 10.83px;
+  height: 10.83px;
+  margin: 6px;
+  background: rgba(255, 0, 0, 1);
+  border-radius: 20px;
 }
 .game-mushal {
   display: inline-flex;

@@ -44,8 +44,11 @@
   margin-right: -40px;
   border-radius: 4px;
 }
-
-
+.user-side-bar-comp {
+  margin-left: 82vw;
+  margin-top: 15vh;
+  position: fixed;
+}
 /* .custom-checkbox {
   appearance: none; 
   width: 20px; 
