@@ -1,0 +1,189 @@
+.single-user-history {
+  position: absolute;
+}
+.single-user-take-title-history {
+  display: inline-flex;
+  direction: rtl;
+}
+.single-user-take-logo-history {
+  background-image: url("../../assets/השאלות2.svg");
+  width: 4vw;
+  height: 9vh;
+  margin-top: 20px;
+}
+.single-user-titleTake-history {
+  width: 30vw;
+  height: 7vh;
+  font-size: 55px;
+  font-weight: 900;
+  line-height: 82.5px;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 47vw;
+}
+.single-table-title-history {
+  width: 77vw;
+  height: 60.09px;
+  margin-left: 3vw;
+  border-radius: 28px 28px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(239, 239, 239, 1);
+  display: inline-flex;
+  direction: rtl;
+}
+.single-taket-h3-history {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 27px;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 4vw;
+  margin-right: 50px;
+  margin-top: 12px;
+}
+.single-user-table-history {
+  width: 77vw;
+  height: 50vh;
+  margin-top: 5px;
+  margin-left: 3vw;
+  gap: 0px;
+  opacity: 0px;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.single-section-history {
+  height: 100vh;
+  margin-left: 2px;
+}
+.one-item-SU-history {
+  direction: rtl;
+  display: inline-flex;
+  background-color: rgba(255, 255, 255, 1);
+  width: 77vw;
+  height: 12vh;
+  gap: 1vw;
+  margin-bottom: 1vh;
+  border-radius: 28px;
+}
+.date-SU-history {
+  border-left: 1px rgba(6, 120, 252, 0.2) solid;
+  display: inline-flex;
+}
+.makav-SU-history {
+  width: 1vw;
+  margin-top: 2vh;
+}
+.take-date-SU-history {
+  margin-right: 3vw;
+}
+.back-date-SU-history {
+  margin-right: 4vw;
+}
+.back-date-SU-history,
+.take-date-SU-history {
+  width: 9vw;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 25.5px;
+  align-items: center;
+  margin-top: 2vh;
+}
+.ActualReturnDate {
+  width: 10vw;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 25.5px;
+  text-align: center;
+  margin-top: 2vh;
+}
+.game-names-SU-history {
+  width: 9vw;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 25.5px;
+  text-align: center;
+  color: rgba(0, 0, 0, 1);
+}
+.type-SU-history {
+  display: inline-flex;
+  gap: 5px;
+}
+.age-SU-history {
+  display: inline-flex;
+  gap: 5px;
+}
+.tchum-SU-history {
+  color: rgba(122, 122, 122, 1);
+}
+.pas-SU-history {
+  width: 1px;
+  height: 10px;
+  color: rgba(217, 217, 217, 1);
+}
+.game-details-SU-history {
+  margin-right: 40px;
+  width: 12vw;
+  border-left: 1px rgba(6, 120, 252, 0.2) solid;
+}
+.game-names-second-SU-history {
+  display: inline-flex;
+  font-size: 13px;
+  gap: 15px;
+  text-align: center;
+}
+.child-logo-SU-history {
+  background-image: url("../../assets/child.svg");
+  width: 20px;
+  height: 20px;
+  gap: 9px;
+  opacity: 0px;
+  color: rgba(122, 122, 122, 1);
+}
+.delay-message-SU-history {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25.5px;
+  text-align: right;
+  color: (188, 55, 55, 1);
+}
+.delay-icon-SU-history {
+  background-image: url("../../assets/delay.svg");
+  width: 20px;
+  height: 20px;
+  margin-top: 0.5vh;
+}
+.delay-SU-history1 {
+  display: inline-flex;
+  width: 6vw;
+  gap: 10px;
+  margin-top: 2vh;
+}
+.delay-SU-history2 {
+  display: inline-flex;
+  width: 9vw;
+  gap: 10px;
+  margin-top: 2vh;
+}
+.comment-history {
+  display: inline-flex;
+  border-left: 1px rgba(6, 120, 252, 0.2) solid;
+  width: 15vw;
+  text-align: center;
+}
+.money-fine {
+  display: inline-flex;
+  text-align: center;
+  margin-top: 2vh;
+}
+.money-icon {
+  background-image: url("../../assets/money.svg");
+  width: 20px;
+  height: 19px;
+  margin-top: 0.5vh;
+}
+.fine-msg {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 25.5px;
+  color: (188, 55, 55, 1);
+  margin-right: 0.7vw;
+}

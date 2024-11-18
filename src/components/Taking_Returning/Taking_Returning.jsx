@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import "./Taking_Returning.css";
-import { useLocation, useNavigate } from "react-router-dom";
 import { UserTitle } from "../UserScreen/userTitle";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@mui/material";
@@ -10,11 +9,15 @@ import { useState } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import UpdateTOR from "../UpdateFunction/UpdateTOR";
+import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
+import { UPDATE_GAME } from "../../app/slices/gameSlice";
+import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
 
 export const Taking_Returning = () => {
-
-  const location = useLocation();
-  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [expanded, setExpanded] = useState({});
+  const [cancelReturn, setCancelReturn] = useState({});
   const [isVisible, setIsVisible] = useState(false);
   const [fineIchur, setFineIchur] = useState();
   const [finePart, setFinePart] = useState();
@@ -22,58 +25,121 @@ export const Taking_Returning = () => {
   const [finesSum, setFinesSum] = useState();
   const [returnStatus, setReturnStatus] = useState({});
   const [amountOfPartAfterReturn, setAmountOfPartAfterReturn] = useState();
-  const [tableData, setTableData] = useState([]);
+  const [tableDataPart, setTableDataPart] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString("en-GB");
   const [selectedValue, setSelectedValue] = useState({});
+  let totalFine = dataTable.reduce((acc, item) => acc + item.fine, 0);
   const singleUser = useSelector((state) => state.singleUser.singleUser);
-  const take = useSelector((state) => state.takingOrReturning.takingsOrReturnings);
-  const games = useSelector((state) => state.game.games);
-  const unavailableGameCodes = games
-    .filter((game) => game.IsAvailable == "FALSE")
-    .map((game) => game.Id);
-  const newFilteredList = take.filter(
-    (item) =>
-      item.UserCode === singleUser.userCode &&
-      unavailableGameCodes.includes(item.GameCode)
+  const take = useSelector(
+    (state) => state.takingOrReturning.takingsOrReturnings
   );
-  const handleChangeSelectedValue = (gameCode, value) => {
+  const games = useSelector((state) => state.game.games);
+  const [newFilteredList, setNewFilteredList] = useState([]);
+  useEffect(() => {
+    const unavailableGameCodes = games
+      .filter((game) => game.IsAvailable === "FALSE")
+      .map((game) => game.Id);
+    const filteredList = take.filter(
+      (item) =>
+        item.UserCode === singleUser.userCode &&
+        unavailableGameCodes.includes(item.GameCode)
+    );
+    setNewFilteredList(filteredList);
+  }, [games, take]);
+
+  const handleChangeSelectedValue = (ReturnID, value) => {
     setSelectedValue((prevValues) => ({
       ...prevValues,
-      [gameCode]: value,
+      [ReturnID]: value,
     }));
   };
   const addAmountOfPartAfterReturn = (part) => {
-    setTableData((prevData) => [...prevData, part]);
+    setTableDataPart((prevData) => [...prevData, part]);
   };
-
-  const handleSaveData = (gameCode) => {
-    const currentDate = new Date().toISOString().split("T")[0]; 
+  const handleSaveData = (ReturnID, gamecode) => {
+    setCancelReturn((prevCancl) => ({
+      ...prevCancl,
+      [ReturnID]: true,
+    }));
+    const currentDate = new Date().toISOString().split("T")[0];
     const tableObject = {
       headers: ["שם החלק", "מס’ חלקים מקורי", "מס’ חלקים לאחר החזרה"],
-      rows: tableData,
+      rows: tableDataPart,
     };
     let newEntry = {
-      GameCode: gameCode,
+      ReturnID: ReturnID,
+      GameCode: gamecode,
       date: currentDate,
-      status: selectedValue,
+      status: selectedValue[ReturnID],
     };
-
-    if (selectedValue === "חסרים חלקים") {
-      newEntry.fine = finesSum; 
-      newEntry.table = tableObject; 
+    if (selectedValue[ReturnID] === "חסרים חלקים") {
+      newEntry.fine = finesSum;
+      newEntry.table = tableObject;
     }
     setDataTable((prevData) => [...prevData, newEntry]);
-  };
-
-  const handleReturnToggle = (gameCode) => {
-    setReturnStatus((prevStatus) => ({
-      ...prevStatus,
-      [gameCode]: !prevStatus[gameCode],
+    setExpanded((prevExpanded) => ({
+      ...prevExpanded,
+      [ReturnID]: !prevExpanded[ReturnID],
     }));
-  };
 
+    setFineIchur();
+    setFinePart();
+    setFinesSum();
+    setWeekNum();
+  };
+  const handleReturnToggle = (ReturnID) => {
+    if (cancelReturn[ReturnID]) {
+      setDataTable((prevData) =>
+        prevData.filter((item) => item.ReturnID !== ReturnID)
+      );
+      setReturnStatus((prevStatus) => ({
+        ...prevStatus,
+        [ReturnID]: !prevStatus[ReturnID],
+      }));
+      setCancelReturn((prevCancl) => ({
+        ...prevCancl,
+        [ReturnID]: false,
+      }));
+    } else {
+      setExpanded((prevExpanded) => ({
+        ...prevExpanded,
+        [ReturnID]: !prevExpanded[ReturnID],
+      }));
+      setReturnStatus((prevStatus) => ({
+        ...prevStatus,
+        [ReturnID]: !prevStatus[ReturnID],
+      }));
+    }
+  };
+  const ApprovalReturnGames = () => {
+    dataTable.map(async (t) => {
+      let take = {
+        IsMissingParts: t.status == "תקין" ? false : true,
+        ActualReturnDate: t.date,
+        ReturnID: t.ReturnID,
+      };
+      if (t.fine) {
+        take.Fine = t.fine;
+      }
+      const updateTOR = await UpdateTOR(take);
+      if (updateTOR) {
+        let game = {
+          Id: t.GameCode,
+          CurrentStateOfGame: t.status,
+          IsAvailable: "TRUE",
+        };
+        const updateGameTor = await UpdateGameTOR(game);
+        if (updateGameTor) {
+          const updateDataGame = await updateGameTor;
+          dispatch(UPDATE_GAME(updateDataGame));
+        }
+        const updateDataTake = await updateTOR;
+        dispatch(UPDATE_TOR(updateDataTake));
+      }
+    });
+  };
   const handleBlurFine = () => {
     let a = Number(fineIchur) * Number(weekNum);
     let b = Number(finePart) + a;
@@ -86,7 +152,6 @@ export const Taking_Returning = () => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
-
   function calculateDaysBetween(returnDateStr, currentDateStr) {
     const [day1, month1, year1] = returnDateStr.split("/").map(Number);
     const [day2, month2, year2] = currentDateStr.split("/").map(Number);
@@ -96,10 +161,6 @@ export const Taking_Returning = () => {
     const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
     return dayDifference;
   }
-
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
   const popover = () => {
     setIsVisible(!isVisible);
   };
@@ -126,7 +187,6 @@ export const Taking_Returning = () => {
           </Button>
         </div>
       </div>
-
       <div className="single-table-title">
         <div className="single-taket-h3">פרטי המשחק</div>
         <div className="single-taket-h3">סטטוס</div>
@@ -145,9 +205,29 @@ export const Taking_Returning = () => {
             return (
               <div key={i} style={{ marginBottom: "10px" }}>
                 <Accordion
-                  sx={{
-                    direction: "rtl",
-                  }}
+                  expanded={!!expanded[item.ReturnID]}
+                  sx={[
+                    {
+                      ...(expanded[item.ReturnID]
+                        ? {
+                            "& .MuiAccordion-region": {
+                              height: "auto",
+                            },
+                            "& .MuiAccordionDetails-root": {
+                              display: "block",
+                            },
+                          }
+                        : {
+                            "& .MuiAccordion-region": {
+                              height: 0,
+                            },
+                            "& .MuiAccordionDetails-root": {
+                              display: "none",
+                            },
+                          }),
+                      direction: "rtl",
+                    },
+                  ]}
                 >
                   <AccordionSummary
                     aria-controls="panel1-content"
@@ -206,16 +286,26 @@ export const Taking_Returning = () => {
                       )}
                       <button
                         key={i}
-                        className="return-btn"
-                        onClick={() => handleReturnToggle(item.GameCode)}
+                        className={`return-btn ${
+                          returnStatus[item.ReturnID] == true ? "cancel" : ""
+                        }`}
+                        onClick={() => handleReturnToggle(item.ReturnID)}
                       >
-                        <div className="return-btn-text">
+                        <div
+                          className={`return-btn-text ${
+                            returnStatus[item.ReturnID] == true ? "cancel" : ""
+                          }`}
+                        >
                           <ExpandMoreIcon
-                            sx={{ color: "rgba(6, 120, 252, 1)" }}
+                            sx={{
+                              color: returnStatus[item.ReturnID]
+                                ? "rgba(255, 255, 255, 1)"
+                                : "rgba(6, 120, 252, 1)",
+                            }}
                           />
                           <div style={{ marginTop: "5px" }}>
                             {" "}
-                            {returnStatus[item.GameCode]
+                            {returnStatus[item.ReturnID]
                               ? "ביטול החזרה"
                               : "החזרה"}
                           </div>
@@ -230,12 +320,17 @@ export const Taking_Returning = () => {
                         <div className="status-in-return">
                           מצב המשחק בהחזרה:
                         </div>
-                        <div key={item.GameCode}>
+                        <div key={item.ReturnID}>
                           <RadioGroup
                             aria-labelledby="demo-radio-buttons-group-label"
                             name="radio-buttons-group"
-                            value={selectedValue[item.GameCode] || ""}
-                            onChange={(e)=>handleChangeSelectedValue(item.GameCode, e.target.value)}
+                            value={selectedValue[item.ReturnID] || ""}
+                            onChange={(e) =>
+                              handleChangeSelectedValue(
+                                item.ReturnID,
+                                e.target.value
+                              )
+                            }
                           >
                             <div style={{ display: "inline-flex" }}>
                               <FormControlLabel
@@ -262,7 +357,7 @@ export const Taking_Returning = () => {
                       </div>
                     </div>
 
-                    {selectedValue[item.GameCode] === "חסרים חלקים" && (
+                    {selectedValue[item.ReturnID] === "חסרים חלקים" && (
                       <>
                         {" "}
                         <table
@@ -294,9 +389,7 @@ export const Taking_Returning = () => {
                               </th>
                             </tr>
                           </thead>
-                          <tbody
-                            style={{ width: "37vw" }}
-                          >
+                          <tbody style={{ width: "37vw" }}>
                             {game.Parts.map((part, p) => (
                               <tr
                                 style={{
@@ -365,7 +458,6 @@ export const Taking_Returning = () => {
                             style={{
                               width: "2vw",
                               textAlign: "center",
-
                               height: "4vh",
                               borderRadius: "999px",
                             }}
@@ -403,7 +495,9 @@ export const Taking_Returning = () => {
                       </>
                     )}
                     <button
-                      onClick={() => handleSaveData(item.GameCode)}
+                      onClick={() =>
+                        handleSaveData(item.ReturnID, item.GameCode)
+                      }
                       style={{
                         color: "rgba(255, 255, 255, 1)",
                         backgroundColor: "rgba(6, 120, 252, 1)",
@@ -411,6 +505,7 @@ export const Taking_Returning = () => {
                         height: "4vh",
                         marginRight: "65vw",
                         borderRadius: "28px",
+                        borderColor: "rgba(6, 120, 252, 1)",
                       }}
                     >
                       שמירת נתונים
@@ -421,6 +516,18 @@ export const Taking_Returning = () => {
             );
           })}
         </section>
+      </div>
+      <div className="Approval">
+        סה"כ קנסות:
+        <input
+          type="text"
+          className="Approval-input"
+          value={`${totalFine} ש"ח`}
+          disabled
+        />
+        <button onClick={ApprovalReturnGames} className="Approval-btn">
+          אישור
+        </button>
       </div>
     </div>
   );
