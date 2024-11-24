@@ -13,9 +13,12 @@ import UpdateTOR from "../UpdateFunction/UpdateTOR";
 import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
+import { useNavigate } from "react-router-dom";
+import UpdateGame from "../UpdateFunction/UpdateGame";
 
 export const Taking_Returning = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [expanded, setExpanded] = useState({});
   const [cancelReturn, setCancelReturn] = useState({});
   const [isVisible, setIsVisible] = useState(false);
@@ -37,6 +40,7 @@ export const Taking_Returning = () => {
   );
   const games = useSelector((state) => state.game.games);
   const [newFilteredList, setNewFilteredList] = useState([]);
+  
   useEffect(() => {
     const unavailableGameCodes = games
       .filter((game) => game.IsAvailable === "FALSE")
@@ -49,6 +53,9 @@ export const Taking_Returning = () => {
     setNewFilteredList(filteredList);
   }, [games, take]);
 
+  const addTake = () => {
+    navigate("/addTake");
+  };
   const handleChangeSelectedValue = (ReturnID, value) => {
     setSelectedValue((prevValues) => ({
       ...prevValues,
@@ -125,12 +132,14 @@ export const Taking_Returning = () => {
       }
       const updateTOR = await UpdateTOR(take);
       if (updateTOR) {
+        let code=games.find((g)=>g.Id==t.GameCode).GameCode;
+        console.log("code",code);
         let game = {
-          Id: t.GameCode,
+          GameCode:code,
           CurrentStateOfGame: t.status,
           IsAvailable: "TRUE",
         };
-        const updateGameTor = await UpdateGameTOR(game);
+        const updateGameTor = await UpdateGame(game);
         if (updateGameTor) {
           const updateDataGame = await updateGameTor;
           dispatch(UPDATE_GAME(updateDataGame));
@@ -174,7 +183,7 @@ export const Taking_Returning = () => {
       <div className="single-user-take-title">
         <div className="single-user-take-logo"></div>
         <div className="single-user-titleTake">משחקים בהשאלה</div>
-        <div className="btn-hashala">
+        <div className="btn-hashala" onClick={()=>addTake()}>
           <Button
             sx={{
               width: "150px",

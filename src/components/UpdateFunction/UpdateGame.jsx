@@ -1,5 +1,6 @@
 const UpdateGame = async (game) => {
   const { GameCode } = game;
+
   try {
     const response = await fetch(
       `http://localhost:5000/gamesListRoutes/${GameCode}`,

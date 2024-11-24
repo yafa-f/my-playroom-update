@@ -25,9 +25,9 @@ const addPartFine=()=>{
       </div>
 
       <div className="table-title">
-        <div className="h-3">קוד קנס</div>
-        <div className="h-3">סוג החלק</div>
-        <div className="h-3">מחיר הקנס</div>
+        <div className="h-3-fine">קוד קנס</div>
+        <div className="h-3-fine">סוג החלק</div>
+        <div className="h-3-fine">מחיר הקנס</div>
       </div>
       <div className="fines-table">
         <section className="section">
