@@ -3,17 +3,17 @@ import { useSelector } from "react-redux";
 import "./TypeOfGameList.css";
 export const TypeOfGameList = () => {
   const types = useSelector((state) => state.typeGame.typesGames);
-
-  return (
+console.log("types",types) 
+ return (
     <div className="types">
       <div className="types-title">
         <div className="type-logo"></div>
         <div className="titleType">תחומי משחק</div>
       </div>
       <div className="table-title">
-        <div className="h-3">קוד תחום</div>
-        <div className="h-3">תחום</div>
-        <div className="h-3">צבע מדבקה</div>
+        <div className="h-3-type ">קוד תחום</div>
+        <div className="h-3-type ">תחום</div>
+        <div className="h-3-type ">צבע מדבקה</div>
       </div>
       <div className="types-table">
         <section className="section">

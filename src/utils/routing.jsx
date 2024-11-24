@@ -16,6 +16,8 @@ import { HomePage } from "../components/HomePage/homePage";
 import { Taking_Returning } from "../components/Taking_Returning/Taking_Returning.jsx";
 import { TakingHistory } from "../components/TakingHistory/TakingHistory.jsx";
 import { ReturnGame } from "../components/ReturnGame/ReturnGame.jsx";
+import { AddTake } from "../components/AddTake/AddTake.jsx";
+import { AgesList } from "../components/AgesList/AgesList.jsx";
 export const Routing = () => {
   return (
     <div style={{ display: "revert" }}>
@@ -30,9 +32,11 @@ export const Routing = () => {
         <Route path="/singleUser" element={<UserScreen />}></Route>
         <Route path="/UsersList/editUser" element={<EditUserScreen />}></Route>
         <Route path="/SideBar" element={<SideBar />}></Route>
+        <Route path="/addTake" element={<AddTake />}></Route>
         <Route path="/TakeList" element={<TakeList />}></Route>
         <Route path="/ClosetsList" element={<ClosetList />}></Route>
         <Route path="/GameTopicList" element={<TypeOfGameList />}></Route>
+        <Route path="/AgesList" element={<AgesList />}></Route>
         <Route path="/FinesList" element={<FinesList />}></Route>
         <Route path="/singleUser/Taking_Returning" element={<Taking_Returning />}>
         <Route path="returnGame" element={<ReturnGame />}/>

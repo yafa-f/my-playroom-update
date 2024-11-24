@@ -1,6 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const singleUser = {};
+const singleUser = {
+  userCode: "",
+  userName: "",
+  userDate: "",
+  phone: "",
+  cellphone: "",
+  depositPaid: "",
+  paymentType: "",
+  totalPayment: "",
+  bankNumber: "",
+  accountNumber: "",
+  checkNumber: "",
+  branchNumber: "",
+  email:"",
+};
 
 export const SingleUserSlice = createSlice({
   name: "singleUser",

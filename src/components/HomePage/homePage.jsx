@@ -40,7 +40,7 @@ export const HomePage = () => {
       srcChoosen: other2,
       to: "FinesList",
     },
-    { name: "טווח גילאים", src: other, srcChoosen: other, to: "AgesList" },
+    { name: "טווח גילאים", src: other, srcChoosen: other2, to: "AgesList" },
   ];
   return (
     <div className="image">

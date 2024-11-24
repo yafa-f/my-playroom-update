@@ -9,38 +9,31 @@ import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import "./newGame.css";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import NewGameFunction from "../AddFunctions/NewGameFunction/NewGameFunction";
+import NewGameFunction from "../AddFunctions/NewGameFunction";
 import UpdateCloset from "../UpdateFunction/UpdateCloset";
 import { useNavigate } from "react-router-dom";
 
 export const NewGame = () => {
-
   const navigate = useNavigate();
   const { bool } = useParams();
   const location = useLocation();
   const { gameToUpdate } = location.state || {};
-
   const [codeOfCloset, setCodeOfCloset] = useState("");
   const [placeInCloset, setPlaceInCloset] = useState("");
-
-  useEffect(() => {
-    if (bool === "true" && gameToUpdate) {
-      setFormData(gameToUpdate);
-      setCodeOfCloset(gameToUpdate.ClosetNumber);
-      setPlaceInCloset(gameToUpdate.PlaceInCloset);
-    } else {
-      let randomNumber;
-      const codes = localGames.map((game) => Number(game.GameCode));
-      do {
-        randomNumber = Math.floor(Math.random() * 10000) + 1;
-      } while (codes.includes(randomNumber));
-
-      setFormData({
-        ...formData,
-        GameCode: randomNumber,
-      });
-    }
-  }, [bool, gameToUpdate]);
+  const [textLocationInClosetValue, setTextLocationInClosetValue] = useState();
+  const [circleFlag, setCircleFlag] = useState(false);
+  const [buttonText, setButtonText] = useState("אישור");
+  const dispatch = useDispatch();
+  const forAges = useSelector((state) => state.forAge.forAges);
+  const typesGames = useSelector((state) => state.typeGame.typesGames);
+  const [localClosets, setLocalClosets] = useState(
+    useSelector((state) => state.closet.closets)
+  );
+  const [updateLocation, setUpdateLocation] = useState([]);
+  const [updateLocation2, setUpdateLocation2] = useState([]);
+  const [localGames, setLocalGames] = useState(
+    useSelector((state) => state.game.games)
+  );
   const [formData, setFormData] = useState({
     Id: "",
     GameCode: "",
@@ -58,25 +51,48 @@ export const NewGame = () => {
     Comment: "",
   });
 
-  const [textLocationInClosetValue, setTextLocationInClosetValue] =
-    useState("");
-  const [circleFlag, setCircleFlag] = useState(false);
-  const [buttonText, setButtonText] = useState("אישור");
-  const dispatch = useDispatch();
-  const forAges = useSelector((state) => state.forAge.forAges);
-  const typesGames = useSelector((state) => state.typeGame.typesGames);
-  const [localClosets, setLocalClosets] = useState(
-    useSelector((state) => state.closet.closets)
-  );
-  const [updateLocation, setUpdateLocation] = useState([]);
-  const [updateLocation2, setUpdateLocation2] = useState([]);
+  useEffect(() => {
+    if (bool === "true" && gameToUpdate) {
+      let age = forAges.data.find(
+        (a) => a.AgeCode === gameToUpdate.AgeCode
+      )?.Age;
+      let tchum = typesGames.find(
+        (t) => t.gameTypeCode === gameToUpdate.GameTypeCode
+      )?.gameTipeName;
+      setFormData({
+        Id: gameToUpdate.Id,
+        GameCode: gameToUpdate.GameCode,
+        ClosetNumber: gameToUpdate.ClosetNumber,
+        PlaceInCloset: gameToUpdate.PlaceInCloset,
+        GameName: gameToUpdate.GameName,
+        GameTypeCode: tchum,
+        Parts: gameToUpdate.Parts,
+        AgeCode: age,
+        CurrentStateOfGame: gameToUpdate.CurrentStateOfGame,
+        Location: gameToUpdate.Location,
+        PrintSticker: gameToUpdate.PrintSticker,
+        HaveComplementaryGame: gameToUpdate.HaveComplementaryGame,
+        IsAvailable: gameToUpdate.IsAvailable,
+        Comment: gameToUpdate.Comment,
+      });
+      setCodeOfCloset(gameToUpdate.ClosetNumber);
+      setPlaceInCloset(gameToUpdate.PlaceInCloset);
+    } else {
+      let randomNumber;
+      const codes = localGames.map((game) => Number(game.GameCode));
+      do {
+        randomNumber = Math.floor(Math.random() * 10000) + 1;
+      } while (codes.includes(randomNumber));
 
-  const [localGames, setLocalGames] = useState(
-    useSelector((state) => state.game.games)
-  );
+      setFormData({
+        ...formData,
+        GameCode: randomNumber,
+      });
+    }
+  }, [bool, gameToUpdate]);
+
   useEffect(() => {}, [localGames]);
   useEffect(() => {}, [localClosets]);
-
   useEffect(() => {
     if (bool === "true") {
       const selectedClosetArray2 =
@@ -157,12 +173,20 @@ export const NewGame = () => {
 
   const handleUpdateGame = async () => {
     setCircleFlag(true);
-    const update = await UpdateGame(formData);
+    let age = forAges.data.find((a) => a.Age === formData.AgeCode).AgeCode;
+    let tchum = typesGames.find(
+      (t) => t.gameTipeName === formData.GameTypeCode
+    ).gameTypeCode;
+    const updatedFormData = {
+      ...formData,
+      AgeCode: age,
+      GameTypeCode: tchum,
+    };
+    const update = await UpdateGame(updatedFormData);
     setTimeout(() => {
       setCircleFlag(false);
     }, 1000);
     if (update) {
-      
       const updateResponse2 = await UpdateCloset(codeOfCloset, updateLocation2);
       if (updateResponse2) {
         const updatedData2 = await updateResponse2;
@@ -185,7 +209,7 @@ export const NewGame = () => {
         console.error("Failed to add object for the second closet");
       }
 
-      dispatch(UPDATE_GAME(formData));
+      dispatch(UPDATE_GAME(updatedFormData));
       setButtonText("המשחק עודכן בהצלחה");
       setTimeout(() => {
         navigate("/GamesList");
@@ -196,7 +220,16 @@ export const NewGame = () => {
   };
   const handleAddGame = async () => {
     setCircleFlag(true);
-    const addResponse = await NewGameFunction(formData);
+    let age = forAges.data.find((a) => a.Age === formData.AgeCode).AgeCode;
+    let tchum = typesGames.find(
+      (t) => t.gameTipeName === formData.GameTypeCode
+    ).gameTypeCode;
+    const updatedFormData = {
+      ...formData,
+      AgeCode: age,
+      GameTypeCode: tchum,
+    };
+    const addResponse = await NewGameFunction(updatedFormData);
     setTimeout(() => {
       setCircleFlag(false);
     }, 1000);
@@ -215,17 +248,18 @@ export const NewGame = () => {
         console.error("Failed to add object");
       }
       setTextLocationInClosetValue(0);
+
+      dispatch(ADD_GAME(updatedFormData));
       setButtonText("המשחק נוסף בהצלחה");
 
-      dispatch(ADD_GAME(formData));
       setTimeout(() => {
         navigate("/GamesList");
-
       }, 3000);
     } else {
       setButtonText("ההוספה נכשלה");
     }
   };
+  console.log("formData", formData);
   return (
     <div className="new-game">
       <div className="add-game-title">
@@ -332,13 +366,15 @@ export const NewGame = () => {
               </div>
               <div className="is-availible">
                 <input
-                  type="radio"
+                  type="checkbox"
                   className="is-availible"
-                  checked={formData.IsAvailable}
+                  checked={
+                    formData.IsAvailable || formData.IsAvailable === "TRUE"
+                  }
                   onChange={(event) =>
                     setFormData({
                       ...formData,
-                      IsAvailable: event.target.value,
+                      IsAvailable: event.target.checked,
                     })
                   }
                 />{" "}
@@ -373,11 +409,13 @@ export const NewGame = () => {
                   id="placeincloset"
                   name="placeincloset"
                   value={textLocationInClosetValue}
-                  onChange={
-                    handleChangeTextLocationInClosetValue
-                  }
+                  onChange={handleChangeTextLocationInClosetValue}
                 >
-                  <option></option>
+                  {bool === "true" && gameToUpdate ? (
+                    <option disabled>{gameToUpdate.PlaceInCloset}</option>
+                  ) : (
+                    <option></option>
+                  )}
                   {Array.isArray(localClosets) &&
                     localClosets?.map((closet, i) =>
                       closet?.closetCode === formData.ClosetNumber ? (
@@ -404,13 +442,16 @@ export const NewGame = () => {
               </div>
               <div className="Complementary-Game">
                 <input
-                  type="radio"
+                  type="checkbox"
                   className="Complementary-Game"
-                  checked={formData.HaveComplementaryGame}
+                  checked={
+                    formData.HaveComplementaryGame ||
+                    formData.HaveComplementaryGame === "TRUE"
+                  }
                   onChange={(event) =>
                     setFormData({
                       ...formData,
-                      HaveComplementaryGame: event.target.value,
+                      HaveComplementaryGame: event.target.checked,
                     })
                   }
                 />
@@ -510,5 +551,3 @@ export const NewGame = () => {
     </div>
   );
 };
-
- 

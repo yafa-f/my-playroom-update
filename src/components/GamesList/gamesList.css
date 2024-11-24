@@ -34,14 +34,16 @@
   display: inline-flex;
   direction: rtl;
 }
-.h-3 {
+.h-3-ga,.h-3-ga-ty {
   margin-top: 15px;
   font-size: 16px;
   font-weight: 600;
   line-height: 27px;
   color: rgba(6, 120, 252, 1);
-  margin-left: 7vw;
-  margin-right: 50px;
+  margin-left: 9vw;
+}
+.h-3-ga-ty{
+  margin-right: 2vw;
 }
 .G-table {
   width: 77vw;
@@ -74,6 +76,7 @@
   color: rgba(0, 0, 0, 1);
 }
 .game-details {
+  /* margin-right: 2vw; */
   width: 10vw;
 }
 .game-names-second {
@@ -104,6 +107,8 @@
   width: 1px;
   height: 10px;
   color: rgba(217, 217, 217, 1);
+  padding-left: 10px; 
+  padding-right: 10px;
 }
 .place {
   width: 10vw;
@@ -116,11 +121,12 @@
   height: 19px;
 }
 .status {
-  width: 10vw;
+  width: 7vw;
   display: inline-flex;
   gap: 10px;
-  align-items: center;
+  /* align-items: center; */
   font-size: 12px;
+  margin-right: 20px;
 }
 .CurrentStateOfGame.green {
   width: 10.83px;
@@ -139,9 +145,15 @@
 .game-mushal {
   display: inline-flex;
   gap: 10px;
+  width: 10vw;
 }
 .mushal-logo {
   background-image: url("../../assets/mushal.svg");
+  width: 20px;
+  height: 20px;
+}
+.no-mushal-logo {
+  background-image: url("../../assets/noMushal.svg");
   width: 20px;
   height: 20px;
 }
@@ -165,8 +177,8 @@
 }
 .update-delete-icons {
   display: inline-flex;
-  gap: 10px;
-  margin-top: 15px;
+  /* gap: 10px; */
+  margin-top: 5px;
 }
 .update-icon {
   background-image: url("../../assets/pen.svg");
@@ -193,7 +205,7 @@
 }
 .parts-table {
   display: grid;
-  grid-template-columns: 100px 100px 100px;
+  grid-template-columns: 100px 100px 100px ;
 }
 .parts {
   display: inline-flex;

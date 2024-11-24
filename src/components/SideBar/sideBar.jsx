@@ -8,7 +8,6 @@ export const SideBar = (props) => {
   const navList = props.navList;
   const location = useLocation();
   const myLocation = location.pathname;
-   console.log("myLocation",myLocation)
   return (
     <div className={`side-bar ${myLocation == "/" ? "login" : ""}`}>
       {navList?.map((name, i) => (

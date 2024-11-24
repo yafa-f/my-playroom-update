@@ -1,26 +1,26 @@
-.fines {
+.ages {
     position: absolute;
   }
-  .fines-title {
+  .ages-title {
     display: inline-flex;
     direction: rtl;
     margin-left: 7vw;
   }
-  .fine-logo {
+  .age-logo {
     background-image: url("../../assets/אחר2.svg");
     width: 65px;
     height: 65px;
     margin-top: 10px;
   }
-  .titleFine {
+  .titleAge {
     direction: rtl;
     font-size: 55px;
     font-weight: 900;
     line-height: 82.5px;
     color: rgba(6, 120, 252, 1);
-    margin-left: 24vw;
+    margin-left: 48vw;
     text-align: center;
-    width: 40vw;
+    width: 20vw;
   }
   .table-title {
     width: 77vw;
@@ -33,7 +33,7 @@
     display: inline-flex;
     direction: rtl;
   }
-  .fines-table {
+  .ages-table {
     width: 77vw;
     height: 55vh;
     margin-top: 5px;
@@ -50,7 +50,7 @@
     height: 100vh;
     margin-left: 2px;
   }
-  .h-3-fine {
+  .h-3-age {
       margin-top: 15px;
     font-size: 16px;
     font-weight: 600;
@@ -59,7 +59,7 @@
     margin-left: 7vw;
     margin-right: 50px;
   }
-  .one-item {
+  .one-item-age {
     direction: rtl;
     display: inline-flex;
     width: 77vw;
@@ -71,18 +71,11 @@
     font-weight: 600;
     line-height: 25.5px;
   }
-  .fine-code{
+  .age-code {
     width: 13vw;
     margin-right: 4vw;
   }
-  .type-part-of-game {
+  .for-ages {
     width: 12vw;
-  }
-  .fine-price {
-    width: 9vw;
-  }
-  .add-fine-icon{
-    margin-top:40px;
-    margin-left: 25px;
   }
   
