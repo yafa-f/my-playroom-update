@@ -1,4 +1,3 @@
-
 const NewGameFunction = async (game) => {
   try {
     const response = await fetch("http://localhost:5000/gamesListRoutes", {

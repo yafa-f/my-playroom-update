@@ -20,8 +20,8 @@ export const NewGame = () => {
   const { gameToUpdate } = location.state || {};
   const [codeOfCloset, setCodeOfCloset] = useState("");
   const [placeInCloset, setPlaceInCloset] = useState("");
-  const [textLocationInClosetValue, setTextLocationInClosetValue] = useState();
   const [circleFlag, setCircleFlag] = useState(false);
+  const [flagEqualCode, setFlagEqualCode] = useState(false);
   const [buttonText, setButtonText] = useState("אישור");
   const dispatch = useDispatch();
   const forAges = useSelector((state) => state.forAge.forAges);
@@ -50,7 +50,6 @@ export const NewGame = () => {
     IsAvailable: "",
     Comment: "",
   });
-
   useEffect(() => {
     if (bool === "true" && gameToUpdate) {
       let age = forAges.data.find(
@@ -90,63 +89,53 @@ export const NewGame = () => {
       });
     }
   }, [bool, gameToUpdate]);
-
   useEffect(() => {}, [localGames]);
   useEffect(() => {}, [localClosets]);
   useEffect(() => {
-    if (bool === "true") {
-      const selectedClosetArray2 =
-        (Array.isArray(localClosets) &&
-          localClosets?.filter(
-            (closet) => closet?.closetCode === codeOfCloset
-          )[0]?.emptyPlace) ||
-        [];
-      const updateNumbers2 = [...selectedClosetArray2, Number(placeInCloset)];
-      updateNumbers2.sort((a, b) => a - b);
-      setUpdateLocation2(updateNumbers2);
-    }
-    const selectedClosetArray =
+    let selectedClosetArray =
       Array.isArray(localClosets) &&
       localClosets?.filter(
         (closet) => closet?.closetCode === formData.ClosetNumber
       )[0]?.emptyPlace;
-
-    if (selectedClosetArray) {
-      if (
-        Array.isArray(selectedClosetArray) &&
-        selectedClosetArray.length === 1
-      ) {
-        const updatedNumbers = [Number(textLocationInClosetValue) + 1];
+    if (Array.isArray(selectedClosetArray)) {
+      if (selectedClosetArray.length === 1) {
+        let updatedNumbers = [Number(formData.PlaceInCloset) + 1];
         setUpdateLocation(updatedNumbers);
       } else if (
-        Number(textLocationInClosetValue) !== Math.max(...selectedClosetArray)
+        Number(formData.PlaceInCloset) !== Math.max(...selectedClosetArray)
       ) {
-        const updatedNumbers = selectedClosetArray.filter(
-          (number) => number !== Number(textLocationInClosetValue)
+        let updatedNumbers = selectedClosetArray.filter(
+          (number) => number !== Number(formData.PlaceInCloset)
         );
-
         setUpdateLocation(updatedNumbers);
       } else if (
-        Array.isArray(selectedClosetArray) &&
-        Number(textLocationInClosetValue) === Math.max(...selectedClosetArray)
+        Number(formData.PlaceInCloset) === Math.max(...selectedClosetArray)
       ) {
-        const updatedNumbers = [
+        let updatedNumbers = [
           ...selectedClosetArray.filter(
-            (number) => number !== Number(textLocationInClosetValue)
+            (number) => number !== Number(formData.PlaceInCloset)
           ),
-          Number(textLocationInClosetValue) + 1,
+          Number(formData.PlaceInCloset) + 1,
         ];
         setUpdateLocation(updatedNumbers);
       }
     }
-  }, [textLocationInClosetValue]);
-  const handleChangeTextLocationInClosetValue = (event) => {
-    setTextLocationInClosetValue(event.target.value);
-    setFormData({
-      ...formData,
-      PlaceInCloset: event.target.value,
-    });
-  };
+    if (bool === "true") {
+      if (codeOfCloset !== formData.ClosetNumber) {
+        let selectedClosetArray2 =
+          (Array.isArray(localClosets) &&
+            localClosets?.filter(
+              (closet) => closet?.closetCode === codeOfCloset
+            )[0]?.emptyPlace) ||
+          [];
+        let updateNumbers2 = [...selectedClosetArray2, Number(placeInCloset)];
+        updateNumbers2.sort((a, b) => a - b);
+        setUpdateLocation2(updateNumbers2);
+      } else {
+        setFlagEqualCode(true);
+      }
+    }
+  }, [formData.PlaceInCloset]);
   const handleAddRow = () => {
     setFormData({
       ...formData,
@@ -170,7 +159,6 @@ export const NewGame = () => {
       handleAddGame();
     }
   };
-
   const handleUpdateGame = async () => {
     setCircleFlag(true);
     let age = forAges.data.find((a) => a.Age === formData.AgeCode).AgeCode;
@@ -183,37 +171,56 @@ export const NewGame = () => {
       GameTypeCode: tchum,
     };
     const update = await UpdateGame(updatedFormData);
-    setTimeout(() => {
-      setCircleFlag(false);
-    }, 1000);
     if (update) {
-      const updateResponse2 = await UpdateCloset(codeOfCloset, updateLocation2);
-      if (updateResponse2) {
-        const updatedData2 = await updateResponse2;
-        dispatch(UPDATE_CLOSET(updatedData2));
-        setUpdateLocation2([]);
-
+      if (flagEqualCode === true) {
+        const updateOneResponse = await UpdateCloset(codeOfCloset, [
+          ...updateLocation,
+          Number(placeInCloset),
+        ]);
+        if (updateOneResponse) {
+          const updatedOneData = await updateOneResponse;
+          dispatch(UPDATE_CLOSET(updatedOneData));
+          setUpdateLocation([]);
+          setCodeOfCloset();
+          setPlaceInCloset();
+        } else {
+          console.error("Failed to add object");
+        }
+        setFlagEqualCode(false);
+      } else {
+        const updateResponse2 = await UpdateCloset(
+          codeOfCloset,
+          updateLocation2
+        );
+        if (updateResponse2) {
+          const updatedData2 = await updateResponse2;
+          dispatch(UPDATE_CLOSET(updatedData2));
+          setUpdateLocation2([]);
+          setCodeOfCloset();
+          setPlaceInCloset();
+        } else {
+          console.error("Failed to add object for the  first");
+        }
         const updateResponse = await UpdateCloset(
           formData.ClosetNumber,
           updateLocation
         );
-
         if (updateResponse) {
           const updatedData = await updateResponse;
           dispatch(UPDATE_CLOSET(updatedData));
           setUpdateLocation([]);
         } else {
-          console.error("Failed to add object");
+          console.error("Failed to add object for the second ");
         }
-      } else {
-        console.error("Failed to add object for the second closet");
       }
-
-      dispatch(UPDATE_GAME(updatedFormData));
+      dispatch(UPDATE_GAME(update));
       setButtonText("המשחק עודכן בהצלחה");
       setTimeout(() => {
         navigate("/GamesList");
       }, 3000);
+      setTimeout(() => {
+        setCircleFlag(false);
+      }, 1000);
     } else {
       setButtonText("העדכון נכשל");
     }
@@ -233,13 +240,11 @@ export const NewGame = () => {
     setTimeout(() => {
       setCircleFlag(false);
     }, 1000);
-
     if (addResponse && addResponse.ok) {
       const updateResponse = await UpdateCloset(
         formData.ClosetNumber,
         updateLocation
       );
-
       if (updateResponse) {
         const updatedData = await updateResponse;
         dispatch(UPDATE_CLOSET(updatedData));
@@ -247,11 +252,8 @@ export const NewGame = () => {
       } else {
         console.error("Failed to add object");
       }
-      setTextLocationInClosetValue(0);
-
       dispatch(ADD_GAME(updatedFormData));
       setButtonText("המשחק נוסף בהצלחה");
-
       setTimeout(() => {
         navigate("/GamesList");
       }, 3000);
@@ -259,7 +261,6 @@ export const NewGame = () => {
       setButtonText("ההוספה נכשלה");
     }
   };
-  console.log("formData", formData);
   return (
     <div className="new-game">
       <div className="add-game-title">
@@ -408,14 +409,21 @@ export const NewGame = () => {
                   className="select-place-in-closet"
                   id="placeincloset"
                   name="placeincloset"
-                  value={textLocationInClosetValue}
-                  onChange={handleChangeTextLocationInClosetValue}
+                  // value={textLocationInClosetValue}
+                  value={formData.PlaceInCloset}
+                  // onChange={handleChangeTextLocationInClosetValue}
+                  onChange={(event) =>
+                    setFormData({
+                      ...formData,
+                      PlaceInCloset: event.target.value,
+                    })
+                  }
                 >
-                  {bool === "true" && gameToUpdate ? (
+                  {bool === "true" && gameToUpdate && (
                     <option disabled>{gameToUpdate.PlaceInCloset}</option>
-                  ) : (
-                    <option></option>
                   )}
+                  <option></option>
+
                   {Array.isArray(localClosets) &&
                     localClosets?.map((closet, i) =>
                       closet?.closetCode === formData.ClosetNumber ? (
