@@ -54,7 +54,7 @@ export const GamesList = () => {
   useEffect(() => {
     setTableArr(games);
   }, [games]);
-  // useEffect(() => {}, [games]);
+  useEffect(() => {}, [games]);
   const dispatch = useDispatch();
   const navToNewGame = (gameToUpdate) => {
     navigate(`/GamesList/NewGame/bool/${"true"}`, { state: { gameToUpdate } });
