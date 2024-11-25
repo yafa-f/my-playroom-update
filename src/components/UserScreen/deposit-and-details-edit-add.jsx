@@ -1,130 +1,368 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PersonIcon from "@mui/icons-material/Person";
 import "./userScreen.css";
+import "./edit-and-add.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { ADD_USER } from "../../app/slices/usersSlice";
+import NewUserFunction from "../AddFunctions/NewUserFunction/newUserFunction";
+export const DepositAndDetailsEditAndAddComp = (props) => {
+  const user = props.user;
+  const isEdit = props.isEdit;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userToUpdate = user || {};
+  const [circleFlag, setCircleFlag] = useState(false);
+  const [buttonText, setButtonText] = useState("אישור");
+  const [isPaymentTypeIsCheck, setIsPaymentTypeIsCheck] = useState(
+    isEdit === false
+      ? false
+      : userToUpdate.paymentType !== "אשראי" &&
+          userToUpdate.paymentType !== "מזומן"
+  );
+  const [isChecked, setIsChecked] = useState(false);
+  const [localUsers, setLocalUsers] = useState(
+    useSelector((state) => state.user.users)
+  );
+  const handleSaveClick = () => {
+    if (isEdit === "true") {
+      handleUpdateUser();
+    } else {
+      handleAddUser();
+    }
+  };
+  const handleAddUser = async () => {
+    setCircleFlag(true);
+    const today = new Date();
+    const updatedUserData = {
+      ...userData,
+      userDate: today.toLocaleDateString(),
+    };
 
-export const DepositAndDetailsEditAndAddComp = ({
-  userCode,
-  userName,
-  userDate,
-  phone,
-  cellphone,
-  email,
-  depositPaid,
-  paymentType,
-  totalPayment,
-  bankNumber,
-  accountNumber,
-  checkNumber,
-  branchNumber,
-}) => {
-  const isPaymentTypeIsCheck =
-    paymentType !== "אשראי" && paymentType !== "מזומן" ? true : false;
-  const isChecked = depositPaid === "TRUE";
+    const addResponse = await NewUserFunction(updatedUserData);
+    setTimeout(() => {
+      setCircleFlag(false);
+    }, 1000);
+    if (addResponse) {
+      const rearrangedUserData = {
+        _id: addResponse._id,
+        userCode: addResponse.userCode,
+        userName: addResponse.userName,
+        userDate: addResponse.userDate,
+        cellphone: addResponse.cellphone,
+        phone: addResponse.phone,
+        email: addResponse.email,
+        paymentType: addResponse.paymentType,
+        totalPayment: addResponse.totalPayment,
+        depositPaid: addResponse.depositPaid,
+        bankNumber: addResponse.bankNumber,
+        accountNumber: addResponse.accountNumber,
+        checkNumber: addResponse.checkNumber,
+        branchNumber: addResponse.branchNumber,
+      };
+      console.log(rearrangedUserData);
+      dispatch(ADD_USER(rearrangedUserData));
+      setButtonText("המשתמש נוסף בהצלחה");
+
+      setTimeout(() => {
+        navigate("/UsersList");
+      }, 3000);
+    } else {
+      console.error("failad to add object");
+      setButtonText("ההוספה נכשלה");
+    }
+  };
+  const handleUpdateUser = async () => {};
+  const [userData, setUserData] = useState({
+    userCode: "",
+    userName: "",
+    userDate: "",
+    phone: "",
+    cellphone: "",
+    email: "",
+    paymentType: "",
+    totalPayment: "",
+    depositPaid: "false",
+    bankNumber: "",
+    accountNumber: "",
+    checkNumber: "",
+    branchNumber: "",
+  });
+  useEffect(() => {
+    if (isEdit && userToUpdate) {
+      setUserData(userToUpdate);
+    } else {
+      let randomNumber;
+      const codes = localUsers.data.map((user) => Number(user.userCode));
+
+      do {
+        randomNumber = Math.floor(Math.random() * 10000) + 1;
+      } while (codes.includes(randomNumber));
+
+      setUserData({
+        ...userData,
+        userCode: randomNumber,
+      });
+    }
+  }, [isEdit, userToUpdate]);
 
   return (
     <div className="deposit-and-details" style={{ display: "inline-flex" }}>
-      <div
-        className="depositDiv"
-        style={{
-          width: "700px",
-          height: "380px",
-          marginTop: "10px",
-          marginLeft: "50px",
-          gap: "0px",
-          borderRadius: "28px",
-          border: "1px 0px 0px 0px",
-          opacity: "0px",
-          backgroundColor: "white",
-          direction: "rtl",
-        }}
-      >
-        <div>
+      <div className="deposit-and-save">
+        <div
+          className="depositDiv"
+          style={{
+            width: "700px",
+            height: "380px",
+            marginTop: "10px",
+            marginLeft: "50px",
+            gap: "0px",
+            borderRadius: "28px",
+            border: "1px 0px 0px 0px",
+            opacity: "0px",
+            backgroundColor: "white",
+            direction: "rtl",
+          }}
+        >
+          <div>
+            <div
+              style={{
+                display: "inline-flex",
+                marginTop: "18px",
+                marginRight: "30px",
+                paddingTop: "-10px",
+              }}
+            >
+              <div className="coins-icon"> </div>{" "}
+              <div
+                style={{
+                  width: "113px",
+                  height: "27px",
+                  fontWeight: 600,
+                  fontSize: "18px",
+                  marginRight: "20px",
+                }}
+              >
+                פיקדון
+              </div>
+            </div>
+          </div>
+
           <div
+            className="isPaid-cost-wayPaid"
             style={{
               display: "inline-flex",
-              marginTop: "18px",
+              marginTop: "30px",
               marginRight: "30px",
             }}
           >
-            <div className="coins-icon"> </div>{" "}
-            <div
-              style={{
-                width: "113px",
-                height: "27px",
-                fontWeight: 600,
-                fontSize: "18px",
-                marginRight: "20px",
-              }}
-            >
-              פיקדון
-            </div>
-          </div>
-        </div>
-
-        <div
-          className="isPaid-cost-wayPaid"
-          style={{
-            display: "inline-flex",
-            marginTop: "30px",
-            marginRight: "81px",
-          }}
-        >
-          <div className="checkbox">
             <input
               type="checkbox"
               checked={isChecked}
-              readOnly
               className="custom-checkbox"
+              style={{ width: "15px", height: "15px" }}
+              onChange={(event) => {
+                setIsChecked(!isChecked);
+                setUserData({
+                  ...userData,
+                  depositPaid: String(!isChecked),
+                });
+              }}
             />
-          </div>
-          <div
-            className="isPaid"
-            style={{ width: "105px", display: "inline-flex" }}
-          >
-            שולם פיקדון
-          </div>
-          <div
-            className="cost"
-            style={{
-              width: "100px",
-              borderRight: "3px solid #0678FC33",
-              textAlign: "center",
-            }}
-          >
-            {totalPayment}{" "}
-          </div>
-          <div
-            className="wayPaid"
-            style={{
-              width: "170px",
-              borderRight: "3px solid #0678FC33",
-              textAlign: "center",
-            }}
-          >
-            אמצעי תשלום {paymentType}
-          </div>
-        </div>
-        {isPaymentTypeIsCheck && (
-          <div className="details" style={{ marginRight: "10px" }}>
-            <div className="detail-with-attribute">
-              <div className="detail-attribute"> מס' בנק</div>{" "}
-              <div className="detail"> {bankNumber}</div>
+            <div
+              className="isPaid"
+              style={{
+                width: "100px",
+                display: "inline-flex",
+                marginRight: "18px",
+              }}
+            >
+              שולם פיקדון{userData.depositPaid}
             </div>
-            <div className="detail-with-attribute">
-              <div className="detail-attribute">מס' סניף </div>{" "}
-              <div className="detail">{branchNumber} </div>
+            <div
+              className="cost"
+              style={{
+                width: "180px",
+                borderRight: "3px solid #0678FC33",
+                textAlign: "center",
+                display: "inline-flex",
+                direction: "rtl",
+              }}
+            >
+              <div
+                className="isPaid"
+                style={{
+                  width: "3vw",
+                  display: "inline-flex",
+                  marginRight: "20px",
+                }}
+              >
+                סכום
+              </div>
+              <input
+                style={{
+                  width: "5vw",
+                  height: "3.5vh",
+                  borderRadius: "28px",
+                  border: "1px rgba(35, 31, 32, 0.4) solid",
+                }}
+                type="text"
+                value={userData.totalPayment}
+                onChange={(event) =>
+                  setUserData({ ...userData, totalPayment: event.target.value })
+                }
+              ></input>{" "}
             </div>
+            <div
+              className="wayPaidPlusInput"
+              style={{ borderRight: "3px solid #0678FC33" }}
+            >
+              <div
+                className="wayPaid"
+                style={{
+                  height: "4vh",
+                  textAlign: "center",
+                  display: "inline-flex",
+                  marginRight: "20px",
+                }}
+              >
+                אמצעי תשלום
+                <select
+                  style={{
+                    height: "3.5vh",
+                    borderRadius: "28px",
+                    border: "1px rgba(35, 31, 32, 0.4) solid",
+                    display: "inline-flex",
+                    width: "6vw",
+                    marginRight: "20px",
+                  }}
+                  name="paymentType"
+                  id="paymentType"
+                  className="payment-type-select"
+                  value={userData.paymentType || ""}
+                  onChange={(event) => {
+                    setIsPaymentTypeIsCheck(true);
+                    setUserData({
+                      ...userData,
+                      paymentType: event.target.value,
+                    });
+                  }}
+                >
+                  <option value="" disabled></option>{" "}
+                  <option value="צק">צ"ק</option>
+                  <option value="אשראי">אשראי</option>
+                  <option value="מזומן">מזומן</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          {isPaymentTypeIsCheck && (
+            <div
+              className="details"
+              style={{ marginRight: "10px", marginTop: "20px" }}
+            >
+              <div
+                className="all-details-with-attributes"
+                style={{ marginTop: "10px", display: "grid" }}
+              >
+                <div className="detail-with-attribute">
+                  <div className="detail-attribute"> מס' בנק</div>{" "}
+                  <input
+                    style={{
+                      height: "3.5vh",
+                      borderRadius: "28px",
+                      border: "1px rgba(35, 31, 32, 0.4) solid",
+                    }}
+                    type="text"
+                    value={userData.bankNumber}
+                    onChange={(event) =>
+                      setUserData({
+                        ...userData,
+                        bankNumber: event.target.value,
+                      })
+                    }
+                  ></input>{" "}
+                </div>
+                <div className="detail-with-attribute">
+                  <div className="detail-attribute">מס' סניף </div>{" "}
+                  <input
+                    style={{
+                      height: "3.5vh",
+                      borderRadius: "28px",
+                      border: "1px rgba(35, 31, 32, 0.4) solid",
+                    }}
+                    type="text"
+                    value={userData.branchNumber}
+                    onChange={(event) =>
+                      setUserData({
+                        ...userData,
+                        branchNumber: event.target.value,
+                      })
+                    }
+                  ></input>{" "}
+                </div>
 
-            <div className="detail-with-attribute">
-              <div className="detail-attribute">מס' חשבון </div>{" "}
-              <div className="detail">{accountNumber}</div>
+                <div className="detail-with-attribute">
+                  <div className="detail-attribute">מס' חשבון </div>{" "}
+                  <input
+                    style={{
+                      height: "3.5vh",
+                      borderRadius: "28px",
+                      border: "1px rgba(35, 31, 32, 0.4) solid",
+                    }}
+                    type="text"
+                    value={userData.accountNumber}
+                    onChange={(event) =>
+                      setUserData({
+                        ...userData,
+                        accountNumber: event.target.value,
+                      })
+                    }
+                  ></input>{" "}
+                </div>
+                <div className="detail-with-attribute">
+                  <div className="detail-attribute"> מס' שק</div>{" "}
+                  <input
+                    style={{
+                      height: "3.5vh",
+                      borderRadius: "28px",
+                      border: "1px rgba(35, 31, 32, 0.4) solid",
+                    }}
+                    type="text"
+                    value={userData.checkNumber}
+                    onChange={(event) =>
+                      setUserData({
+                        ...userData,
+                        checkNumber: event.target.value,
+                      })
+                    }
+                  ></input>{" "}
+                </div>
+              </div>
             </div>
-            <div className="detail-with-attribute">
-              <div className="detail-attribute"> מס' שק</div>{" "}
-              <div className="detail">{checkNumber}</div>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
+        <input
+          type="button"
+          className="save"
+          value={buttonText}
+          style={{
+            width: "70px",
+            height: "30px",
+            borderRadius: "28px",
+            backgroundColor: "#0678FC",
+            marginLeft: "50px",
+            marginTop: "30px",
+            textAlign: "center",
+            color: "white",
+            fontWeight: 700,
+            alignContent: "center",
+            marginLeft: "55px",
+            display: "block",
+          }}
+          onClick={handleSaveClick}
+        ></input>
       </div>
       <div
         className="personalDetails"
@@ -166,21 +404,63 @@ export const DepositAndDetailsEditAndAddComp = ({
         <div className="details">
           <div className="detail-with-attribute">
             <div className="detail-attribute">שם </div>{" "}
-            <div className="detail">{userName}</div>
+            <input
+              style={{
+                height: "3.5vh",
+                borderRadius: "28px",
+                border: "1px rgba(35, 31, 32, 0.4) solid",
+              }}
+              type="text"
+              value={userData.userName}
+              onChange={(event) =>
+                setUserData({ ...userData, userName: event.target.value })
+              }
+            ></input>
           </div>
           <div className="detail-with-attribute">
             <div className="detail-attribute">מייל</div>{" "}
-            <a href={`mailto:${email}`} className="detail">
-              {email}
-            </a>
+            <input
+              style={{
+                height: "3.5vh",
+                borderRadius: "28px",
+                border: "1px rgba(35, 31, 32, 0.4) solid",
+              }}
+              type="text"
+              value={userData.email}
+              onChange={(event) =>
+                setUserData({ ...userData, email: event.target.value })
+              }
+            ></input>{" "}
           </div>
           <div className="detail-with-attribute">
             <div className="detail-attribute">טלפון 1</div>{" "}
-            <div className="detail">{phone}</div>
+            <input
+              style={{
+                height: "3.5vh",
+                borderRadius: "28px",
+                border: "1px rgba(35, 31, 32, 0.4) solid",
+              }}
+              type="text"
+              value={userData.phone}
+              onChange={(event) =>
+                setUserData({ ...userData, phone: event.target.value })
+              }
+            ></input>{" "}
           </div>
           <div className="detail-with-attribute">
             <div className="detail-attribute">טלפון 2</div>{" "}
-            <div className="detail">{cellphone}</div>
+            <input
+              style={{
+                height: "3.5vh",
+                borderRadius: "28px",
+                border: "1px rgba(35, 31, 32, 0.4) solid",
+              }}
+              type="text"
+              value={userData.cellphone}
+              onChange={(event) =>
+                setUserData({ ...userData, cellphone: event.target.value })
+              }
+            ></input>
           </div>
         </div>
       </div>

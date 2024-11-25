@@ -69,7 +69,7 @@ export const DepositAndDetailsComp = ({
             marginRight: "81px",
           }}
         >
-          <div className="checkbox" >
+          <div className="checkbox">
             <input
               type="checkbox"
               checked={isChecked}

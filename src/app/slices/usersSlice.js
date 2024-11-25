@@ -26,18 +26,16 @@ export const UserSlice = createSlice({
       );
     },
     UPDATE_USER: (state, action) => {
-      debugger
       const { _id, ...newValues } = action.payload;
       const updatedUsers = state.users.data.map((user) => {
         if (user._id === _id) {
           return { ...user, ...newValues };
         }
-        debugger
+
         return user;
       });
-      debugger
+
       state.users.data = updatedUsers;
-      debugger
     },
   },
 });

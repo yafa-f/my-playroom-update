@@ -12,8 +12,7 @@ import { UserTitle } from "./userTitle";
 import { DepositAndDetailsComp } from "./deposit-and-details";
 import { SideBar } from "../SideBar/sideBar";
 export const UserScreen = () => {
-
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const myLocation = location.pathname;
   const singleUser = useSelector((state) => state.singleUser.singleUser);
@@ -21,20 +20,19 @@ export const UserScreen = () => {
   const user = location.state?.user;
 
   const [isChecked, setIsChecked] = useState(false);
-const editUser=()=>{
-    navigate("/UsersList/editUser", { state: { user } });
-}
+  const editUser = () => {
+    navigate("/singleUser/editUser", { state: { user } });
+  };
   const handleChange = () => {
     setIsChecked(!isChecked);
   };
   return (
-    <div className="screen" style={{ display: "grid" ,  position: "absolute"
-  }}>
-     
-   <UserTitle
+    <div className="screen" style={{ display: "grid", position: "absolute" }}>
+      <UserTitle
         name={singleUser.userName}
         phone={singleUser.phone}
         cellphone={singleUser.cellphone}
+        email={singleUser.email}
       ></UserTitle>
       <button
         style={{
@@ -65,25 +63,6 @@ const editUser=()=>{
         depositPaid={singleUser.depositPaid}
         paymentType={singleUser.paymentType}
       ></DepositAndDetailsComp>
-
-      <div
-        className="save"
-        style={{
-          width: "70px",
-          height: "30px",
-          borderRadius: "28px",
-          backgroundColor: "#0678FC",
-          marginLeft: "110px",
-          marginTop: "20px",
-          textAlign: "center",
-          color: "white",
-          fontWeight: 700,
-          alignContent: "center",
-        }}
-      >
-        אישור
-      </div>
-    
     </div>
   );
 };
