@@ -20,7 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { DELETE_USER } from "../../app/slices/usersSlice";
-import deleteUser from "../DeleteFunctions/DeleteUser/DeleteUser";
+import deleteUser from "../DeleteFunctions/DeleteUser/deleteUser";
 import Supervisor from "../../assets/supervisor_account.svg";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -32,7 +32,7 @@ import { styled } from "@mui/system";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DoneIcon from "@mui/icons-material/Done";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import {setSingleUser} from  "../../app/slices/singleUserSlice"
+import { setSingleUser } from "../../app/slices/singleUserSlice";
 export const UsersList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -53,15 +53,18 @@ export const UsersList = () => {
   const [chosenUser, setChosenUser] = useState("");
   const buttonRef = useRef(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [prevLocation, setPrevLocation] = useState(location);
 
-const navigate=useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     setNameOfList(users.data);
     setOnSearch(false);
     setFieldValue("");
     setCurrentField("");
   }, [name, users]);
-  useEffect(() => {}, [dispatch, currentStore, isEdit]);
+  useEffect(() => {
+    setPrevLocation(location);
+  }, [dispatch, currentStore, isEdit, location, prevLocation]);
 
   const headers = Array.from(
     new Set(nameOfList.flatMap((item) => (item ? Object.keys(item) : [])))
@@ -153,7 +156,6 @@ const navigate=useNavigate();
     setIsEditClicked(true);
     setClickedRow(user);
     navigate("editUser", { state: { user } });
-
   };
   const updateEditState = () => {
     setIsEdit(!isEdit);
@@ -170,11 +172,10 @@ const navigate=useNavigate();
   const handleDoubleClick = (user) => {
     dispatch(setSingleUser(user));
     navigate("/singleUser", { state: { user } });
-
   };
-  // const editCurrent = (current) => {
-  //   navigate("editUser", { state: { current } });
-  // };
+  const navigateToAdd = () => {
+    navigate(`/UsersList/newUser`);
+  };
 
   const openMenu = (event) => {
     if (buttonRef.current) {
@@ -276,6 +277,7 @@ const navigate=useNavigate();
             wordWrap: "break-word",
             marginLeft: "-23.2vw",
           }}
+          onClick={navigateToAdd}
         >
           מנוי +
         </Button>
@@ -438,7 +440,7 @@ const navigate=useNavigate();
                         backgroundColor: "white",
                         borderColor: "transparent",
                       }}
-                      onDoubleClick={()=>handleDoubleClick(user)}
+                      onDoubleClick={() => handleDoubleClick(user)}
                     >
                       {user.userName}
                     </button>
@@ -455,7 +457,7 @@ const navigate=useNavigate();
                       {user.cellphone}
                     </div>
                     <div className="user-attribute">{user.phone}</div>
-                    {user.depositPaid == "TRUE" ? (
+                    {user.depositPaid?.toLowerCase() === "true" ? (
                       <div
                         className="user-attribute"
                         style={{ display: "inline-flex", marginLeft: "40px" }}
@@ -502,7 +504,10 @@ const navigate=useNavigate();
                         height: "2px",
                         marginRight: "-50px",
                       }}
-                      onClick={()=>{handleEditClick(user)}}>                    
+                      onClick={() => {
+                        handleEditClick(user);
+                      }}
+                    >
                       <EditIcon></EditIcon>{" "}
                     </Button>{" "}
                     <Button
