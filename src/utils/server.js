@@ -112,3 +112,17 @@ export const fetchGetFinesForMissingParts = () => {
       return null;
     });
 };
+export const fetchGetGamesWithMissingParts = () => {
+  return fetch("http://localhost:5000/gamesWithMissingPartsRoutes")
+    .then((data) => {
+      console.log("data ", data);
+      if (data.ok) {
+        return data.json().then((gamesWiteMissing) => {
+          return gamesWiteMissing;
+        });
+      } else alert("not defined");
+    })
+    .catch((e) => {
+      return null;
+    });
+};

@@ -20,16 +20,15 @@ export const GamesList = () => {
     { name: "סטטוס השאלה" },
   ];
   const navigate = useNavigate();
+
   const games = useSelector((state) => state.game.games);
+  
   const usersFromStore = useSelector((state) => state.user.users).data;
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const torFromStore = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
-  const closetsFromStore = useSelector((state) => state.closet.closets);
-  const [userm, setUserm] = useState(null);
-
   const [tableArr, setTableArr] = useState();
   const userName=(Id)=>{
     let gameTake = torFromStore.filter((tg) => tg.GameCode === Id);
@@ -189,7 +188,8 @@ export const GamesList = () => {
                           </div>
                           <div className="Complementar-Available">
                             {game.HaveComplementaryGame === "on" ||
-                            game.HaveComplementaryGame === "TRUE" ? (
+                            game.HaveComplementaryGame === "TRUE" ||
+                            game.HaveComplementaryGame === "true" ? (
                               <div className="Complementar">
                                 <div className="v-logo"></div>קיים משחק משלים
                               </div>

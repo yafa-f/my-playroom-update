@@ -1,5 +1,6 @@
 const UpdateGame = async (game) => {
   const { GameCode } = game;
+  const bool=false;
 
   try {
     const response = await fetch(
@@ -9,7 +10,7 @@ const UpdateGame = async (game) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(game),
+        body: JSON.stringify({ ...game, bool }),
       }
     );
 
@@ -21,7 +22,7 @@ const UpdateGame = async (game) => {
     }
 
     const data = await response.json();
-    console.log("Update successful:", data);
+    console.log("Update game successful:", data);
     return data; // Return the response object
   } catch (error) {
     console.error("Error updating game:", error);

@@ -1,19 +1,18 @@
-
-const UpdateGameTOR = async (game) => {
+const UpdateGameWithMissPart = async (game) => {
     const { Id } = game;
-  const bool=true;
+   
     try {
       const response = await fetch(
-        `http://localhost:5000/gamesListRoutes/${Id}`,
+        `http://localhost:5000/gamesWithMissingPartsRoutes/${Id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ ...game, bool }),
+          body: JSON.stringify(game),
         }
       );
-  
+    
       if (!response.ok) {
         const errorData = await response.json();
         console.error("Error details:", errorData);
@@ -29,4 +28,5 @@ const UpdateGameTOR = async (game) => {
       return null; // Return null in case of an error
     }
   };
-  export default UpdateGameTOR;
+  export default UpdateGameWithMissPart;
+  

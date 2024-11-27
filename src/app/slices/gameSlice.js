@@ -7,7 +7,6 @@ const initialState = {
 
 export const GameSlice = createSlice({
   name: "game",
-
   initialState: initialState,
   reducers: {
     setCurrentGame: (state, action) => {

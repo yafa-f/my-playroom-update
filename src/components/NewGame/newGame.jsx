@@ -131,6 +131,8 @@ export const NewGame = () => {
         let updateNumbers2 = [...selectedClosetArray2, Number(placeInCloset)];
         updateNumbers2.sort((a, b) => a - b);
         setUpdateLocation2(updateNumbers2);
+        setFlagEqualCode(false);
+
       } else {
         setFlagEqualCode(true);
       }
@@ -199,7 +201,7 @@ export const NewGame = () => {
           setCodeOfCloset();
           setPlaceInCloset();
         } else {
-          console.error("Failed to add object for the  first");
+          console.error("Failed to update closet that free for the  first");
         }
         const updateResponse = await UpdateCloset(
           formData.ClosetNumber,
@@ -210,7 +212,7 @@ export const NewGame = () => {
           dispatch(UPDATE_CLOSET(updatedData));
           setUpdateLocation([]);
         } else {
-          console.error("Failed to add object for the second ");
+          console.error("Failed to update closet that take for the second ");
         }
       }
       dispatch(UPDATE_GAME(update));
@@ -409,9 +411,7 @@ export const NewGame = () => {
                   className="select-place-in-closet"
                   id="placeincloset"
                   name="placeincloset"
-                  // value={textLocationInClosetValue}
                   value={formData.PlaceInCloset}
-                  // onChange={handleChangeTextLocationInClosetValue}
                   onChange={(event) =>
                     setFormData({
                       ...formData,

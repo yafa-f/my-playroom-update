@@ -10,6 +10,7 @@ import {
   fetchGetTakingOrReturning,
   fetchGetTypesGames,
   fetchGetUsers,
+  fetchGetGamesWithMissingParts
 } from "./utils/server";
 import { BrowserRouter } from "react-router-dom";
 import { setUsers } from "./app/slices/usersSlice";
@@ -21,6 +22,7 @@ import { setTypesGames } from "./app/slices/typeGameSlice";
 import { setTakingOrReturning } from "./app/slices/takeOrReturnSlice";
 import { setForAges } from "./app/slices/forAgeSlice";
 import { BaseScreen } from "./components/BaseScreen";
+import { setGamesWithMissingParts } from "./app/slices/gamesWiteMissingPartsSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -90,6 +92,14 @@ function App() {
         console.error(error);
       }
     };
+    const fetchGamesWithMissingParts = async () => {
+      try {
+        const response = await fetchGetGamesWithMissingParts();
+        dispatch(setGamesWithMissingParts(response));
+      } catch (error) {
+        console.error(error);
+      }
+    };
     fetchUsers();
     fetchGames();
     fetchClosets();
@@ -98,6 +108,7 @@ function App() {
     fetchTypesOfGames();
     fetchTakingOrReturning();
     fetchForAges();
+    fetchGamesWithMissingParts();
   }, []);
 
   return (
