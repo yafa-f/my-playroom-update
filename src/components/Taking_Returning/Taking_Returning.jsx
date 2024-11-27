@@ -15,6 +15,9 @@ import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
 import { useNavigate } from "react-router-dom";
 import UpdateGame from "../UpdateFunction/UpdateGame";
+import UpdateGameWithMissPart from "../UpdateFunction/UpdateGameWithMissPart";
+import { ADD_GAMES_WITH_MISSING_PARTS, UPDATE_GAMES_WITH_MISSING_PARTS } from "../../app/slices/gamesWiteMissingPartsSlice";
+import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
 
 export const Taking_Returning = () => {
   const dispatch = useDispatch();
@@ -40,18 +43,21 @@ export const Taking_Returning = () => {
   );
   const games = useSelector((state) => state.game.games);
   const [newFilteredList, setNewFilteredList] = useState([]);
-  
+  const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
+  const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
+  const gamesWithMissing = useSelector(
+    (state) => state.gamesWithMissingPart.gamesWithMissingParts
+  );
   useEffect(() => {
-    const unavailableGameCodes = games
-      .filter((game) => game.IsAvailable === "FALSE")
-      .map((game) => game.Id);
-    const filteredList = take.filter(
+    const filteredItems = take.filter(
       (item) =>
-        item.UserCode === singleUser.userCode &&
-        unavailableGameCodes.includes(item.GameCode)
+        item.UserCode === singleUser.userCode && !item.ActualReturnDate &&
+        games.some(
+          (game) => game.Id === item.GameCode && game.IsAvailable === "FALSE"
+        )
     );
-    setNewFilteredList(filteredList);
-  }, [games, take]);
+    setNewFilteredList(filteredItems);
+  }, [games, take, singleUser.userCode]);
 
   const addTake = () => {
     navigate("/addTake");
@@ -132,22 +138,57 @@ export const Taking_Returning = () => {
       }
       const updateTOR = await UpdateTOR(take);
       if (updateTOR) {
-        let code=games.find((g)=>g.Id==t.GameCode).GameCode;
-        console.log("code",code);
+        let code = games.find((g) => g.Id == t.GameCode).Id;
         let game = {
-          GameCode:code,
+          Id: code,
           CurrentStateOfGame: t.status,
           IsAvailable: "TRUE",
         };
-        const updateGameTor = await UpdateGame(game);
+        const updateGameTor = await UpdateGameTOR(game);
         if (updateGameTor) {
-          const updateDataGame = await updateGameTor;
-          dispatch(UPDATE_GAME(updateDataGame));
+          dispatch(UPDATE_GAME(updateGameTor));
+        } else {
+          console.error("Failed to add object");
         }
-        const updateDataTake = await updateTOR;
-        dispatch(UPDATE_TOR(updateDataTake));
+        dispatch(UPDATE_TOR(updateTOR));
+      } else {
+        
+      }
+      if (t.status === "חסרים חלקים") {
+        let g = games.find((g) => g.Id == t.GameCode);
+        let gameWithMiss = {
+          Id: g.Id,
+          GameName: g.GameName,
+          MissingParts: t.table,
+        };
+        let missPart = gamesWithMissing?.find(
+          (game) => game.Id == t.GameCode
+        );
+        console.log("missPart",missPart);
+        if (missPart) {
+          //update
+          console.log("מצאתי כבר משחק כזה עם חלקים חסרים");
+          // const updateGameMiss = await UpdateGameWithMissPart(gameWithMiss);
+          // if (updateGameMiss) {
+          //   dispatch(UPDATE_GAMES_WITH_MISSING_PARTS(gameWithMiss));
+          // } else {
+          //   console.error("Failed to update object");
+          // }
+        } else {
+          //add
+          console.log("לא מצאתי משחק כזה " );
+
+          // const addGameMiss = await NewGameWithMissPartFunction(gameWithMiss);
+          // if (addGameMiss) {
+          //   dispatch(ADD_GAMES_WITH_MISSING_PARTS(addGameMiss));
+          // } else {
+          //   console.error("Failed to add object");
+          // }
+        }
       }
     });
+    setDataTable([]);
+    setSelectedValue({});
   };
   const handleBlurFine = () => {
     let a = Number(fineIchur) * Number(weekNum);
@@ -183,7 +224,7 @@ export const Taking_Returning = () => {
       <div className="single-user-take-title">
         <div className="single-user-take-logo"></div>
         <div className="single-user-titleTake">משחקים בהשאלה</div>
-        <div className="btn-hashala" onClick={()=>addTake()}>
+        <div className="btn-hashala" onClick={() => addTake()}>
           <Button
             sx={{
               width: "150px",
@@ -206,6 +247,12 @@ export const Taking_Returning = () => {
         <section className="single-section">
           {newFilteredList.map((item, i) => {
             let game = games.find((game) => game.Id === item.GameCode);
+            let age = forAgesFromStore.find(
+              (a) => a.AgeCode === game.AgeCode
+            )?.Age;
+            let tchum = typesGamesFromStore.find(
+              (t) => t.gameTypeCode === game.GameTypeCode
+            )?.gameTipeName;
             const returnDate = formatDate(item.ReturnDate);
             const delayMessage = calculateDaysBetween(
               returnDate,
@@ -248,26 +295,27 @@ export const Taking_Returning = () => {
                         <div className="game-names-second-SU">
                           <div className="age-SU">
                             <div className="child-logo-SU"></div>
-                            {game.AgeCode}
+                            {age}
                           </div>
                           <div className="pas-SU">|</div>
                           <div className="type-SU">
                             <div className="tchum-SU">תחום:</div>
-                            <div>{game.GameTypeCode}</div>
+                            <div>{tchum}</div>
                           </div>
                         </div>
                       </div>
                       <div className="status-SU">
                         <div
                           className={`SU-CurrentStateOfGame ${
-                            game.CurrentStateOfGame == "תקין"
+                            game.CurrentStateOfGame == "תקין" ||
+                            game.CurrentStateOfGame == ""
                               ? "green"
                               : game.CurrentStateOfGame == "חסרים חלקים"
                               ? "red"
                               : ""
                           }`}
                         ></div>
-                        <div>{game.CurrentStateOfGame}</div>
+                        <div>{game.CurrentStateOfGame || "תקין"}</div>
                       </div>
                       <div className="date-SU">
                         <div className="take-date-SU">
@@ -291,7 +339,7 @@ export const Taking_Returning = () => {
                           <div className="delay-message-SU">איחור</div>
                         </div>
                       ) : (
-                        <div></div>
+                        <div className="delay-SU"></div>
                       )}
                       <button
                         key={i}

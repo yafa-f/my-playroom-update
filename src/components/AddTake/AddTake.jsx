@@ -7,11 +7,15 @@ import UpdateGame from "../UpdateFunction/UpdateGame";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { ADD_TOR } from "../../app/slices/takeOrReturnSlice";
 import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import GetFunction from "./GetFunction";
 
 export const AddTake = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [buttonText, setButtonText] = useState("אישור");
+  const [circleFlag, setCircleFlag] = useState(false);
   const games = useSelector((state) => state.game.games);
   const availableGames = games.filter((game) => game.IsAvailable !== "FALSE");
   const singleUser = useSelector((state) => state.singleUser.singleUser);
@@ -40,8 +44,9 @@ export const AddTake = () => {
     } while (existingIDs.includes(String(newID)));
     return String(newID);
   };
-
+  console.log("selectedGames", selectedGames);
   const ApprovalTake = () => {
+    setCircleFlag(true);
     const ReturnDate = new Date();
     ReturnDate.setDate(ReturnDate.getDate() + 14); // Two weeks from today
     const formattedReturnDate = ReturnDate.toISOString().split("T")[0];
@@ -49,8 +54,6 @@ export const AddTake = () => {
     selectedGames.map(async (game) => {
       let take = {
         IsMissingParts: game.CurrentStateOfGame == "תקין" ? false : true,
-        // Fine:,
-        // ActualReturnDate:Date,
         ReturnDate: formattedReturnDate,
         TakingDate: new Date().toISOString().split("T")[0],
         GameCode: game.Id,
@@ -58,37 +61,31 @@ export const AddTake = () => {
         ReturnID: generateUniqueReturnID(existingReturnIDs),
       };
       const addResponse = await NewTakeFunction(take);
+      setTimeout(() => {
+        setCircleFlag(false);
+      }, 1000);
       if (addResponse && addResponse.ok) {
         let gameForUpdate = {
-          Id:game.Id,
-          GameCode: game.GameCode,
-          ClosetNumber:game.ClosetNumber,
-          PlaceInCloset:game.PlaceInCloset,
-          GameName:game.GameName,
-          GameTypeCode:game.GameTypeCode,
-          Parts:game.Parts,
-          AgeCode:game.AgeCode,
-          CurrentStateOfGame:game.CurrentStateOfGame,
-          Location:game.Location,
-          PrintSticker:game.PrintSticker,
-          HaveComplementaryGame:game.HaveComplementaryGame,
+          ...game,
           IsAvailable: "FALSE",
-          Comment:game.Comment,
         };
-        const updateGame = await UpdateGame(gameForUpdate);
-
-        // if (updateGame) {
-        //    console.log("updateGame",updateGame);
-        //   const storeGame=await GetFunction(gameForUpdate.Id)
-        //   if("storeGame",storeGame){
-        //   console.log(storeGame)
-        //   dispatch(UPDATE_GAME(storeGame));}
-
-        // }
-        // dispatch(ADD_TOR(take));
-
+        const updateGame = await UpdateGameTOR(gameForUpdate);
+        if (updateGame) {
+          dispatch(UPDATE_GAME(updateGame));
+        } else {
+          console.error("Failed to add object");
+        }
+        dispatch(ADD_TOR(take));
+        setButtonText("ההשאלה נוספה בהצלחה");
+        setTimeout(() => {
+          navigate("/singleUser/Taking_Returning");
+        }, 3000);
+      } else {
+        setButtonText("ההוספה נכשלה");
       }
     });
+    setSelectedGames([{}]);
+
   };
   const handleDeleteTakegame = (index) => {
     if (selectedGames.length == 1) {
@@ -213,7 +210,8 @@ export const AddTake = () => {
           ))}
         {selectedGames[0].GameName && (
           <button onClick={ApprovalTake} className="Approval-take-btn">
-            אישור
+            {circleFlag && <CircularProgress sx={{ color: "white" }} />}
+            {buttonText}{" "}
           </button>
         )}
       </div>

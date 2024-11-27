@@ -16,10 +16,10 @@ const UpdateCloset = async (id, updateLocation) => {
     }
 
     const data = await response.json();
-    console.log("Update successful:", data);
+    console.log("Update closet successful:", data);
     return data; // Return the response object
   } catch (error) {
-    console.error("Error updating game:", error);
+    console.error("Error updating closet:", error);
     return null; // Return null in case of an error
   }
 };
