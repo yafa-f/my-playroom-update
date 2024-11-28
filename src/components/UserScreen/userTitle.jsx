@@ -73,8 +73,8 @@ export const UserTitle = ({ name, phone, cellphone,email }) => {
               height: "53px",
             }}
           >
-            {phone}{" "}
-            {cellphone}
+            {cellphone}{" "}
+            {phone}
           </div>
         </div>
         <div

@@ -7,25 +7,30 @@ import "./userScreen.css";
 import Checkbox from "@mui/material/Checkbox";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { UserTitle } from "./userTitle";
 import { DepositAndDetailsComp } from "./deposit-and-details";
 import { SideBar } from "../SideBar/sideBar";
+import { SET_CURRENT_USER } from "../../app/slices/usersSlice";
 export const UserScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const myLocation = location.pathname;
   const singleUser = useSelector((state) => state.singleUser.singleUser);
-
-  const user = location.state?.user;
-
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const[user,setUser]=useState(location.state?.user);
   const [isChecked, setIsChecked] = useState(false);
   const editUser = () => {
     navigate("/singleUser/editUser", { state: { user } });
   };
-  const handleChange = () => {
-    setIsChecked(!isChecked);
-  };
+  useEffect(() => {
+    if (user) {
+      dispatch(SET_CURRENT_USER(user));
+    }
+    setUser(currentUser);
+  }, [user, currentUser, dispatch]);
+
   return (
     <div className="screen" style={{ display: "grid", position: "absolute" }}>
       <UserTitle

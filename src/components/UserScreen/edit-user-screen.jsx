@@ -44,8 +44,8 @@ export const EditUserScreen = () => {
         userCode={user.userCode}
         userName={user.userName}
         userDate={user.userDate}
-        phone={user.phone}
         cellphone={user.cellphone}
+        phone={user.phone}
         email={user.email}
         branchNumber={user.branchNumber}
         checkNumber={user.checkNumber}
