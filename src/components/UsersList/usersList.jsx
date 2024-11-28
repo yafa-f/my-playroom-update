@@ -54,7 +54,6 @@ export const UsersList = () => {
   const buttonRef = useRef(null);
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [prevLocation, setPrevLocation] = useState(location);
-
   const navigate = useNavigate();
   useEffect(() => {
     setNameOfList(users.data);
@@ -65,7 +64,15 @@ export const UsersList = () => {
   useEffect(() => {
     setPrevLocation(location);
   }, [dispatch, currentStore, isEdit, location, prevLocation]);
-
+  // const handleSearch = (e) => {
+  //   setFieldValue(e.target.value);
+  // };
+  const handleDeleteUser = async (user) => {
+    debugger
+    const deleteCurrentUser = await deleteUser(user);
+    dispatch(DELETE_USER(user));
+    alert("נמחק");
+  };
   const headers = Array.from(
     new Set(nameOfList.flatMap((item) => (item ? Object.keys(item) : [])))
   );
@@ -89,9 +96,7 @@ export const UsersList = () => {
       row["userName"].includes(chosenUser)
     );
   });
-  const handleSearch = (e) => {
-    setFieldValue(e.target.value);
-  };
+
   const columns = headers.map((header, index) => ({
     width: 200,
     label: header,
@@ -515,6 +520,9 @@ export const UsersList = () => {
                         width: "1px",
                         height: "2px",
                         marginRight: "-10px",
+                      }}
+                      onClick={() => {
+                        handleDeleteUser(user);
                       }}
                     >
                       <DeleteOutlineIcon></DeleteOutlineIcon>{" "}
