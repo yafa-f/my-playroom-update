@@ -33,7 +33,7 @@ export const ViewUserScreen = () => {
         ></UserTitle>
       ) : (
         <div className="usersCaptionWithIcon" style={{ marginLeft: "35vw" }}>
-          <div className="menuim">הוספת מנוי</div>
+          <div className="add-user">הוספת מנוי</div>
           <img src={Supervisor.toString()}></img>
         </div>
       )}
