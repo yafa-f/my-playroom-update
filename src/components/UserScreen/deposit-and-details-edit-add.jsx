@@ -3,13 +3,16 @@ import PersonIcon from "@mui/icons-material/Person";
 import "./userScreen.css";
 import "./edit-and-add.css";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ADD_USER } from "../../app/slices/usersSlice";
+import { UPDATE_USER } from "../../app/slices/usersSlice";
 import NewUserFunction from "../AddFunctions/NewUserFunction/newUserFunction";
+import UpdateUser from "../UpdateFunction/UpdateUser";
 export const DepositAndDetailsEditAndAddComp = (props) => {
   const user = props.user;
   const isEdit = props.isEdit;
+  const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userToUpdate = user || {};
@@ -21,12 +24,19 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
       : userToUpdate.paymentType !== "אשראי" &&
           userToUpdate.paymentType !== "מזומן"
   );
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(
+    location.pathname.endsWith("newUser")
+      ? false
+      : userToUpdate.depositPaid?.toLowerCase() === "false" ||
+        userToUpdate.depositPaid === false
+      ? false
+      : true
+  );
   const [localUsers, setLocalUsers] = useState(
     useSelector((state) => state.user.users)
   );
   const handleSaveClick = () => {
-    if (isEdit === "true") {
+    if (isEdit === true) {
       handleUpdateUser();
     } else {
       handleAddUser();
@@ -39,7 +49,6 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
       ...userData,
       userDate: today.toLocaleDateString(),
     };
-
     const addResponse = await NewUserFunction(updatedUserData);
     setTimeout(() => {
       setCircleFlag(false);
@@ -50,18 +59,18 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
         userCode: addResponse.userCode,
         userName: addResponse.userName,
         userDate: addResponse.userDate,
-        cellphone: addResponse.cellphone,
         phone: addResponse.phone,
-        email: addResponse.email,
+        cellphone: addResponse.cellphone,
+        depositPaid: addResponse.depositPaid,
         paymentType: addResponse.paymentType,
         totalPayment: addResponse.totalPayment,
-        depositPaid: addResponse.depositPaid,
         bankNumber: addResponse.bankNumber,
         accountNumber: addResponse.accountNumber,
         checkNumber: addResponse.checkNumber,
         branchNumber: addResponse.branchNumber,
+        email: addResponse.email,
       };
-      console.log(rearrangedUserData);
+
       dispatch(ADD_USER(rearrangedUserData));
       setButtonText("המשתמש נוסף בהצלחה");
 
@@ -73,21 +82,40 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
       setButtonText("ההוספה נכשלה");
     }
   };
-  const handleUpdateUser = async () => {};
+  const handleUpdateUser = async () => {
+    setCircleFlag(true);
+    const updatedUserData = {
+      ...userData,
+    };
+    const updateUser = await UpdateUser(updatedUserData);
+    if (updateUser) {
+      dispatch(UPDATE_USER(updateUser));
+      setButtonText("המשתמש עודכן בהצלחה");
+      setTimeout(() => {
+        navigate("/UsersList");
+      }, 3000);
+      setTimeout(() => {
+        setCircleFlag(false);
+      }, 1000);
+    } else {
+      setButtonText("העדכון נכשל");
+    }
+  };
+
   const [userData, setUserData] = useState({
     userCode: "",
     userName: "",
     userDate: "",
-    phone: "",
     cellphone: "",
-    email: "",
+    phone: "",
+    depositPaid: "false",
     paymentType: "",
     totalPayment: "",
-    depositPaid: "false",
     bankNumber: "",
     accountNumber: "",
     checkNumber: "",
     branchNumber: "",
+    email: "",
   });
   useEffect(() => {
     if (isEdit && userToUpdate) {
@@ -178,7 +206,7 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
                 marginRight: "18px",
               }}
             >
-              שולם פיקדון{userData.depositPaid}
+              שולם פיקדון
             </div>
             <div
               className="cost"
@@ -242,11 +270,13 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
                   className="payment-type-select"
                   value={userData.paymentType || ""}
                   onChange={(event) => {
-                    setIsPaymentTypeIsCheck(true);
                     setUserData({
                       ...userData,
                       paymentType: event.target.value,
                     });
+                    if (event.target.value === "צק")
+                      setIsPaymentTypeIsCheck(true);
+                    else setIsPaymentTypeIsCheck(false);
                   }}
                 >
                   <option value="" disabled></option>{" "}
@@ -441,9 +471,9 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
                 border: "1px rgba(35, 31, 32, 0.4) solid",
               }}
               type="text"
-              value={userData.phone}
+              value={userData.cellphone}
               onChange={(event) =>
-                setUserData({ ...userData, phone: event.target.value })
+                setUserData({ ...userData, cellphone: event.target.value })
               }
             ></input>{" "}
           </div>
@@ -456,9 +486,9 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
                 border: "1px rgba(35, 31, 32, 0.4) solid",
               }}
               type="text"
-              value={userData.cellphone}
+              value={userData.phone}
               onChange={(event) =>
-                setUserData({ ...userData, cellphone: event.target.value })
+                setUserData({ ...userData, phone: event.target.value })
               }
             ></input>
           </div>

@@ -19,7 +19,7 @@ export const DepositAndDetailsComp = ({
 }) => {
   const isPaymentTypeIsCheck =
     paymentType !== "אשראי" && paymentType !== "מזומן" ? true : false;
-  const isChecked = depositPaid === "TRUE";
+  const isChecked = depositPaid.toLowerCase() === "true";
 
   return (
     <div className="deposit-and-details" style={{ display: "inline-flex" }}>
@@ -79,7 +79,11 @@ export const DepositAndDetailsComp = ({
           </div>
           <div
             className="isPaid"
-            style={{ width: "105px", display: "inline-flex" }}
+            style={{
+              width: "105px",
+              display: "inline-flex",
+              marginRight: "10px",
+            }}
           >
             שולם פיקדון
           </div>
@@ -168,10 +172,7 @@ export const DepositAndDetailsComp = ({
             <div className="detail-attribute">שם </div>{" "}
             <div className="detail"> {userName}</div>
           </div>
-          {/* <div className="detail-with-attribute">
-            <div className="detail-attribute">שם משפחה</div>{" "}
-            <div className="detail">אבן צור</div>
-          </div> */}
+
           <div className="detail-with-attribute">
             <div className="detail-attribute">מייל</div>{" "}
             <a href={`mailto:${email}`} className="detail">
@@ -180,11 +181,11 @@ export const DepositAndDetailsComp = ({
           </div>
           <div className="detail-with-attribute">
             <div className="detail-attribute">טלפון 1</div>{" "}
-            <div className="detail">{phone}</div>
+            <div className="detail">{cellphone}</div>
           </div>
           <div className="detail-with-attribute">
             <div className="detail-attribute">טלפון 2</div>{" "}
-            <div className="detail">{cellphone}</div>
+            <div className="detail">{phone}</div>
           </div>
         </div>
       </div>

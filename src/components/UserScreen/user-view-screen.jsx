@@ -1,4 +1,3 @@
-import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
@@ -7,21 +6,22 @@ import "./userScreen.css";
 import "../UsersList/usersList.css";
 import Checkbox from "@mui/material/Checkbox";
 import Supervisor from "../../assets/supervisor_account.svg";
-
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import { useState } from "react";
 import { UserTitle } from "./userTitle";
 import { DepositAndDetailsEditAndAddComp } from "./deposit-and-details-edit-add";
 export const ViewUserScreen = () => {
   const location = useLocation();
   const user = location.state?.user;
-  const isEdit = location.pathname.endsWith(`/editUser`) ? true : false;
+  const [isEdit, setIsEdit] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-
   const handleChange = () => {
     setIsChecked(!isChecked);
   };
+  useEffect(() => {
+    setIsEdit(location.pathname.endsWith("editUser"));
+  }, [location.pathname]);
   return (
     <div className="screen" style={{ display: "grid" }}>
       {user ? (

@@ -176,7 +176,6 @@ export const UsersList = () => {
   const navigateToAdd = () => {
     navigate(`/UsersList/newUser`);
   };
-
   const openMenu = (event) => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
@@ -457,7 +456,8 @@ export const UsersList = () => {
                       {user.cellphone}
                     </div>
                     <div className="user-attribute">{user.phone}</div>
-                    {user.depositPaid?.toLowerCase() === "true" ? (
+                    {user.depositPaid?.toLowerCase() === "true" ||
+                    user.depositPaid === true ? (
                       <div
                         className="user-attribute"
                         style={{ display: "inline-flex", marginLeft: "40px" }}
