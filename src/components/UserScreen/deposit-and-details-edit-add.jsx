@@ -9,6 +9,10 @@ import { ADD_USER } from "../../app/slices/usersSlice";
 import { UPDATE_USER } from "../../app/slices/usersSlice";
 import NewUserFunction from "../AddFunctions/NewUserFunction/newUserFunction";
 import UpdateUser from "../UpdateFunction/UpdateUser";
+import { CircularProgress, Button } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
+
 export const DepositAndDetailsEditAndAddComp = (props) => {
   const user = props.user;
   const isEdit = props.isEdit;
@@ -16,6 +20,7 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userToUpdate = user || {};
+  const [status, setStatus] = useState(null);
   const [circleFlag, setCircleFlag] = useState(false);
   const [buttonText, setButtonText] = useState("אישור");
   const [isPaymentTypeIsCheck, setIsPaymentTypeIsCheck] = useState(
@@ -43,6 +48,7 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
     }
   };
   const handleAddUser = async () => {
+    setStatus(null);
     setCircleFlag(true);
     const today = new Date();
     const updatedUserData = {
@@ -54,6 +60,7 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
       setCircleFlag(false);
     }, 1000);
     if (addResponse) {
+      setStatus('success');
       const rearrangedUserData = {
         _id: addResponse._id,
         userCode: addResponse.userCode,
@@ -78,6 +85,8 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
         navigate("/UsersList");
       }, 3000);
     } else {
+      setStatus('error');
+
       console.error("failad to add object");
       setButtonText("ההוספה נכשלה");
     }
@@ -373,7 +382,7 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
             </div>
           )}
         </div>
-        <input
+        <Button
           type="button"
           className="save"
           value={buttonText}
@@ -392,7 +401,20 @@ export const DepositAndDetailsEditAndAddComp = (props) => {
             display: "block",
           }}
           onClick={handleSaveClick}
-        ></input>
+        >
+          {
+            circleFlag ? (
+              <CircularProgress size={24} color="white"/>
+            ) : status === 'success' ? (
+              <CheckIcon />
+            ) : status === 'error' ? (
+              <CloseIcon />
+            ) : (
+              'אישור'
+            )
+      
+          }
+        </Button>
       </div>
       <div
         className="personalDetails"
