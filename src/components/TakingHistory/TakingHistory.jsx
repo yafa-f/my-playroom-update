@@ -8,21 +8,21 @@ export const TakingHistory = () => {
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const [filteredList, setFilteredList] = useState();
   const singleUser = useSelector((state) => state.singleUser.singleUser);
-  const take = useSelector(
+  const takeOrReturn = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
   // const filteredList = take.filter(
   //   (item) => item.UserCode === singleUser.userCode
   // );
   useEffect(() => {
-    const filteredL = take.filter((item) => {
+    const filteredL = takeOrReturn.filter((item) => {
       const isDateValid =
         item.ActualReturnDate &&
         !isNaN(new Date(item.ActualReturnDate).getTime());
       return item.UserCode === singleUser.userCode && isDateValid;
     });
     setFilteredList(filteredL);
-  }, [take]);
+  }, [takeOrReturn]);
   // const filteredList = take.filter((item) => {
   //   const isDateValid = item.ActualReturnDate && !isNaN(new Date(item.ActualReturnDate).getTime());
   //   return item.UserCode === singleUser.userCode && isDateValid;
