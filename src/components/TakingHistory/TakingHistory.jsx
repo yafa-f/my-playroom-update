@@ -8,19 +8,19 @@ export const TakingHistory = () => {
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const [filteredList, setFilteredList] = useState();
   const singleUser = useSelector((state) => state.singleUser.singleUser);
-  const take = useSelector(
+  const takeOrReturn = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
   useEffect(() => {
-    const filteredL = take.filter((item) => {
+    const filteredL = takeOrReturn.filter((item) => {
       const isDateValid =
         item.ActualReturnDate &&
         !isNaN(new Date(item.ActualReturnDate).getTime());
       return item.UserCode === singleUser.userCode && isDateValid;
     });
     setFilteredList(filteredL);
-  }, [take]);
-  const games = useSelector((state) => state.game.games);
+  }, [takeOrReturn]);
+    const games = useSelector((state) => state.game.games);
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
