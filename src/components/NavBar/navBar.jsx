@@ -40,13 +40,13 @@ export const NavBar = () => {
     setAnchorEl(event.currentTarget);
   };
   const handleCloseWithNavigate = (name) => {
-    navigate('/List' ,{ state: { name } });    
+    navigate("/List", { state: { name } });
     setAnchorEl(null);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
-  
+
   return (
     <div>
       <div className="nav-bar">
@@ -54,16 +54,16 @@ export const NavBar = () => {
           <div key={i} className="links">
             {i.name === "רשימות" ? (
               <div>
-                <Button 
+                <Button
                   id="fade-button"
                   aria-controls={open ? "fade-menu" : undefined}
                   aria-haspopup="true"
                   aria-expanded={open ? "true" : undefined}
                   onMouseOver={handleClick}
                 >
-                <div className="lists-style">{i.name}</div> 
+                  <div className="lists-style">{i.name}</div>
                 </Button>
-                <Menu 
+                <Menu
                   id="fade-menu"
                   MenuListProps={{
                     "aria-labelledby": "fade-button",
@@ -74,19 +74,22 @@ export const NavBar = () => {
                   TransitionComponent={Fade}
                 >
                   {lists.map((list) => (
-                    <MenuItem onClick={() => handleCloseWithNavigate(list.name)}>
+                    <MenuItem
+                      onClick={() => handleCloseWithNavigate(list.name)}
+                    >
                       {list.name}
                     </MenuItem>
                   ))}
                 </Menu>
               </div>
             ) : (
-              <Link className="links-style" to={i.to}>{i.name}</Link>
+              <Link className="links-style" to={i.to}>
+                {i.name}
+              </Link>
             )}
           </div>
         ))}
       </div>
-     
     </div>
   );
 };

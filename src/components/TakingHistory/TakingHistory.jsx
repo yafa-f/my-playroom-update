@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./TakingHistory.css";
+import "./takingHistory.css";
 import { UserTitle } from "../UserScreen/userTitle";
 import { useSelector } from "react-redux";
 
@@ -11,9 +11,6 @@ export const TakingHistory = () => {
   const take = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
-  // const filteredList = take.filter(
-  //   (item) => item.UserCode === singleUser.userCode
-  // );
   useEffect(() => {
     const filteredL = take.filter((item) => {
       const isDateValid =
@@ -23,11 +20,6 @@ export const TakingHistory = () => {
     });
     setFilteredList(filteredL);
   }, [take]);
-  // const filteredList = take.filter((item) => {
-  //   const isDateValid = item.ActualReturnDate && !isNaN(new Date(item.ActualReturnDate).getTime());
-  //   return item.UserCode === singleUser.userCode && isDateValid;
-  // });
-  // console.log("filteredList", filteredList);
   const games = useSelector((state) => state.game.games);
   const formatDate = (dateString) => {
     const date = new Date(dateString);

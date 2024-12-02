@@ -1,19 +1,13 @@
 import React from "react";
 import EditIcon from "@mui/icons-material/Edit";
-import PersonIcon from "@mui/icons-material/Person";
-import PhoneEnabledIcon from "@mui/icons-material/PhoneEnabled";
-import MailIcon from "@mui/icons-material/Mail";
 import "./userScreen.css";
-import Checkbox from "@mui/material/Checkbox";
-import { useLocation, useNavigate } from "react-router-dom";
-
+import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import { UserTitle } from "./userTitle";
-import { DepositAndDetailsEditAndAddComp } from "./deposit-and-details-edit-add";
+import { DepositAndDetailsEditAndAddComp } from "./edit-add-user-details";
 export const EditUserScreen = () => {
   const location = useLocation();
   const user = location.state?.user;
-
   const [isChecked, setIsChecked] = useState(false);
 
   const handleChange = () => {

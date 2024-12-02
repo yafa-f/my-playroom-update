@@ -1,0 +1,85 @@
+.closets {
+  position: absolute;
+}
+.close-title {
+  display: inline-flex;
+  direction: rtl;
+  margin-left: 7vw;
+}
+.close-logo {
+  background-image: url("../../../assets/אחר2.svg");
+  width: 65px;
+  height: 65px;
+  margin-top: 10px;
+}
+.titleClose {
+  direction: rtl;
+  font-size: 55px;
+  font-weight: 900;
+  line-height: 82.5px;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 56vw;
+  text-align: center;
+}
+.table-title {
+  width: 77vw;
+  height: 60.09px;
+  margin-top: 2vh;
+  margin-left: 3vw;
+  border-radius: 28px 28px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(239, 239, 239, 1);
+  display: inline-flex;
+  direction: rtl;
+}
+.closet-table {
+  width: 77vw;
+  height: 55vh;
+  margin-top: 5px;
+  margin-left: 3vw;
+  gap: 0px;
+  border-radius: 0px 0px 28px 28px;
+  border: 1px 0px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(255, 255, 255, 1);
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.section {
+  height: 100vh;
+  margin-left: 2px;
+}
+.tt-h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 27px;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 5vw;
+  margin-right: 50px;
+  margin-top: 12px;
+}
+.one-item {
+  direction: rtl;
+  display: inline-flex;
+  width: 77vw;
+  height: 8vh;
+  gap: 1vw;
+  border-bottom: 2px rgba(6, 120, 252, 0.2) solid;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 25.5px;
+}
+.close-code {
+  width: 11vw;
+  margin-right: 4vw;
+}
+.type-game-in-closet {
+  width: 18vw;
+}
+.is-empty-place {
+  width: 15vw;
+}
+.position-of-closet {
+  width: 9vw;
+}

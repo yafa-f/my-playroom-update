@@ -11,41 +11,25 @@ export const SideBar = (props) => {
   return (
     <div className={`side-bar ${myLocation == "/" ? "login" : ""}`}>
       {navList?.map((name, i) => (
-    
-       
-          <div
-            className={`side-list ${
-              // myLocation == `/${name.to}` || myLocation.includes(name.to)
-              myLocation == `/${name.to}`
-                ? "choosen"
-                : ""
+        <div
+          className={`side-list ${
+            myLocation == `/${name.to}` ? "choosen" : ""
+          }`}
+          key={i}
+        >
+          <img
+            className={"img-icon"}
+            src={myLocation == `/${name.to}` ? name.srcChoosen : name.src}
+          />
+          <Link
+            className={`side-names ${
+              myLocation == `/${name.to}` ? "choosen" : ""
             }`}
-            key={i}
+            to={name.to}
           >
-            <img
-              className={"img-icon"}
-              src={
-                // myLocation == `/${name.to}` || myLocation.includes(name.to)
-                myLocation == `/${name.to}` 
-
-                  ? name.srcChoosen
-                  : name.src
-              }
-            />
-              <Link
-                className={`side-names ${
-                  // myLocation == `/${name.to}` || myLocation.includes(name.to)
-                  myLocation == `/${name.to}` 
-                    ? "choosen"
-                    : ""
-                }`}
-                to={name.to}
-              >
-                {name.name}
-              </Link>
-          
-          </div>
-        
+            {name.name}
+          </Link>
+        </div>
       ))}
     </div>
   );

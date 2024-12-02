@@ -46,7 +46,6 @@
 .side-list.choosen {
   direction: rtl;
   width: 230px;
-  /* margin-top: 6vh; */
   display: inline-flex;
   background-color: rgba(255, 255, 255, 1);
   align-items: center;
