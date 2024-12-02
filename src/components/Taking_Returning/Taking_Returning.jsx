@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./Taking_Returning.css";
+import "./taking_returning.css";
 import { UserTitle } from "../UserScreen/userTitle";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@mui/material";
@@ -14,10 +14,6 @@ import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
 import { useNavigate } from "react-router-dom";
-import UpdateGame from "../UpdateFunction/UpdateGame";
-import UpdateGameWithMissPart from "../UpdateFunction/UpdateGameWithMissPart";
-import { ADD_GAMES_WITH_MISSING_PARTS, UPDATE_GAMES_WITH_MISSING_PARTS } from "../../app/slices/gamesWiteMissingPartsSlice";
-import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
 
 export const Taking_Returning = () => {
   const dispatch = useDispatch();
@@ -51,7 +47,8 @@ export const Taking_Returning = () => {
   useEffect(() => {
     const filteredItems = take.filter(
       (item) =>
-        item.UserCode === singleUser.userCode && !item.ActualReturnDate &&
+        item.UserCode === singleUser.userCode &&
+        !item.ActualReturnDate &&
         games.some(
           (game) => game.Id === item.GameCode && game.IsAvailable === "FALSE"
         )
@@ -152,7 +149,6 @@ export const Taking_Returning = () => {
         }
         dispatch(UPDATE_TOR(updateTOR));
       } else {
-        
       }
       if (t.status === "חסרים חלקים") {
         let g = games.find((g) => g.Id == t.GameCode);
@@ -161,29 +157,14 @@ export const Taking_Returning = () => {
           GameName: g.GameName,
           MissingParts: t.table,
         };
-        let missPart = gamesWithMissing?.find(
-          (game) => game.Id == t.GameCode
-        );
-        console.log("missPart",missPart);
+        let missPart = gamesWithMissing?.find((game) => game.Id == t.GameCode);
+        console.log("missPart", missPart);
         if (missPart) {
           //update
           console.log("מצאתי כבר משחק כזה עם חלקים חסרים");
-          // const updateGameMiss = await UpdateGameWithMissPart(gameWithMiss);
-          // if (updateGameMiss) {
-          //   dispatch(UPDATE_GAMES_WITH_MISSING_PARTS(gameWithMiss));
-          // } else {
-          //   console.error("Failed to update object");
-          // }
         } else {
           //add
-          console.log("לא מצאתי משחק כזה " );
-
-          // const addGameMiss = await NewGameWithMissPartFunction(gameWithMiss);
-          // if (addGameMiss) {
-          //   dispatch(ADD_GAMES_WITH_MISSING_PARTS(addGameMiss));
-          // } else {
-          //   console.error("Failed to add object");
-          // }
+          console.log("לא מצאתי משחק כזה ");
         }
       }
     });

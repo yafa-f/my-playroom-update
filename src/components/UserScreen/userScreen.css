@@ -10,7 +10,7 @@
   color: black;
 }
 .detail:hover {
-  color: black; 
+  color: black;
 }
 
 .detail-with-attribute {
@@ -50,15 +50,3 @@
   margin-top: 15vh;
   position: fixed;
 }
-/* .custom-checkbox {
-  appearance: none; 
-  width: 20px; 
-  height: 20px; 
-  border: 2px solid black;
-  border-radius: 4px; 
-  cursor: pointer; 
-}  */
-
-/* .custom-checkbox:checked {
-  background-color: #1A5EA9; 
-} */

@@ -3,9 +3,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import "./userScreen.css";
 
 export const DepositAndDetailsComp = ({
-  userCode,
   userName,
-  userDate,
   phone,
   cellphone,
   email,
