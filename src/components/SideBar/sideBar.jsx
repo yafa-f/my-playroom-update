@@ -13,17 +13,17 @@ export const SideBar = (props) => {
       {navList?.map((name, i) => (
         <div
           className={`side-list ${
-            myLocation == `/${name.to}` ? "choosen" : ""
+            myLocation.includes(`/${name.to}`) ? "choosen" : ""
           }`}
           key={i}
         >
           <img
             className={"img-icon"}
-            src={myLocation == `/${name.to}` ? name.srcChoosen : name.src}
+            src={myLocation.includes(`/${name.to}`) ? name.srcChoosen : name.src}
           />
           <Link
             className={`side-names ${
-              myLocation == `/${name.to}` ? "choosen" : ""
+              myLocation.includes(`/${name.to}`)? "choosen" : ""
             }`}
             to={name.to}
           >
