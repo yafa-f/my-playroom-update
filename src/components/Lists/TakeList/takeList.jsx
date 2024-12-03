@@ -11,9 +11,10 @@ export const TakeList = () => {
   const [tableArr, setTableArr] = useState();
   const take = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
-  ); 
+  );
   useEffect(() => {
-    setTableArr(take);
+    const filter = take.filter((item) => item.ActualReturnDate === undefined);
+    setTableArr(filter);
   }, [take]);
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -37,7 +38,7 @@ export const TakeList = () => {
   }
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString("en-GB");
- 
+
   return (
     <div className="takes">
       <div className="take-title">
@@ -45,8 +46,8 @@ export const TakeList = () => {
         <div className="titleTake">השאלות</div>
       </div>
       <div className="search-buttons">
-        <SearchButtons name="שם מנוי"  list={take}setTableArr={setTableArr} />{" "}
-        <SearchButtons name="שם המשחק"  list={take}setTableArr={setTableArr} />{" "}
+        <SearchButtons name="שם מנוי" list={take} setTableArr={setTableArr} />{" "}
+        <SearchButtons name="שם המשחק" list={take} setTableArr={setTableArr} />{" "}
       </div>
       <div className="table-title">
         <div className="taket-h3">פרטי המשחק</div>
@@ -86,15 +87,13 @@ export const TakeList = () => {
                   </div>
                   {delayMessage > 30 ? (
                     <div className="delay">
-                      <div className="delay-icon">  </div>
+                      <div className="delay-icon"> </div>
                       <div className="delay-message2">איחור מעל חודש</div>{" "}
-                    
                     </div>
                   ) : delayMessage >= 1 && delayMessage > 30 ? (
                     <div className="delay">
-                     <div className="delay-icon">    </div>
-                    <div className="delay-message">איחור</div>
-               
+                      <div className="delay-icon"> </div>
+                      <div className="delay-message">איחור</div>
                     </div>
                   ) : (
                     <div></div>

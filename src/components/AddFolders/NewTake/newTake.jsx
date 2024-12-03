@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import "./newTake.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import NewTakeFunction from "../../AddFunctions/newTakeFunction";
-import UpdateGame from "../../UpdateFunction/UpdateGame";
-import { UPDATE_GAME } from "../../../app/slices/gameSlice";
-import { ADD_TOR } from "../../../app/slices/takeOrReturnSlice";
-import UpdateGameTOR from "../../UpdateFunction/UpdateGameTOR";
+import NewTakeFunction from "../AddFunctions/NewTakeFunction";
+import { UPDATE_GAME } from "../../app/slices/gameSlice";
+import { ADD_TOR } from "../../app/slices/takeOrReturnSlice";
+import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export const AddTake = () => {
@@ -38,52 +37,61 @@ export const AddTake = () => {
   const generateUniqueReturnID = (existingIDs) => {
     let newID;
     do {
-      newID = Math.floor(Math.random() * 10000); // Generate a random ID
+      newID = Math.floor(Math.random() * 10000);
     } while (existingIDs.includes(String(newID)));
     return String(newID);
   };
-  console.log("selectedGames", selectedGames);
-  const ApprovalTake = () => {
+
+  const ApprovalTake = async () => {
     setCircleFlag(true);
+    setButtonText("הוספת השאלות בתהליך...");
     const ReturnDate = new Date();
-    ReturnDate.setDate(ReturnDate.getDate() + 14); // Two weeks from today
+    ReturnDate.setDate(ReturnDate.getDate() + 14);
     const formattedReturnDate = ReturnDate.toISOString().split("T")[0];
 
-    selectedGames.map(async (game) => {
-      let take = {
-        IsMissingParts: game.CurrentStateOfGame == "תקין" ? false : true,
-        ReturnDate: formattedReturnDate,
-        TakingDate: new Date().toISOString().split("T")[0],
-        GameCode: game.Id,
-        UserCode: singleUser.userCode,
-        ReturnID: generateUniqueReturnID(existingReturnIDs),
-      };
-      const addResponse = await NewTakeFunction(take);
-      setTimeout(() => {
-        setCircleFlag(false);
-      }, 1000);
-      if (addResponse && addResponse.ok) {
-        let gameForUpdate = {
-          ...game,
-          IsAvailable: "FALSE",
+    const results = await Promise.all(
+      selectedGames.map(async (game) => {
+        let take = {
+          IsMissingParts: game.CurrentStateOfGame === "תקין" ? false : true,
+          ReturnDate: formattedReturnDate,
+          TakingDate: new Date().toISOString().split("T")[0],
+          GameCode: game.Id,
+          UserCode: singleUser.userCode,
+          ReturnID: generateUniqueReturnID(existingReturnIDs),
         };
-        const updateGame = await UpdateGameTOR(gameForUpdate);
-        if (updateGame) {
-          dispatch(UPDATE_GAME(updateGame));
+        const addResponse = await NewTakeFunction(take);
+        if (addResponse && addResponse.ok) {
+          let gameForUpdate = { ...game, IsAvailable: "FALSE" };
+          const updateGame = await UpdateGameTOR(gameForUpdate);
+          if (updateGame) {
+            dispatch(UPDATE_GAME(updateGame));
+          } else {
+            console.error("Failed to add object");
+          }
+          dispatch(ADD_TOR(take));
+          return { name: game.GameName, success: true };
         } else {
-          console.error("Failed to add object");
+          return { name: game.GameName, success: false };
         }
-        dispatch(ADD_TOR(take));
-        setButtonText("ההשאלה נוספה בהצלחה");
-        setTimeout(() => {
-          navigate("/singleUser/Taking_Returning");
-        }, 3000);
-      } else {
-        setButtonText("ההוספה נכשלה");
-      }
-    });
-    setSelectedGames([{}]);
+      })
+    );
 
+    setCircleFlag(false);
+    const successMessages = results
+      .filter((result) => result.success)
+      .map((result) => result.name);
+    const failureMessages = results
+      .filter((result) => !result.success)
+      .map((result) => result.name);
+
+    if (failureMessages.length > 0) {
+      setButtonText(`נכשל עבור: ${failureMessages.join(", ")}`);
+    } else {
+      setButtonText("כל ההשאלות נוספו בהצלחה!");
+      setTimeout(() => {
+        navigate("/singleUser/Taking_Returning");
+      }, 3000);
+    }
   };
   const handleDeleteTakegame = (index) => {
     if (selectedGames.length == 1) {
@@ -208,7 +216,9 @@ export const AddTake = () => {
           ))}
         {selectedGames[0].GameName && (
           <button onClick={ApprovalTake} className="Approval-take-btn">
-            {circleFlag && <CircularProgress sx={{ color: "white" }} />}
+            {circleFlag && (
+              <CircularProgress sx={{ color: "white" }} size={10} />
+            )}
             {buttonText}{" "}
           </button>
         )}

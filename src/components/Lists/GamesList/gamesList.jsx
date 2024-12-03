@@ -20,9 +20,7 @@ export const GamesList = () => {
     { name: "סטטוס השאלה" },
   ];
   const navigate = useNavigate();
-
-  const games = useSelector((state) => state.game.games);
-  
+  const games = useSelector((state) => state.game.games)
   const usersFromStore = useSelector((state) => state.user.users).data;
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const torFromStore = useSelector(
@@ -30,26 +28,26 @@ export const GamesList = () => {
   );
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const [tableArr, setTableArr] = useState();
-  const userName=(Id)=>{
+  const userName = (Id) => {
     let gameTake = torFromStore.filter((tg) => tg.GameCode === Id);
-    
     if (gameTake.length === 0) {
-        return "No user found"; // or handle it as needed
+      return "No user found"; // or handle it as needed
     }
+      let closestDateObject = gameTake.reduce((closest, current) => {
+      let currentDate = new Date(current.TakingDate);
+      let closestDate = new Date(closest.TakingDate);
 
-    let closestDateObject = gameTake.reduce((closest, current) => {
-        let currentDate = new Date(current.TakingDate);
-        let closestDate = new Date(closest.TakingDate);
-
-        return Math.abs(currentDate - new Date()) < Math.abs(closestDate - new Date())
-            ? current
-            : closest;
+      return Math.abs(currentDate - new Date()) <
+        Math.abs(closestDate - new Date())
+        ? current
+        : closest;
     }, gameTake[0]);
 
-    let user = usersFromStore.find((u) => u.userCode === closestDateObject.UserCode)?.userName;
+    let user = usersFromStore.find(
+      (u) => u.userCode === closestDateObject.UserCode
+    )?.userName;
     return user || "Unknown User"; // Handle case where user is not found
-
-  }
+  };
   useEffect(() => {
     setTableArr(games);
   }, [games]);
@@ -113,7 +111,7 @@ export const GamesList = () => {
                 let tchum = typesGamesFromStore.find(
                   (t) => t.gameTypeCode === game.GameTypeCode
                 )?.gameTipeName;
-              
+
                 return (
                   <div key={i}>
                     <Accordion
@@ -187,8 +185,7 @@ export const GamesList = () => {
                             )}
                           </div>
                           <div className="Complementar-Available">
-                            {game.HaveComplementaryGame === "on" ||
-                            game.HaveComplementaryGame === "TRUE" ||
+                            {game.HaveComplementaryGame === "TRUE" ||
                             game.HaveComplementaryGame === "true" ? (
                               <div className="Complementar">
                                 <div className="v-logo"></div>קיים משחק משלים
@@ -196,7 +193,8 @@ export const GamesList = () => {
                             ) : (
                               <div></div>
                             )}
-                            {game.IsAvailable !== "FALSE" ? (
+                            {game.IsAvailable === "TRUE" ||
+                            game.IsAvailable === "true" ? (
                               <div className="Available">
                                 <div className="v-logo"></div>זמין להשאלה
                               </div>

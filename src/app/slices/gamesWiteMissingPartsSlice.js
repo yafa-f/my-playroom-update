@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
   currentGamesWithMissingParts: {},
   gamesWithMissingParts: [],
@@ -14,7 +15,7 @@ export const GamesWithMissingPartsSlice = createSlice({
       state.gamesWithMissingParts = action.payload;
     },
     ADD_GAMES_WITH_MISSING_PARTS: (state, action) => {
-      state.gamesWithMissingParts.push(action.payload);
+      state.gamesWithMissingParts.data.push(action.payload);
     },
     DELETE_GAMES_WITH_MISSING_PARTS: (state, action) => {
       state.gamesWithMissingParts = state.gamesWithMissingParts.filter(
@@ -23,20 +24,22 @@ export const GamesWithMissingPartsSlice = createSlice({
     },
     UPDATE_GAMES_WITH_MISSING_PARTS: (state, action) => {
       const { Id, ...newValues } = action.payload;
-      const updatedGamesWithMissingParts = state.gamesWithMissingParts.data.map((game) => {
-        if (game.Id === Id) {
-          return { ...game, ...newValues };
+      const updatedGamesWithMissingParts = state.gamesWithMissingParts.data.map(
+        (game) => {
+          if (game.Id === Id) {
+            return { ...game, ...newValues };
+          }
+          return game;
         }
-        return game;
-      });
+      );
       state.gamesWithMissingParts.data = updatedGamesWithMissingParts;
     },
   },
 });
 export const {
-    setCurrentGamesWithMissingParts,
-    setGamesWithMissingParts,
-    ADD_GAMES_WITH_MISSING_PARTS,
-    DELETE_GAMES_WITH_MISSING_PARTS,
-    UPDATE_GAMES_WITH_MISSING_PARTS,
+  setCurrentGamesWithMissingParts,
+  setGamesWithMissingParts,
+  ADD_GAMES_WITH_MISSING_PARTS,
+  DELETE_GAMES_WITH_MISSING_PARTS,
+  UPDATE_GAMES_WITH_MISSING_PARTS,
 } = GamesWithMissingPartsSlice.actions;

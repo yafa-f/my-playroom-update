@@ -18,7 +18,9 @@ export const SearchButtons = (props) => {
   const forAges = useSelector((state) => state.forAge.forAges).data;
   const closets = useSelector((state) => state.closet.closets);
   const buttonRef = useRef(null);
-  const take = useSelector((state) => state.takingOrReturning.takingsOrReturnings);
+  const take = useSelector(
+    (state) => state.takingOrReturning.takingsOrReturnings
+  );
   const users = useSelector((state) => state.user.users).data;
   const games = useSelector((state) => state.game.games);
 
@@ -26,20 +28,28 @@ export const SearchButtons = (props) => {
     switch (props.name) {
       case "שם מנוי":
         {
-          const userCodes = take.map(item => item.UserCode);
-          const filteredUsers = users ? users.filter(user => userCodes.includes(user.userCode)) : [];
-          const userNames = filteredUsers.map(user => user.userName);
-          setSelectArray(userNames);
+          const filterTake = take.filter(
+            (item) => item.ActualReturnDate === undefined
+          );
+          const userCodes = filterTake.map((item) => item.UserCode);
+          const matchingUsers = users
+            .filter((user) => userCodes.includes(user.userCode))
+            .map((user) => user.userName);
+          setSelectArray(matchingUsers);
         }
         break;
-        case "שם המשחק":
-          {
-            const gameCodes = take.map(item => item.GameCode);
-            const filteredGames = games ? games.filter(item => gameCodes.includes(String(item.GameCode))) : [];
-            const gameNames = filteredGames.map(item => item.GameName);
-            setSelectArray(gameNames);
-          }
-          break;
+      case "שם המשחק":
+        {
+          const filterTake = take.filter(
+            (item) => item.ActualReturnDate === undefined
+          );
+          const gameCodes = filterTake.map((item) => item.GameCode);
+          const matchingGames = games
+            .filter((game) => gameCodes.includes(game.Id))
+            .map((game) => game.GameName);
+          setSelectArray(matchingGames);
+        }
+        break;
       case "תחום":
         {
           const type = typesGames.map((item) => item.gameTipeName);
@@ -67,64 +77,63 @@ export const SearchButtons = (props) => {
       default:
         setSelectArray([]);
     }
-  }, [props.name, typesGames, forAges, closets,take,users,games]);
-
-
-
+  }, [props.name, typesGames, forAges, closets, take, users, games]);
 
   useEffect(() => {
-    if(chosenUser!==""){
+    if (chosenUser !== "") {
       switch (props.name) {
         case "שם מנוי":
-          {  
-            const filteredUsers = users?.find(user => user.userName === chosenUser).userCode;
+          {
+            const filteredUsers = users?.find(
+              (user) => user.userName === chosenUser
+            ).userCode;
             const filteredRows = take.filter((row) => {
               return (
                 typeof row["UserCode"] === "string" &&
-                row["UserCode"]===filteredUsers
+                row["UserCode"] === filteredUsers
               );
             });
             setSelectArrayFilter(filteredRows);
           }
           break;
-          case "שם המשחק":
+        case "שם המשחק":
           {
-            const filteredGame = games?.filter(game => game.GameName === chosenUser);
-            const gameCodesAsStrings = filteredGame?.map(game => game?.Id?.toString());
-            const filteredGames = take.filter(game => gameCodesAsStrings.includes(game.GameCode));
+            const filteredGame = games?.filter(
+              (game) => game.GameName === chosenUser
+            );
+            const gameCodesAsStrings = filteredGame?.map((game) =>
+              game?.Id?.toString()
+            );
+            const filteredGames = take.filter((game) =>
+              gameCodesAsStrings.includes(game.GameCode)
+            );
             setSelectArrayFilter(filteredGames);
           }
           break;
         case "תחום":
           {
-            const filteredRows = games.filter((row) => {
-              return (
-                typeof row["GameTypeCode"] === "string" &&
-                row["GameTypeCode"]===chosenUser
-              );
-            });
-            setSelectArrayFilter(filteredRows);
+            const type = typesGames.find(
+              (t) => t.gameTipeName === chosenUser
+            ).gameTypeCode;
+            const filterG = games.filter((g) => g.GameTypeCode === type);
+            setSelectArrayFilter(filterG);
           }
           break;
         case "טווח גילאים":
           {
-            const filteredRows = games.filter((row) => {
-              return (
-                typeof row["AgeCode"] === "string" &&
-                row["AgeCode"]===chosenUser
-              );
-            });
-            setSelectArrayFilter(filteredRows);
+            const age = forAges.find((a) => a.Age === chosenUser).AgeCode;
+            const filterG = games.filter((g) => g.AgeCode === age);
+            setSelectArrayFilter(filterG);
           }
           break;
         case "סטטוס משחק":
-          const filteredRows = games.filter((row) => {
-            return (
-              typeof row["CurrentStateOfGame"] === "string" &&
-              row["CurrentStateOfGame"]===chosenUser
+          {
+            const filterG = games.filter(
+              (g) => g.CurrentStateOfGame === chosenUser
             );
-          });
-          setSelectArrayFilter(filteredRows);
+            setSelectArrayFilter(filterG);
+          }
+
           break;
         case "מס’ ארון":
           {
@@ -137,16 +146,21 @@ export const SearchButtons = (props) => {
             setSelectArrayFilter(filteredRows);
           }
           break;
-        // צריך לעדכן בדאטה בייס ולשנות
-        // case "סטטוס השאלה":
-        //   setSelectArray(["מושאל", "במשחקייה"]);
-  
-        //   break;
+        case "סטטוס השאלה":
+          {
+            let filterG;
+            if (chosenUser === "מושאל") {
+              filterG = games.filter((g) => g.IsAvailable === "FALSE");
+            } else {
+              filterG = games.filter((g) => g.IsAvailable !== "FALSE");
+            }
+            setSelectArrayFilter(filterG);
+          }
+          break;
         default:
           setSelectArrayFilter([]);
-        }
-    }
-    else{
+      }
+    } else {
       setSelectArrayFilter(props.list);
     }
   }, [chosenUser]);
