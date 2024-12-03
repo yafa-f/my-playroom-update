@@ -1,0 +1,113 @@
+.h-3-game {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 27px;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 7vw;
+  margin-right: 50px;
+}
+.gamesMissing {
+  position: absolute;
+}
+.games-missing-title {
+    display: inline-flex;
+    direction: rtl;
+    /* margin-left: 7vw; */
+}
+.game-missing-logo {
+    background-image: url("../../../assets/אחר2.svg");
+    width: 65px;
+    height: 65px;
+    margin-top: 10px;
+}
+.titleMissing {
+    direction: rtl;
+    font-size: 55px;
+    font-weight: 900;
+    line-height: 82.5px;
+    color: rgba(6, 120, 252, 1);
+    margin-left: 24vw;
+    text-align: center;
+    width: 40vw;
+}
+.fines-title {
+    display: inline-flex;
+    direction: rtl;
+    margin-left: 7vw;
+  }
+  .fine-logo {
+    background-image: url("../../../assets/אחר2.svg");
+    width: 65px;
+    height: 65px;
+    margin-top: 10px;
+  }
+  .titleFine {
+    direction: rtl;
+    font-size: 55px;
+    font-weight: 900;
+    line-height: 82.5px;
+    color: rgba(6, 120, 252, 1);
+    margin-left: 24vw;
+    text-align: center;
+    width: 40vw;
+  }
+.table-title {
+  width: 77vw;
+  height: 60.09px;
+  margin-top: 2vh;
+  margin-left: 3vw;
+  border-radius: 28px 28px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(239, 239, 239, 1);
+  display: inline-flex;
+  direction: rtl;
+}
+.games-missing-table {
+  width: 77vw;
+  height: 55vh;
+  margin-top: 5px;
+  margin-left: 3vw;
+  gap: 0px;
+  border-radius: 0px 0px 28px 28px;
+  border: 1px 0px 0px 0px;
+  opacity: 0px;
+  background-color: rgba(255, 255, 255, 1);
+  overflow: scroll;
+  overflow-x: hidden;
+}
+.section {
+  height: 100vh;
+  margin-left: 2px;
+}
+.one-item {
+  direction: rtl;
+  display: inline-flex;
+  width: 77vw;
+  height: 12vh;
+  border-bottom: 2px rgba(6, 120, 252, 0.2) solid;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: auto;
+  padding-left: 50px;
+}
+.tbl {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+.scrollable {
+  padding-left: 20vw;
+  background-color: red;
+}
+
+.tbl th {
+  position: sticky;
+  top: 0;
+  padding-right: 20px; 
+  z-index: 1;
+}
+.tbl td {
+  width: 3vw;
+  padding-right: 20px;
+}

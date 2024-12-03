@@ -18,7 +18,7 @@ export const GamesWithMissingPartsSlice = createSlice({
       state.gamesWithMissingParts.data.push(action.payload);
     },
     DELETE_GAMES_WITH_MISSING_PARTS: (state, action) => {
-      state.gamesWithMissingParts = state.gamesWithMissingParts.filter(
+      state.gamesWithMissingParts = state.gamesWithMissingParts.data.filter(
         (game) => game._id !== action.payload._id
       );
     },
