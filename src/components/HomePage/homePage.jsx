@@ -41,6 +41,8 @@ export const HomePage = () => {
       to: "FinesList",
     },
     { name: "טווח גילאים", src: other, srcChoosen: other2, to: "AgesList" },
+    { name: "משחקים עם חלקים חסרים", src: other, srcChoosen: other2, to: "GamesWithMissingPartsList" },
+
   ];
   return (
     <div className="image">
