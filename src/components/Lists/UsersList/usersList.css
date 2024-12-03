@@ -1,6 +1,4 @@
-.table-container{
-  margin-top: 37px;
-}
+
 .usersTitle {
   width: 1700px;
   gap: 17px;
@@ -148,6 +146,11 @@ h3 {
   width: 29px;
   height: 27px;
   margin-left: 10px;
+}
+.table-container {
+  margin-top: 10vh;
+  align-items: center;
+  margin-left: 10vw;
 }
 .table {
   width: 78vw;
