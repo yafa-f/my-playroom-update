@@ -77,15 +77,21 @@ export const NewGame = () => {
       setCodeOfCloset(gameToUpdate.ClosetNumber);
       setPlaceInCloset(gameToUpdate.PlaceInCloset);
     } else {
-      let randomNumber;
+      let randomNumberCode;
       const codes = localGames.map((game) => Number(game.GameCode));
       do {
-        randomNumber = Math.floor(Math.random() * 10000) + 1;
-      } while (codes.includes(randomNumber));
+        randomNumberCode = Math.floor(Math.random() * 10000) + 1;
+      } while (codes.includes(randomNumberCode));
+      let randomNumberId;
+      const Ids = localGames.map((game) => Number(game.GameCode));
+      do {
+        randomNumberId = Math.floor(Math.random() * 10000) + 1;
+      } while (Ids.includes(randomNumberId));
 
       setFormData({
         ...formData,
-        GameCode: randomNumber,
+        Id: String(randomNumberId),
+        GameCode: randomNumberCode,
       });
     }
   }, [bool, gameToUpdate]);
@@ -132,7 +138,6 @@ export const NewGame = () => {
         updateNumbers2.sort((a, b) => a - b);
         setUpdateLocation2(updateNumbers2);
         setFlagEqualCode(false);
-
       } else {
         setFlagEqualCode(true);
       }
@@ -372,12 +377,13 @@ export const NewGame = () => {
                   type="checkbox"
                   className="is-availible"
                   checked={
-                    formData.IsAvailable || formData.IsAvailable === "TRUE"
+                    formData.IsAvailable === "true" ||
+                    formData.IsAvailable === "TRUE"
                   }
                   onChange={(event) =>
                     setFormData({
                       ...formData,
-                      IsAvailable: event.target.checked,
+                      IsAvailable: event.target.checked ? "TRUE" : "FALSE",
                     })
                   }
                 />{" "}
@@ -453,13 +459,15 @@ export const NewGame = () => {
                   type="checkbox"
                   className="Complementary-Game"
                   checked={
-                    formData.HaveComplementaryGame ||
+                    formData.HaveComplementaryGame === "true" ||
                     formData.HaveComplementaryGame === "TRUE"
                   }
                   onChange={(event) =>
                     setFormData({
                       ...formData,
-                      HaveComplementaryGame: event.target.checked,
+                      HaveComplementaryGame: event.target.checked
+                        ? "TRUE"
+                        : "FALSE",
                     })
                   }
                 />

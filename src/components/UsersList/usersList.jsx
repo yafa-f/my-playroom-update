@@ -20,7 +20,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import { DELETE_USER } from "../../app/slices/usersSlice";
-import deleteUser from "../DeleteFunctions/DeleteUser/deleteUser";
+import deleteUser from "../DeleteFunctions/DeleteUser/DeleteUser";
 import Supervisor from "../../assets/supervisor_account.svg";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";

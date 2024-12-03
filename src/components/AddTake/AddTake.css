@@ -1,4 +1,3 @@
-
 .img-back {
   background-image: url("../../assets/reka.png");
   background-repeat: no-repeat;
@@ -78,8 +77,8 @@
   margin-right: 25vw;
 }
 .game-name-row {
-    margin-right: 3vw;
-    width: 20vw;
+  margin-right: 3vw;
+  width: 20vw;
 }
 .status-row {
   width: 10vw;
@@ -93,74 +92,73 @@
 .place-row {
   width: 10vw;
 }
-.select-game-take{
-        width: 20vw;
-        height: 5vh;
-        direction: rtl;
-        /* margin-left: 2vw; */
-        /* margin-top: 3vh; */
+.select-game-take {
+  width: 20vw;
+  height: 5vh;
+  direction: rtl;
 }
-.new-hashala{
-    display: inline-flex;
-    font-size: 15px;
-    margin-top: 3vh;
-    margin-right: 5vw;
-    text-align: center; 
-    height: 5vh;
+.new-hashala {
+  display: inline-flex;
+  font-size: 15px;
+  margin-top: 3vh;
+  margin-right: 5vw;
+  text-align: center;
+  height: 5vh;
 }
-.garb-icon-take{
-        background-image: url("../../assets/garbage.svg");
-        width: 13px;
-        height: 17px;
-        position: relative;
-        margin-right: 8vw;
+.garb-icon-take {
+  background-image: url("../../assets/garbage.svg");
+  width: 13px;
+  height: 17px;
+  position: relative;
+  margin-right: 8vw;
 }
 .Complementar-Available-take {
-    width: 10vw;
-    margin-right: 5vw;
-  }
-  .v-logo-take {
-    background-image: url("../../assets/V-take.svg");
-    width: 20px;
-    height: 15px;
-  }
-  .Available-take {
-    font-size: 12px;
-    display: inline-flex;
-    gap: 10px;
-  }
-  .Complementar-take {
-    font-size: 12px;
-    display: inline-flex;
-    gap: 10px;
-  }
-  .parts-game-take{
-    margin-top: 3vh;
-  }
-  .parts-table-take {
-    display: grid;
-    grid-template-columns: 100px  ;
-  }
-  .parts-take {
-    display: inline-flex;
-    font-size: 12px;
-    gap: 10px;
-  }
-  .game-parts-name-take {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 24px;
-    text-align: right;
-    color: rgba(122, 122, 122, 1);
-  }
-  .Approval-take-btn {
-    width: 5vw;
-    height: 4vh;
-    border-radius: 33px;
-    background-color: rgba(6, 120, 252, 1);
-    color: rgba(255, 255, 255, 1);
-    margin-top: 1vh;
-    font-weight: 600;
-    border: 1px rgba(6, 120, 252, 1) solid;
-    margin-right: 90vw;
-  }
+  width: 10vw;
+  margin-right: 5vw;
+}
+.v-logo-take {
+  background-image: url("../../assets/V-take.svg");
+  width: 20px;
+  height: 15px;
+}
+.Available-take {
+  font-size: 12px;
+  display: inline-flex;
+  gap: 10px;
+}
+.Complementar-take {
+  font-size: 12px;
+  display: inline-flex;
+  gap: 10px;
+}
+.parts-game-take {
+  margin-top: 3vh;
+}
+.parts-table-take {
+  display: grid;
+  grid-template-columns: 100px;
+}
+.parts-take {
+  display: inline-flex;
+  font-size: 12px;
+  gap: 10px;
+}
+.game-parts-name-take {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  text-align: right;
+  color: rgba(122, 122, 122, 1);
+}
+.Approval-take-btn {
+  width: 8vw;
+  height: 5vh;
+  border-radius: 33px;
+  background-color: rgba(6, 120, 252, 1);
+  color: rgba(255, 255, 255, 1);
+  margin-top: 1vh;
+  font-weight: 600;
+  font-size: 10px;
+  border: 1px rgba(6, 120, 252, 1) solid;
+  margin-right: 87vw;
+}

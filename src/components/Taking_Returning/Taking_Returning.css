@@ -252,8 +252,8 @@
   color: black;
 }
 .Approval-btn {
-  width: 5vw;
-  height: 4vh;
+  width: 8vw;
+  height: 5vh;
   border-radius: 33px;
   background-color: rgba(6, 120, 252, 1);
   color: rgba(255, 255, 255, 1);
@@ -261,12 +261,12 @@
   font-weight: 600;
   border: 1px rgba(6, 120, 252, 1) solid;
   margin-right: 2vw;
+  font-size: 10px;
 }
 .Approval {
   direction: rtl;
-  margin-right: 57vw;
-  font-size: 15px;
-  font-weight: 700;
+  margin-right: 53vw;
+  font-weight: 500;
   line-height: 30px;
 }
 .Approval-input {

@@ -11,25 +11,16 @@ export const TakingHistory = () => {
   const takeOrReturn = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
-  // const filteredList = take.filter(
-  //   (item) => item.UserCode === singleUser.userCode
-  // );
   useEffect(() => {
-    const filteredL = takeOrReturn.filter((item) => {
-      const isDateValid =
-        item.ActualReturnDate &&
-        !isNaN(new Date(item.ActualReturnDate).getTime());
-      return item.UserCode === singleUser.userCode && isDateValid;
-    });
+    const filteredL = takeOrReturn.filter(
+      (item) =>
+        item.UserCode === singleUser.userCode &&
+        item.ActualReturnDate !== undefined
+    );
     setFilteredList(filteredL);
-  }, [takeOrReturn]);
-  // const filteredList = take.filter((item) => {
-  //   const isDateValid = item.ActualReturnDate && !isNaN(new Date(item.ActualReturnDate).getTime());
-  //   return item.UserCode === singleUser.userCode && isDateValid;
-  // });
-  // console.log("filteredList", filteredList);
-  const games = useSelector((state) => state.game.games);
-  const formatDate = (dateString) => {
+  }, [takeOrReturn, singleUser.userCode]);
+    const games = useSelector((state) => state.game.games);
+    const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -115,13 +106,11 @@ export const TakingHistory = () => {
                   <div></div>
                 )}
               </div>
-              {item.IsMissingParts ? (
+              {item.Fine > 0 && (
                 <div className="money-fine">
-                  <div className="money-icon"></div>{" "}
-                  <div className="fine-msg">{`${item.Fine} ש"ח`}</div>{" "}
+                  <div className="money-icon"></div>
+                  <div className="fine-msg">{`${item.Fine} ש"ח`}</div>
                 </div>
-              ) : (
-                <div></div>
               )}
             </div>
           ) : (

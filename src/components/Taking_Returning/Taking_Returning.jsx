@@ -14,23 +14,28 @@ import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
 import { useNavigate } from "react-router-dom";
-import UpdateGame from "../UpdateFunction/UpdateGame";
 import UpdateGameWithMissPart from "../UpdateFunction/UpdateGameWithMissPart";
-import { ADD_GAMES_WITH_MISSING_PARTS, UPDATE_GAMES_WITH_MISSING_PARTS } from "../../app/slices/gamesWiteMissingPartsSlice";
+import {
+  ADD_GAMES_WITH_MISSING_PARTS,
+  UPDATE_GAMES_WITH_MISSING_PARTS,
+} from "../../app/slices/gamesWiteMissingPartsSlice";
 import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export const Taking_Returning = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [buttonText, setButtonText] = useState("אישור");
+  const [circleFlag, setCircleFlag] = useState(false);
   const [expanded, setExpanded] = useState({});
   const [cancelReturn, setCancelReturn] = useState({});
   const [isVisible, setIsVisible] = useState(false);
   const [fineIchur, setFineIchur] = useState();
   const [finePart, setFinePart] = useState();
   const [weekNum, setWeekNum] = useState();
-  const [finesSum, setFinesSum] = useState();
+  const [finesSum, setFinesSum] = useState(0);
   const [returnStatus, setReturnStatus] = useState({});
-  const [amountOfPartAfterReturn, setAmountOfPartAfterReturn] = useState();
+  const [amountOfPartAfterReturn, setAmountOfPartAfterReturn] = useState({});
   const [tableDataPart, setTableDataPart] = useState([]);
   const [dataTable, setDataTable] = useState([]);
   const currentDate = new Date();
@@ -43,22 +48,23 @@ export const Taking_Returning = () => {
   );
   const games = useSelector((state) => state.game.games);
   const [newFilteredList, setNewFilteredList] = useState([]);
+  const [lastGameWithMiss, setLastGameWithMiss] = useState({});
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const gamesWithMissing = useSelector(
     (state) => state.gamesWithMissingPart.gamesWithMissingParts
-  );
+  ).data;
   useEffect(() => {
     const filteredItems = take.filter(
       (item) =>
-        item.UserCode === singleUser.userCode && !item.ActualReturnDate &&
+        item.UserCode === singleUser.userCode &&
+        item.ActualReturnDate === undefined &&
         games.some(
           (game) => game.Id === item.GameCode && game.IsAvailable === "FALSE"
         )
     );
     setNewFilteredList(filteredItems);
   }, [games, take, singleUser.userCode]);
-
   const addTake = () => {
     navigate("/addTake");
   };
@@ -67,7 +73,28 @@ export const Taking_Returning = () => {
       ...prevValues,
       [ReturnID]: value,
     }));
+    if (value === "חסרים חלקים") {
+      const takeC = take.find((t) => t.ReturnID === ReturnID).GameCode;
+      const missingGame = gamesWithMissing.find((g) => g.Id === takeC);
+
+      if (missingGame) {
+        setLastGameWithMiss((prevGame) => ({
+          ...prevGame,
+          [ReturnID]: missingGame.MissingParts,
+        }));
+      }
+    }
   };
+  const handleInputChange = (ReturnID, partIndex, value) => {
+    setAmountOfPartAfterReturn((prev) => ({
+      ...prev,
+      [ReturnID]: {
+        ...prev[ReturnID],
+        [partIndex]: value,
+      },
+    }));
+  };
+
   const addAmountOfPartAfterReturn = (part) => {
     setTableDataPart((prevData) => [...prevData, part]);
   };
@@ -126,67 +153,83 @@ export const Taking_Returning = () => {
       }));
     }
   };
-  const ApprovalReturnGames = () => {
-    dataTable.map(async (t) => {
-      let take = {
-        IsMissingParts: t.status == "תקין" ? false : true,
-        ActualReturnDate: t.date,
-        ReturnID: t.ReturnID,
-      };
-      if (t.fine) {
-        take.Fine = t.fine;
-      }
-      const updateTOR = await UpdateTOR(take);
-      if (updateTOR) {
-        let code = games.find((g) => g.Id == t.GameCode).Id;
-        let game = {
-          Id: code,
-          CurrentStateOfGame: t.status,
-          IsAvailable: "TRUE",
-        };
-        const updateGameTor = await UpdateGameTOR(game);
-        if (updateGameTor) {
-          dispatch(UPDATE_GAME(updateGameTor));
-        } else {
-          console.error("Failed to add object");
+  const ApprovalReturnGames = async () => {
+    setCircleFlag(true);
+    setButtonText("החזרת המשחקים בתהליך...");
+    const results = await Promise.all(
+      dataTable.map(async (t) => {
+        if (t.status === "חסרים חלקים") {
+          let g = games.find((g) => g.Id == t.GameCode);
+          let missPart = gamesWithMissing?.find(
+            (game) => game.Id == t.GameCode
+          );
+          let gameWithMiss = {
+            Id: g.Id,
+            GameName: g.GameName,
+            MissingParts: t.table,
+          };
+          if (missPart) {
+            const updateGameMiss = await UpdateGameWithMissPart(gameWithMiss);
+            if (updateGameMiss) {
+              dispatch(UPDATE_GAMES_WITH_MISSING_PARTS(gameWithMiss));
+            } else {
+              console.error("Failed to update object");
+            }
+          } else {
+            const addGameMiss = await NewGameWithMissPartFunction(gameWithMiss);
+            if (addGameMiss) {
+              dispatch(ADD_GAMES_WITH_MISSING_PARTS(gameWithMiss));
+            } else {
+              console.error("Failed to add object");
+            }
+          }
         }
-        dispatch(UPDATE_TOR(updateTOR));
-      } else {
-        
-      }
-      if (t.status === "חסרים חלקים") {
-        let g = games.find((g) => g.Id == t.GameCode);
-        let gameWithMiss = {
-          Id: g.Id,
-          GameName: g.GameName,
-          MissingParts: t.table,
+        let take = {
+          IsMissingParts: t.status == "תקין" ? false : true,
+          ActualReturnDate: t.date,
+          ReturnID: t.ReturnID,
         };
-        let missPart = gamesWithMissing?.find(
-          (game) => game.Id == t.GameCode
-        );
-        console.log("missPart",missPart);
-        if (missPart) {
-          //update
-          console.log("מצאתי כבר משחק כזה עם חלקים חסרים");
-          // const updateGameMiss = await UpdateGameWithMissPart(gameWithMiss);
-          // if (updateGameMiss) {
-          //   dispatch(UPDATE_GAMES_WITH_MISSING_PARTS(gameWithMiss));
-          // } else {
-          //   console.error("Failed to update object");
-          // }
+        if (t.fine) {
+          take.Fine = t.fine;
+        }
+        const updateTOR = await UpdateTOR(take);
+        if (updateTOR) {
+          let code = games.find((g) => g.Id == t.GameCode).Id;
+          let game = {
+            Id: code,
+            CurrentStateOfGame: t.status,
+            IsAvailable: "TRUE",
+          };
+          const updateGameTor = await UpdateGameTOR(game);
+          if (updateGameTor) {
+            dispatch(UPDATE_GAME(updateGameTor));
+          } else {
+            console.error("Failed to add object");
+          }
+          dispatch(UPDATE_TOR(updateTOR));
+          return { code: t.GameCode, success: true };
         } else {
-          //add
-          console.log("לא מצאתי משחק כזה " );
+          return { code: t.GameCode, success: false };
+        }
+      })
+    );
+    setCircleFlag(false);
+    const successMessages = results
+      .filter((result) => result.success)
+      .map((result) => result.name);
+    const failureMessages = results
+      .filter((result) => !result.success)
+      .map((result) => result.name);
 
-          // const addGameMiss = await NewGameWithMissPartFunction(gameWithMiss);
-          // if (addGameMiss) {
-          //   dispatch(ADD_GAMES_WITH_MISSING_PARTS(addGameMiss));
-          // } else {
-          //   console.error("Failed to add object");
-          // }
-        }
-      }
-    });
+    if (failureMessages.length > 0) {
+      setButtonText(`נכשל עבור: ${failureMessages.join(", ")}`);
+    } else {
+      setButtonText("כל המשחקים הוחזרו בהצלחה!");
+      setTimeout(() => {
+        navigate("/singleUser");
+      }, 3000);
+    }
+
     setDataTable([]);
     setSelectedValue({});
   };
@@ -447,7 +490,7 @@ export const Taking_Returning = () => {
                             </tr>
                           </thead>
                           <tbody style={{ width: "37vw" }}>
-                            {game.Parts.map((part, p) => (
+                            {game.Parts.map((part, p, i) => (
                               <tr
                                 style={{
                                   fontSize: "16px",
@@ -462,14 +505,25 @@ export const Taking_Returning = () => {
                                 <td>{part.amount}</td>
                                 <td>
                                   <input
-                                    key={p}
+                                    key={item.ReturnID}
+                                    value={amountOfPartAfterReturn[item.ReturnID]?.[p] ||"" ||
+                                      lastGameWithMiss[item.ReturnID]?.[0]
+                                        ?.rows[p]?.afterReturn
+                                    }
                                     onChange={(e) =>
-                                      setAmountOfPartAfterReturn(e.target.value)
+                                      handleInputChange(
+                                        item.ReturnID,
+                                        p,
+                                        e.target.value
+                                      )
                                     }
                                     onBlur={() =>
                                       addAmountOfPartAfterReturn({
                                         ...part,
-                                        afterReturn: amountOfPartAfterReturn,
+                                        afterReturn:
+                                          amountOfPartAfterReturn[
+                                            item.ReturnID
+                                          ]?.[p] || "",
                                       })
                                     }
                                     style={{
@@ -583,7 +637,8 @@ export const Taking_Returning = () => {
           disabled
         />
         <button onClick={ApprovalReturnGames} className="Approval-btn">
-          אישור
+          {circleFlag && <CircularProgress sx={{ color: "white" }} size={10} />}
+          {buttonText}{" "}
         </button>
       </div>
     </div>
