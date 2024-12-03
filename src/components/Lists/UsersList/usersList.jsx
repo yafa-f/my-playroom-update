@@ -13,7 +13,6 @@ import { TableVirtuoso } from "react-virtuoso";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import "../GenericLists/genericLists.css";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
