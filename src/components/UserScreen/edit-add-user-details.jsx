@@ -29,6 +29,7 @@ export const EditAddUserDetails = (props) => {
   const [isPaymentTypeIsCheck, setIsPaymentTypeIsCheck] = useState(
     !isEdit ? false : isCheck
   );
+  const singleUser = useSelector((state) => state.singleUser.singleUser);
 
   const [isChecked, setIsChecked] = useState(
     location.pathname.endsWith("newUser")
@@ -130,7 +131,8 @@ export const EditAddUserDetails = (props) => {
   });
   useEffect(() => {
     if (isEdit && userToUpdate) {
-      setUserData(userToUpdate);
+      setUserData(singleUser);
+
     } else {
       let randomNumber;
       const codes = localUsers.data.map((user) => Number(user.userCode));
