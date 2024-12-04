@@ -13,7 +13,6 @@
 .games-missing-title {
     display: inline-flex;
     direction: rtl;
-    /* margin-left: 7vw; */
 }
 .game-missing-logo {
     background-image: url("../../../assets/אחר2.svg");
@@ -22,36 +21,16 @@
     margin-top: 10px;
 }
 .titleMissing {
-    direction: rtl;
     font-size: 55px;
     font-weight: 900;
-    line-height: 82.5px;
     color: rgba(6, 120, 252, 1);
-    margin-left: 24vw;
+    margin-left: 38vw;
+    margin-right:-3vw;
     text-align: center;
     width: 40vw;
 }
-.fines-title {
-    display: inline-flex;
-    direction: rtl;
-    margin-left: 7vw;
-  }
-  .fine-logo {
-    background-image: url("../../../assets/אחר2.svg");
-    width: 65px;
-    height: 65px;
-    margin-top: 10px;
-  }
-  .titleFine {
-    direction: rtl;
-    font-size: 55px;
-    font-weight: 900;
-    line-height: 82.5px;
-    color: rgba(6, 120, 252, 1);
-    margin-left: 24vw;
-    text-align: center;
-    width: 40vw;
-  }
+
+
 .table-title {
   width: 77vw;
   height: 60.09px;
@@ -74,7 +53,7 @@
   opacity: 0px;
   background-color: rgba(255, 255, 255, 1);
   overflow: scroll;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 .section {
   height: 100vh;
@@ -111,3 +90,10 @@
   width: 3vw;
   padding-right: 20px;
 }
+.tbl thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 1; 
+  }
+  

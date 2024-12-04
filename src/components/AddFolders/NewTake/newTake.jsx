@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import "./newTake.css";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import NewTakeFunction from "../AddFunctions/NewTakeFunction";
-import { UPDATE_GAME } from "../../app/slices/gameSlice";
-import { ADD_TOR } from "../../app/slices/takeOrReturnSlice";
-import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
+import NewTakeFunction from "../../AddFunctions/newTakeFunction";
+import { UPDATE_GAME } from "../../../app/slices/gameSlice";
+import { ADD_TOR } from "../../../app/slices/takeOrReturnSlice";
+import UpdateGameTOR from "../../UpdateFunction/UpdateGameTOR";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export const AddTake = () => {

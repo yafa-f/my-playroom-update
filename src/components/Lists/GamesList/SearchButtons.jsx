@@ -32,8 +32,7 @@ export const SearchButtons = (props) => {
             (item) => item.ActualReturnDate === undefined
           );
           const userCodes = filterTake.map((item) => item.UserCode);
-          const matchingUsers = users
-            .filter((user) => userCodes.includes(user.userCode))
+          const matchingUsers = users?.filter((user) => userCodes.includes(user.userCode))
             .map((user) => user.userName);
           setSelectArray(matchingUsers);
         }
@@ -58,7 +57,7 @@ export const SearchButtons = (props) => {
         break;
       case "טווח גילאים":
         {
-          const age = forAges.map((item) => item.Age);
+          const age = forAges?.map((item) => item.Age);
           setSelectArray(age);
         }
         break;

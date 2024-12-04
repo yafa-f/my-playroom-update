@@ -24,9 +24,10 @@ export const GamesWithMissingPartsList = () => {
   
   return (
     <div className="gamesMissing">
-      <div className="gmaes-missing-title">
-        <div className="game-missing-logo"></div>
+      <div className="gmaes-missing-title" style={{display:"inline-flex"}}>
         <div className="titleMissing">משחקים עם חלקים חסרים</div>
+        <div className="game-missing-logo"></div>
+
       </div>
       <div className="table-title">
         <div className="h-3-game ">שם המשחק</div>
@@ -35,9 +36,7 @@ export const GamesWithMissingPartsList = () => {
       <div className="games-missing-table">
         <section className="section">
           {Array.isArray(gamesMissing.data) &&
-            gamesMissing.data.map((item, i) => {
-                console.log(i,":",isScrollable(item.MissingParts))
-                
+            gamesMissing.data.map((item, i) => {                
               return (
                 <div
                   className="one-item"
@@ -92,31 +91,7 @@ export const GamesWithMissingPartsList = () => {
                             </tr>
                           ))
                         )}
-                        {/* {item.MissingParts.map((part, j) => {
-                          const contentHeight = part.rows.length ; // Estimate row height
-                          return (
-                            <tr
-                              key={j}
-                              className={
-                                isScrollable(contentHeight) ? "" : "scrollable"
-                              }
-                            >
-                              {part.rows.map((row, l) => (
-                                <React.Fragment key={l}>
-                                  <td style={{ textAlign: "center" }}>
-                                    {row.name}
-                                  </td>
-                                  <td style={{ textAlign: "center" }}>
-                                    {row.amount}
-                                  </td>
-                                  <td style={{ textAlign: "center" }}>
-                                    {row.afterReturn}
-                                  </td>
-                                </React.Fragment>
-                              ))}
-                            </tr>
-                          );
-                        })} */}
+
                       </tbody>
                     </table>
                   )}
@@ -140,35 +115,3 @@ export const GamesWithMissingPartsList = () => {
     </div>
   );
 };
-// import "./typeOfGameList.css";
-// export const TypeOfGameList = () => {
-//   const types = useSelector((state) => state.typeGame.typesGames);
-// console.log("types",types)
-//  return (
-//     <div className="types">
-//       <div className="types-title">
-//         <div className="type-logo"></div>
-//         <div className="titleType">תחומי משחק</div>
-//       </div>
-//       <div className="table-title">
-//         <div className="h-3-type ">קוד תחום</div>
-//         <div className="h-3-type ">תחום</div>
-//         <div className="h-3-type ">צבע מדבקה</div>
-//       </div>
-//       <div className="types-table">
-//         <section className="section">
-//           {Array.isArray(types) &&
-//             types.map((item, i) => {
-//               return (
-//                 <div className="one-item" key={i}>
-//                   <div className="type-code">{item.gameTypeCode}</div>
-//                   <div className="type-game">{item.gameTipeName}</div>
-//                   <div className="sticker-Color">{item.stickerColor}</div>
-//                 </div>
-//               );
-//             })}
-//         </section>
-//       </div>
-//     </div>
-//   );
-// };

@@ -20,7 +20,7 @@ export const GamesList = () => {
     { name: "סטטוס השאלה" },
   ];
   const navigate = useNavigate();
-  const games = useSelector((state) => state.game.games)
+  const games = useSelector((state) => state.game.games);
   const usersFromStore = useSelector((state) => state.user.users).data;
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const torFromStore = useSelector(
@@ -33,7 +33,7 @@ export const GamesList = () => {
     if (gameTake.length === 0) {
       return "No user found"; // or handle it as needed
     }
-      let closestDateObject = gameTake.reduce((closest, current) => {
+    let closestDateObject = gameTake.reduce((closest, current) => {
       let currentDate = new Date(current.TakingDate);
       let closestDate = new Date(closest.TakingDate);
 
@@ -85,7 +85,7 @@ export const GamesList = () => {
         </div>
         <div className="search-buttons">
           {Array.isArray(searchNames) &&
-            searchNames?.map((search, i) => (
+            (searchNames || [])?.map((search, i) => (
               <div id={i}>
                 <SearchButtons
                   name={search.name}

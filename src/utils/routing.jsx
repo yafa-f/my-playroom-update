@@ -10,8 +10,8 @@ import { TypeOfGameList } from "../components/Lists/TypeOfGameList/typeOfGameLis
 import { FinesList } from "../components/Lists/FinesList/finesList.jsx";
 import { ViewSingleUser } from "../components/UserScreen/view-single-user.jsx";
 import { ViewEditAddUser } from "../components/UserScreen/view-edit-add-user.jsx";
-import { Taking_Returning } from "../components/Taking_Returning/taking_returning.jsx";
-import { TakingHistory } from "../components/TakingHistory/takingHistory.jsx";
+import { Taking_Returning } from "../components/Taking_Returning/Taking_Returning.jsx";
+import { TakingHistory } from "../components/TakingHistory/TakingHistory.jsx";
 import { AddTake } from "../components/AddFolders/NewTake/newTake.jsx";
 import { AgesList } from "../components/Lists/AgesList/agesList.jsx";
 import { GamesWithMissingPartsList } from "../components/Lists/GamesWithMissingPartsList/gamesWithMissingParts.jsx";

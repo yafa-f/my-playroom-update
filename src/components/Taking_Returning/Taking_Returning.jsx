@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./taking_returning.css";
+import "./Taking_Returning.css";
 import { UserTitle } from "../UserScreen/userTitle";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@mui/material";
@@ -19,7 +19,7 @@ import {
   ADD_GAMES_WITH_MISSING_PARTS,
   UPDATE_GAMES_WITH_MISSING_PARTS,
 } from "../../app/slices/gamesWiteMissingPartsSlice";
-import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
+import NewGameWithMissPartFunction from "../AddFunctions/newGameWithMissPartFunction";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export const Taking_Returning = () => {
