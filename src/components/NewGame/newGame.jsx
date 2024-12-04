@@ -2,18 +2,16 @@ import { Box, Button } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import CircularProgress from "@mui/material/CircularProgress";
-import { ADD_GAME } from "../../../app/slices/gameSlice";
-import { UPDATE_CLOSET } from "../../../app/slices/closetSlice";
-import UpdateGame from "../../UpdateFunction/updateGame";
-import { UPDATE_GAME } from "../../../app/slices/gameSlice";
+import { ADD_GAME } from "../../app/slices/gameSlice";
+import { UPDATE_CLOSET } from "../../app/slices/closetSlice";
+import UpdateGame from "../UpdateFunction/updateGame";
+import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import "./newGame.css";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import NewGameFunction from "../../AddFunctions/newGameFunction";
-import UpdateCloset from "../../UpdateFunction/updateCloset";
+import NewGameFunction from "../AddFunctions/newGameFunction";
+import UpdateCloset from "../UpdateFunction/updateCloset";
 import { useNavigate } from "react-router-dom";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
 
 export const NewGame = () => {
   const navigate = useNavigate();
@@ -22,7 +20,6 @@ export const NewGame = () => {
   const { gameToUpdate } = location.state || {};
   const [codeOfCloset, setCodeOfCloset] = useState("");
   const [placeInCloset, setPlaceInCloset] = useState("");
-  const [status, setStatus] = useState(null);
   const [circleFlag, setCircleFlag] = useState(false);
   const [flagEqualCode, setFlagEqualCode] = useState(false);
   const [buttonText, setButtonText] = useState("אישור");
@@ -80,21 +77,15 @@ export const NewGame = () => {
       setCodeOfCloset(gameToUpdate.ClosetNumber);
       setPlaceInCloset(gameToUpdate.PlaceInCloset);
     } else {
-      let randomNumberCode;
+      let randomNumber;
       const codes = localGames.map((game) => Number(game.GameCode));
       do {
-        randomNumberCode = Math.floor(Math.random() * 10000) + 1;
-      } while (codes.includes(randomNumberCode));
-      let randomNumberId;
-      const Ids = localGames.map((game) => Number(game.GameCode));
-      do {
-        randomNumberId = Math.floor(Math.random() * 10000) + 1;
-      } while (Ids.includes(randomNumberId));
+        randomNumber = Math.floor(Math.random() * 10000) + 1;
+      } while (codes.includes(randomNumber));
 
       setFormData({
         ...formData,
-        Id: String(randomNumberId),
-        GameCode: randomNumberCode,
+        GameCode: randomNumber,
       });
     }
   }, [bool, gameToUpdate]);
@@ -141,6 +132,7 @@ export const NewGame = () => {
         updateNumbers2.sort((a, b) => a - b);
         setUpdateLocation2(updateNumbers2);
         setFlagEqualCode(false);
+
       } else {
         setFlagEqualCode(true);
       }
@@ -225,7 +217,6 @@ export const NewGame = () => {
       }
       dispatch(UPDATE_GAME(update));
       setButtonText("המשחק עודכן בהצלחה");
-      setStatus("success");
       setTimeout(() => {
         navigate("/GamesList");
       }, 3000);
@@ -233,8 +224,6 @@ export const NewGame = () => {
         setCircleFlag(false);
       }, 1000);
     } else {
-      setStatus("error");
-
       setButtonText("העדכון נכשל");
     }
   };
@@ -267,12 +256,10 @@ export const NewGame = () => {
       }
       dispatch(ADD_GAME(updatedFormData));
       setButtonText("המשחק נוסף בהצלחה");
-      setStatus("success");
       setTimeout(() => {
         navigate("/GamesList");
       }, 3000);
     } else {
-      setStatus("error");
       setButtonText("ההוספה נכשלה");
     }
   };
@@ -385,13 +372,12 @@ export const NewGame = () => {
                   type="checkbox"
                   className="is-availible"
                   checked={
-                    formData.IsAvailable === "true" ||
-                    formData.IsAvailable === "TRUE"
+                    formData.IsAvailable || formData.IsAvailable === "TRUE"
                   }
                   onChange={(event) =>
                     setFormData({
                       ...formData,
-                      IsAvailable: event.target.checked ? "TRUE" : "FALSE",
+                      IsAvailable: event.target.checked,
                     })
                   }
                 />{" "}
@@ -467,15 +453,13 @@ export const NewGame = () => {
                   type="checkbox"
                   className="Complementary-Game"
                   checked={
-                    formData.HaveComplementaryGame === "true" ||
+                    formData.HaveComplementaryGame ||
                     formData.HaveComplementaryGame === "TRUE"
                   }
                   onChange={(event) =>
                     setFormData({
                       ...formData,
-                      HaveComplementaryGame: event.target.checked
-                        ? "TRUE"
-                        : "FALSE",
+                      HaveComplementaryGame: event.target.checked,
                     })
                   }
                 />
@@ -567,15 +551,8 @@ export const NewGame = () => {
               marginRight: "70vw",
             }}
           >
-            {circleFlag ? (
-              <CircularProgress size={24} color="white" />
-            ) : status === "success" ? (
-              <CheckIcon />
-            ) : status === "error" ? (
-              <CloseIcon />
-            ) : (
-              "אישור"
-            )}
+            {circleFlag && <CircularProgress sx={{ color: "white" }} />}
+            {buttonText}
           </Button>
         </section>
       </div>

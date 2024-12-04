@@ -9,12 +9,12 @@ import { useState } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import UpdateTOR from "../UpdateFunction/UpdateTOR";
-import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
+import UpdateTOR from "../UpdateFunction/updateTOR";
+import UpdateGameTOR from "../UpdateFunction/updateGameTOR";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
 import { useNavigate } from "react-router-dom";
-import UpdateGameWithMissPart from "../UpdateFunction/UpdateGameWithMissPart";
+import UpdateGameWithMissPart from "../UpdateFunction/updateGameWithMissPart";
 import {
   ADD_GAMES_WITH_MISSING_PARTS,
   UPDATE_GAMES_WITH_MISSING_PARTS,
