@@ -69,10 +69,10 @@ export const UsersList = () => {
     alert("נמחק");
   };
   const headers = Array.from(
-    new Set(nameOfList.flatMap((item) => (item ? Object.keys(item) : [])))
+    new Set((nameOfList|| []).flatMap((item) => (item ? Object.keys(item) : [])))
   );
   const rows =
-    nameOfList.length > 0 && headers.length > 0
+   (nameOfList|| []).length > 0 && headers.length > 0
       ? nameOfList.map((item, index) =>
           createData(index, ...Object.values(item))
         )
