@@ -42,12 +42,13 @@
 }
 .single-user-table-history {
   width: 77vw;
-  height: 50vh;
+  max-height: 50vh; 
+  height: auto; 
   margin-top: 5px;
   margin-left: 3vw;
   gap: 0px;
   opacity: 0px;
-  overflow: scroll;
+  overflow: auto;
   overflow-x: hidden;
 }
 .single-section-history {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "./Taking_Returning.css";
+import "./taking_returning.css";
 import { UserTitle } from "../UserScreen/userTitle";
 import { useSelector, useDispatch } from "react-redux";
 import { Button } from "@mui/material";
@@ -288,7 +288,6 @@ export const Taking_Returning = () => {
         <div className="single-taket-h3">תאריך החזרה</div>
       </div>
       <div className="single-user-table">
-        <section className="single-section">
           {newFilteredList.map((item, i) => {
             let game = games.find((game) => game.Id === item.GameCode);
             let age = forAgesFromStore.find(
@@ -627,8 +626,8 @@ export const Taking_Returning = () => {
               </div>
             );
           })}
-        </section>
       </div>
+      {newFilteredList.length>0&&
       <div className="Approval">
         סה"כ קנסות:
         <input
@@ -641,7 +640,7 @@ export const Taking_Returning = () => {
           {circleFlag && <CircularProgress sx={{ color: "white" }} size={10} />}
           {buttonText}{" "}
         </button>
-      </div>
+      </div>}
     </div>
   );
 };
