@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ADD_USER } from "../../app/slices/usersSlice";
 import { UPDATE_USER } from "../../app/slices/usersSlice";
-import NewUserFunction from "../AddFunctions/ewUserFunction";
+import NewUserFunction from "../AddFunctions/newUserFunction";
 import UpdateUser from "../UpdateFunction/UpdateUser";
 import { CircularProgress, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
