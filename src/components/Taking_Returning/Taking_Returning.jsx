@@ -9,17 +9,17 @@ import { useState } from "react";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import UpdateTOR from "../UpdateFunction/updateTOR";
-import UpdateGameTOR from "../UpdateFunction/updateGameTOR";
+import UpdateTOR from "../UpdateFunction/UpdateTOR";
+import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
 import { useNavigate } from "react-router-dom";
-import UpdateGameWithMissPart from "../UpdateFunction/updateGameWithMissPart";
+import UpdateGameWithMissPart from "../UpdateFunction/UpdateGameWithMissPart";
 import {
   ADD_GAMES_WITH_MISSING_PARTS,
   UPDATE_GAMES_WITH_MISSING_PARTS,
 } from "../../app/slices/gamesWiteMissingPartsSlice";
-import NewGameWithMissPartFunction from "../AddFunctions/newGameWithMissPartFunction";
+import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export const Taking_Returning = () => {
