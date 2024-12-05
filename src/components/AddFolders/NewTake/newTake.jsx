@@ -48,7 +48,6 @@ export const AddTake = () => {
     const ReturnDate = new Date();
     ReturnDate.setDate(ReturnDate.getDate() + 14);
     const formattedReturnDate = ReturnDate.toISOString().split("T")[0];
-
     const results = await Promise.all(
       selectedGames.map(async (game) => {
         let take = {
