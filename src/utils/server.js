@@ -1,8 +1,8 @@
-import React from "react";
 const path='https://server-jnz9.onrender.com/'
 export const fetchGetUsers = () => {
   // return fetch("http://localhost:5000/userRoutes")
-  return fetch(`${path}userRoutes`)
+  // return fetch(`${path}userRoutes`)
+  return fetch("https://server-jnz9.onrender.com/userRoutes")
 
     .then((data) => {
       console.log("data ", data);
