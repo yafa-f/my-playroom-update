@@ -2,9 +2,13 @@
 const UpdateGameTOR = async (game) => {
     const { Id } = game;
   const bool=true;
+  const path='https://server-jnz9.onrender.com/'
+
     try {
       const response = await fetch(
-        `http://localhost:5000/gamesListRoutes/${Id}`,
+        // `http://localhost:5000/gamesListRoutes/${Id}`,
+        `${path}gamesListRoutes/${Id}`,
+
         {
           method: "PUT",
           headers: {

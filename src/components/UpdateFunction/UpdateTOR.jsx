@@ -1,9 +1,12 @@
 const UpdateTOR = async (take) => {
     const { ReturnID } = take;
-   
+    const path='https://server-jnz9.onrender.com/'
+
     try {
       const response = await fetch(
-        `http://localhost:5000/takingOrReturningRoutes/${ReturnID}`,
+        // `http://localhost:5000/takingOrReturningRoutes/${ReturnID}`,
+        `${path}takingOrReturningRoutes/${ReturnID}`,
+
         {
           method: "PUT",
           headers: {

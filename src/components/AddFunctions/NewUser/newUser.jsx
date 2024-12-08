@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import { isIsraeliPhoneNumber } from "../../CheckValues/CheckPhone";
 import { checkIsCode } from "../../CheckValues/CheckCode";
 export const NewUser = () => {
+  const path='https://server-jnz9.onrender.com/'
+
   const [styleName, setStyleName] = useState(false);
   const [stylePhone, setStylePhone] = useState(false);
   const [styleCode, setStyleCode] = useState(false);
@@ -86,7 +88,9 @@ export const NewUser = () => {
   };
 
   const addNewUser = async () => {
-    const response = await fetch("http://localhost:5000/userRoutes", {
+    // const response = await fetch("http://localhost:5000/userRoutes", {
+      const response = await fetch(`${path}userRoutes`, {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",

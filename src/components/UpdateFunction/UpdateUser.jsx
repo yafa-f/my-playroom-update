@@ -1,9 +1,12 @@
 const UpdateUser = async (user) => {
     const { userCode } = user;
-  
+    const path='https://server-jnz9.onrender.com/'
+
     try {
       const response = await fetch(
-        `http://localhost:5000/userRoutes/${userCode}`,
+        // `http://localhost:5000/userRoutes/${userCode}`,
+        `${path}userRoutes/${userCode}`,
+
         {
           method: "PUT",
           headers: {

@@ -1,6 +1,10 @@
 const NewUserFunction = async (user) => {
+  const path='https://server-jnz9.onrender.com/'
+
   try {
-    const response = await fetch("http://localhost:5000/userRoutes", {
+    // const response = await fetch("http://localhost:5000/userRoutes", {
+      const response = await fetch(`${path}userRoutes`, {
+
       method: "POST",
       headers: {
         "Content-Type": "application/json",

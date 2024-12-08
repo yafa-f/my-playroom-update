@@ -1,9 +1,12 @@
 const UpdateGameWithMissPart = async (game) => {
     const { Id } = game;
-   
+    const path='https://server-jnz9.onrender.com/'
+
     try {
       const response = await fetch(
-        `http://localhost:5000/gamesWithMissingPartsRoutes/${Id}`,
+        // `http://localhost:5000/gamesWithMissingPartsRoutes/${Id}`,
+        `${path}gamesWithMissingPartsRoutes/${Id}`,
+
         {
           method: "PUT",
           headers: {

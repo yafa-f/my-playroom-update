@@ -1,6 +1,11 @@
+const path='https://server-jnz9.onrender.com/'
+
 const UpdateCloset = async (id, updateLocation) => {
+
   try {
-    const response = await fetch(`http://localhost:5000/closetsRoutes/${id}`, {
+    // const response = await fetch(`http://localhost:5000/closetsRoutes/${id}`, { 
+         const response = await fetch(`${path}closetsRoutes/${id}`, {
+
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
