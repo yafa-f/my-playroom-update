@@ -1,4 +1,3 @@
-import React from "react";
 const path='https://server-jnz9.onrender.com/'
 export const fetchGetUsers = () => {
   // return fetch("http://localhost:5000/userRoutes")
