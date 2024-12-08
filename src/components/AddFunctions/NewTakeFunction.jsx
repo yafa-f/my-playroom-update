@@ -1,7 +1,11 @@
 
 const NewTakeFunction = async (take) => {
+  const path='https://server-jnz9.onrender.com/'
+
     try {
-      const response = await fetch("http://localhost:5000/takingOrReturningRoutes", {
+      // const response = await fetch("http://localhost:5000/takingOrReturningRoutes", {
+        const response = await fetch(`${path}takingOrReturningRoutes`, {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",

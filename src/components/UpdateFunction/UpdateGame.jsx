@@ -1,10 +1,13 @@
 const UpdateGame = async (game) => {
   const { GameCode } = game;
   const bool=false;
+  const path='https://server-jnz9.onrender.com/'
 
   try {
     const response = await fetch(
-      `http://localhost:5000/gamesListRoutes/${GameCode}`,
+      // `http://localhost:5000/gamesListRoutes/${GameCode}`,
+      `${path}gamesListRoutes/${GameCode}`,
+
       {
         method: "PUT",
         headers: {

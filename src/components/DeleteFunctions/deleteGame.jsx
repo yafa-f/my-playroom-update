@@ -1,6 +1,7 @@
 import React from "react";
 
 const deleteGame = async (row) => {
+  const path='https://server-jnz9.onrender.com/'
 
   const { _id } = row;
   const isConfirmed = window.confirm(
@@ -9,7 +10,9 @@ const deleteGame = async (row) => {
   if (isConfirmed) {
     try {
  
-      const response = await fetch(`http://localhost:5000/gamesListRoutes/${_id}`, {
+      // const response = await fetch(`http://localhost:5000/gamesListRoutes/${_id}`, {
+        const response = await fetch(`${path}gamesListRoutes/${_id}`, {
+
         method: "DELETE",
       });
     

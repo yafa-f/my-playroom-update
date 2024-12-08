@@ -1,6 +1,10 @@
 const NewGameWithMissPartFunction = async (game) => {
+  const path='https://server-jnz9.onrender.com/'
+
     try {
-      const response = await fetch("http://localhost:5000/gamesWithMissingPartsRoutes", {
+      // const response = await fetch("http://localhost:5000/gamesWithMissingPartsRoutes", {
+        const response = await fetch(`${path}gamesWithMissingPartsRoutes`, {
+
         method: "POST",
         headers: {
           "Content-Type": "application/json",
