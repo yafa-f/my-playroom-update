@@ -31,7 +31,6 @@ export const DepositAndDetailsComp = ({
           gap: "0px",
           borderRadius: "28px",
           border: "1px 0px 0px 0px",
-          opacity: "0px",
           backgroundColor: "white",
           direction: "rtl",
         }}
@@ -138,7 +137,6 @@ export const DepositAndDetailsComp = ({
           gap: "0px",
           borderRadius: "28px",
           border: "1px 0px 0px 0px",
-          opacity: "0px",
           backgroundColor: "white",
           direction: "rtl",
         }}

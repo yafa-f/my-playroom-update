@@ -24,8 +24,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
-// import 'my-playroom-update\src\components\Lists\UsersList\usersList.css';
-import "../../../components/Lists/UsersList/usersList.css";
+import "./usersList.css";
 import PersonIcon from "@mui/icons-material/Person";
 import { styled } from "@mui/system";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
@@ -38,7 +37,6 @@ export const UsersList = () => {
   const { name } = location.state || {};
   const [nameOfList, setNameOfList] = useState([]);
   const users = useSelector((state) => state.user.users);
-  console.log("users",users);
   const [currentField, setCurrentField] = useState("");
   const [fieldValue, setFieldValue] = useState("");
   const [currentStore, setCurrentStore] = useState(null);

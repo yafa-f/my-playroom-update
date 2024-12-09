@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./TakingHistory.css";
+import "./takingHistory.css";
 import { UserTitle } from "../UserScreen/userTitle";
 import { useSelector } from "react-redux";
 
