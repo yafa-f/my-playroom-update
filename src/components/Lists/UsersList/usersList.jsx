@@ -37,6 +37,7 @@ export const UsersList = () => {
   const { name } = location.state || {};
   const [nameOfList, setNameOfList] = useState([]);
   const users = useSelector((state) => state.user.users);
+  console.log("users",users);
   const [currentField, setCurrentField] = useState("");
   const [fieldValue, setFieldValue] = useState("");
   const [currentStore, setCurrentStore] = useState(null);
