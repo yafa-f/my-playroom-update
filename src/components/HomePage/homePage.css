@@ -12,14 +12,12 @@
   height: 9vh;
   background: rgba(240, 21, 87, 1);
   gap: 0px;
-  opacity: 0px;
 }
 .logo {
   background-image: url("../../assets/המשחקיה.png");
   width: 240px;
   height: 90px;
   gap: 0px;
-  opacity: 0px;
   position: absolute;
   top: 5vh;
   left: 82vw;

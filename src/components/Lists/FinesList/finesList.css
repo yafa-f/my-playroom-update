@@ -28,7 +28,6 @@
     margin-top: 2vh;
     margin-left: 3vw;
     border-radius: 28px 28px 0px 0px;
-    opacity: 0px;
     background-color: rgba(239, 239, 239, 1);
     display: inline-flex;
     direction: rtl;
@@ -41,7 +40,6 @@
     gap: 0px;
     border-radius: 0px 0px 28px 28px;
     border: 1px 0px 0px 0px;
-    opacity: 0px;
     background-color: rgba(255, 255, 255, 1);
     overflow: scroll;
     overflow-x: hidden;
