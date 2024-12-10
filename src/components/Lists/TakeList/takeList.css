@@ -41,14 +41,14 @@
   border: 1px 0px 0px 0px;
   background-color: rgba(255, 255, 255, 1);
   overflow: scroll;
-    overflow-x: hidden;
+  overflow-x: hidden;
 }
 .section {
   height: 100vh;
   margin-left: 2px;
 }
-.taket-h3 { 
-   margin-top: 15px;
+.taket-h3 {
+  margin-top: 15px;
   font-size: 16px;
   font-weight: 600;
   line-height: 27px;
@@ -64,8 +64,9 @@
   width: 77vw;
   height: 8vh;
   gap: 1vw;
-  border-bottom: 2px rgba(6, 120, 252, 0.20) solid;
-align-items: center;}
+  border-bottom: 2px rgba(6, 120, 252, 0.2) solid;
+  align-items: center;
+}
 .back-date,
 .take-date,
 .found-at,
@@ -77,46 +78,44 @@ align-items: center;}
   text-align: right;
 }
 .makav {
-  width:1vw;
+  width: 1vw;
 }
 .back-date,
-.take-date{
+.take-date {
   width: 9vw;
 }
-.back-date
-{
-margin-right: 3vw;
+.back-date {
+  margin-right: 3vw;
 }
-.found-at{
+.found-at {
   width: 15vw;
-
 }
-.t-details{
+.t-details {
   margin-right: 3vw;
   width: 13vw;
 }
-.delay-message{
-font-size: 14px;
-font-weight: 400;
-line-height: 25.5px;
-text-align: right;
-color: (188, 55, 55, 1);
+.delay-message {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 25.5px;
+  text-align: right;
+  color: (188, 55, 55, 1);
 }
-.delay-message2{
-font-size: 14px;
-font-weight: 700;
-line-height: 25.5px;
-text-align: right;
-color: rgba(188, 55, 55, 1);
+.delay-message2 {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 25.5px;
+  text-align: right;
+  color: rgba(188, 55, 55, 1);
 }
-.delay-icon{
+.delay-icon {
   background-image: url("../../../assets/delay.svg");
   width: 20px;
   height: 20px;
 }
-.delay{
+.delay {
   display: inline-flex;
-  width:  9vw;
+  width: 9vw;
   gap: 10px;
 }
 .search-buttons {
