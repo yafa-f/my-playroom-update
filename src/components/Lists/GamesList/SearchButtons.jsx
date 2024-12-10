@@ -32,7 +32,8 @@ export const SearchButtons = (props) => {
             (item) => item.ActualReturnDate === undefined
           );
           const userCodes = filterTake.map((item) => item.UserCode);
-          const matchingUsers = users?.filter((user) => userCodes.includes(user.userCode))
+          const matchingUsers = users
+            ?.filter((user) => userCodes.includes(user.userCode))
             .map((user) => user.userName);
           setSelectArray(matchingUsers);
         }
@@ -208,22 +209,29 @@ export const SearchButtons = (props) => {
         ref={buttonRef}
         variant="outlined"
         sx={{
-          fontSize: 16,
           color: "black",
           borderRadius: 28,
           width: 180,
           height: 36,
           fontWeight: 700,
+          overflow: "hidden", 
+          textOverflow: "ellipsis", 
+          whiteSpace: "nowrap", 
         }}
       >
-        <div style={{ display: "inline-flex", direction: "rtl", width: 180 }}>
+        <div
+          style={{ display: "inline-flex", direction: "rtl", width: "100%" }}
+        >
           <div
             onClick={openMenu}
             style={{
-              width: "10vw",
-              marginTop: 7,
+              width: "100%",
+              marginTop: 9,
               fontWeight: 100,
-              marginLeft: "40px",
+              textAlign: "right",
+              overflow: "hidden", 
+              textOverflow: "ellipsis", 
+              whiteSpace: "nowrap", 
             }}
           >
             {chosenUser !== "" ? chosenUser : props.name}
