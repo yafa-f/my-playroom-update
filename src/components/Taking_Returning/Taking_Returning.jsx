@@ -264,6 +264,7 @@ export const Taking_Returning = () => {
         name={singleUser.userName}
         phone={singleUser.phone}
         cellphone={singleUser.cellphone}
+        email={singleUser.email}
       ></UserTitle>
       <div className="single-user-take-title">
         <div className="single-user-take-logo"></div>

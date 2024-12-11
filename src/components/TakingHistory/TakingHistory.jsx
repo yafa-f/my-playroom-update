@@ -34,6 +34,7 @@ export const TakingHistory = () => {
         name={singleUser.userName}
         phone={singleUser.phone}
         cellphone={singleUser.cellphone}
+        email={singleUser.email}
       ></UserTitle>
       <div className="single-user-take-title-history">
         <div className="single-user-take-logo-history"></div>

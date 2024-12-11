@@ -12,6 +12,7 @@ import UpdateUser from "../UpdateFunction/UpdateUser";
 import { CircularProgress, Button } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckIcon from "@mui/icons-material/Check";
+import { setSingleUser } from "../../app/slices/singleUserSlice";
 
 export const EditAddUserDetails = (props) => {
   const user = props.user;
@@ -93,13 +94,18 @@ export const EditAddUserDetails = (props) => {
     }
   };
   const handleUpdateUser = async () => {
+    setStatus(null);
     setCircleFlag(true);
     const updatedUserData = {
       ...userData,
     };
     const updateUser = await UpdateUser(updatedUserData);
+    setTimeout(() => {
+      setCircleFlag(false);
+    }, 1000);
     if (updateUser) {
-      dispatch(UPDATE_USER(updateUser));
+      dispatch(UPDATE_USER(updatedUserData));
+      dispatch(setSingleUser(updatedUserData));
       setStatus("success");
       setButtonText("המשתמש עודכן בהצלחה");
       setTimeout(() => {
