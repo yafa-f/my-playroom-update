@@ -20,7 +20,7 @@ export const ViewEditAddUser = () => {
   return (
     <div className="screen" style={{ display: "grid" }}>
    
-         {singleUser ? (
+         {singleUser&&!location.pathname.endsWith('newUser') ? (
         <UserTitle
           name={singleUser.userName}
           phone={singleUser.phone}
