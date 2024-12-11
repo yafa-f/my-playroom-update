@@ -107,6 +107,7 @@ export const EditAddUserDetails = (props) => {
       dispatch(UPDATE_USER(updatedUserData));
       dispatch(setSingleUser(updatedUserData));
       setStatus("success");
+      
       setButtonText("המשתמש עודכן בהצלחה");
       setTimeout(() => {
         navigate("/UsersList");
@@ -138,7 +139,6 @@ export const EditAddUserDetails = (props) => {
   useEffect(() => {
     if (isEdit && userToUpdate) {
       setUserData(singleUser);
-
     } else {
       let randomNumber;
       const codes = localUsers.data.map((user) => Number(user.userCode));
