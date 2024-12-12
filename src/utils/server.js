@@ -1,9 +1,6 @@
-const path='https://server-jnz9.onrender.com/'
+const path = "https://server-jnz9.onrender.com/";
 export const fetchGetUsers = () => {
-  // return fetch("http://localhost:5000/userRoutes")
-  // return fetch(`${path}userRoutes`)
   return fetch("https://server-jnz9.onrender.com/userRoutes")
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
@@ -18,9 +15,7 @@ export const fetchGetUsers = () => {
 };
 
 export const fetchGetGames = () => {
-  // return fetch("http://localhost:5000/gamesListRoutes")
   return fetch(`${path}gamesListRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
@@ -34,9 +29,7 @@ export const fetchGetGames = () => {
     });
 };
 export const fetchGetFines = () => {
-  // return fetch("http://localhost:5000/finesRoutes")
   return fetch(`${path}finesRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
@@ -50,9 +43,7 @@ export const fetchGetFines = () => {
     });
 };
 export const fetchGetTypesGames = () => {
-  // return fetch("http://localhost:5000/tipesOfGamesRoutes")
   return fetch(`${path}tipesOfGamesRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
@@ -66,9 +57,7 @@ export const fetchGetTypesGames = () => {
     });
 };
 export const fetchGetTakingOrReturning = () => {
-  // return fetch("http://localhost:5000/takingOrReturningRoutes")
   return fetch(`${path}takingOrReturningRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
@@ -82,9 +71,7 @@ export const fetchGetTakingOrReturning = () => {
     });
 };
 export const fetchGetClosets = () => {
-  // return fetch("http://localhost:5000/closetsRoutes")
   return fetch(`${path}closetsRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
@@ -98,9 +85,7 @@ export const fetchGetClosets = () => {
     });
 };
 export const fetchGetForAges = () => {
-  // return fetch("http://localhost:5000/forAgesRoutes")
   return fetch(`${path}forAgesRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
@@ -114,9 +99,7 @@ export const fetchGetForAges = () => {
     });
 };
 export const fetchGetFinesForMissingParts = () => {
-  // return fetch("http://localhost:5000/finesForMissingPartsRoutes")
   return fetch(`${path}finesForMissingPartsRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
@@ -130,9 +113,7 @@ export const fetchGetFinesForMissingParts = () => {
     });
 };
 export const fetchGetGamesWithMissingParts = () => {
-  // return fetch("http://localhost:5000/gamesWithMissingPartsRoutes")
   return fetch(`${path}gamesWithMissingPartsRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {
