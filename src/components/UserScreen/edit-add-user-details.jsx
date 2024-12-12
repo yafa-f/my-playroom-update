@@ -43,6 +43,22 @@ export const EditAddUserDetails = (props) => {
   const [localUsers, setLocalUsers] = useState(
     useSelector((state) => state.user.users)
   );
+  const generateUserCode = (userToUpdate, localUsers) => {
+    
+    if (userToUpdate.userCode) {
+      return userToUpdate.userCode;
+    }
+  
+    const codes = localUsers.data.map((user) => Number(user.userCode));
+    
+    let randomNumber;
+  
+    do {
+      randomNumber = Math.floor(Math.random() * 10000) + 1;
+    } while (codes.includes(randomNumber));
+  
+    return randomNumber;
+  };
   const handleSaveClick = () => {
     if (isEdit === true) {
       handleUpdateUser();
@@ -63,7 +79,6 @@ export const EditAddUserDetails = (props) => {
       setCircleFlag(false);
     }, 1000);
     if (addResponse) {
-      setStatus("success");
       const rearrangedUserData = {
         _id: addResponse._id,
         userCode: addResponse.userCode,
@@ -80,13 +95,15 @@ export const EditAddUserDetails = (props) => {
         branchNumber: addResponse.branchNumber,
         email: addResponse.email,
       };
-
       dispatch(ADD_USER(rearrangedUserData));
+      setStatus("success");
       setButtonText("המשתמש נוסף בהצלחה");
-
       setTimeout(() => {
         navigate("/UsersList");
       }, 3000);
+      setTimeout(() => {
+        setCircleFlag(false);
+      }, 1000);
     } else {
       setStatus("error");
       console.error("failad to add object");
@@ -107,7 +124,6 @@ export const EditAddUserDetails = (props) => {
       dispatch(UPDATE_USER(updatedUserData));
       dispatch(setSingleUser(updatedUserData));
       setStatus("success");
-      
       setButtonText("המשתמש עודכן בהצלחה");
       setTimeout(() => {
         navigate("/UsersList");
@@ -122,7 +138,7 @@ export const EditAddUserDetails = (props) => {
   };
 
   const [userData, setUserData] = useState({
-    userCode: "",
+    userCode: generateUserCode(userToUpdate, localUsers),
     userName: "",
     userDate: "",
     cellphone: "",
@@ -136,22 +152,14 @@ export const EditAddUserDetails = (props) => {
     branchNumber: "",
     email: "",
   });
+
   useEffect(() => {
     if (isEdit && userToUpdate) {
       setUserData(singleUser);
-    } else {
-      let randomNumber;
-      const codes = localUsers.data.map((user) => Number(user.userCode));
-      do {
-        randomNumber = Math.floor(Math.random() * 10000) + 1;
-      } while (codes.includes(randomNumber));
 
-      setUserData({
-        ...userData,
-        userCode: randomNumber,
-      });
-    }
-  }, [userToUpdate]);
+    } 
+    
+  }, [isEdit, userToUpdate]);
 
 
   return (

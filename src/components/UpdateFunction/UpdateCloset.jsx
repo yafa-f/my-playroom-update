@@ -1,3 +1,4 @@
+
 import { path } from "../../utils/server";
 
 const UpdateCloset = async (id, updateLocation) => {

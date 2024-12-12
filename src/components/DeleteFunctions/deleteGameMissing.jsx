@@ -1,6 +1,7 @@
 import { path } from "../../utils/server";
 
 const deleteGameMissing = async (row) => {
+
   const { _id } = row;
   const isConfirmed = window.confirm(
     `Are you sure you want to delete: ${JSON.stringify(row)}?`
@@ -13,6 +14,7 @@ const deleteGameMissing = async (row) => {
           method: "DELETE",
         }
       );
+
       if (response.ok) {
         const data = await response.json();
       }

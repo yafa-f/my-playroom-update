@@ -1,3 +1,4 @@
+const NewUserFunction = async (user) => {
 import { path } from "../../utils/server";
 
 const NewUserFunction = async (user) => {

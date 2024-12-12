@@ -26,4 +26,5 @@ const UpdateGame = async (game) => {
     return null; // Return null in case of an error
   }
 };
+
 export default UpdateGame;

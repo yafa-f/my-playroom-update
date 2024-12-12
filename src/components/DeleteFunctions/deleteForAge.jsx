@@ -10,7 +10,6 @@ const deleteForAge = async (row) => {
       const response = await fetch(`${path}forAgesRoutes/${_id}`, {
         method: "DELETE",
       });
-      console.log(response);
       if (response.ok) {
         const data = await response.json();
         return data;

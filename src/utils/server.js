@@ -1,3 +1,4 @@
+
 export const path='https://server-jnz9.onrender.com/'
 export const fetchGetUsers = () => {
   return fetch(`${path}userRoutes`)
@@ -16,7 +17,6 @@ export const fetchGetUsers = () => {
 
 export const fetchGetGames = () => {
   return fetch(`${path}gamesListRoutes`)
-
     .then((data) => {
       console.log("data ", data);
       if (data.ok) {

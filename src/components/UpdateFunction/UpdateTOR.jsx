@@ -2,6 +2,7 @@ import { path } from "../../utils/server";
 
 const UpdateTOR = async (take) => {
   const { ReturnID } = take;
+
   try {
     const response = await fetch(`${path}takingOrReturningRoutes/${ReturnID}`, {
       method: "PUT",
