@@ -1,12 +1,11 @@
 
 .table-container {
-  margin-top: 10vh;
   align-items: center;
   margin-left: 10vw;
+  margin-top: 7vh;
 }
-
 .usersTitle {
-  width: 1700px;
+  width: 1000px;
   gap: 17px;
   display: inline-flex;
   margin-left: 15.4vw;
@@ -23,7 +22,7 @@
   font-size: 55px;
   font-weight: 900;
   margin-right: -15px;
-  padding-left: 320px;
+  padding-left: 35vw;
 }
 .add-user{
   width: 15vw;
@@ -113,7 +112,7 @@
 .u-table-title {
   width: 78vw;
   height: 60.09px;
-  margin-top: 5vh;
+  margin-top: 2vh;
   margin-left: -8vw;
   border-radius: 28px 28px 0px 0px;
   background-color: rgba(239, 239, 239, 1);
@@ -152,14 +151,10 @@ h3 {
   height: 27px;
   margin-left: 10px;
 }
-.table-container {
-  margin-top: 10vh;
-  align-items: center;
-  margin-left: 10vw;
-}
+
 .table {
   width: 78vw;
-  height: 46vh;
+  height: 52vh;
   margin-top: 5px;
   margin-left: -8vw;
   gap: 0px;
@@ -168,8 +163,6 @@ h3 {
   background-color: rgba(255, 255, 255, 1);
   overflow: scroll;
   overflow-x: hidden;
-  scrollbar-color: red;
-  direction: rtl;
 }
 .user-column {
   display: inline-flex;
@@ -183,8 +176,8 @@ h3 {
   margin-right:"40px";
 }
 .user-attribute {
-  white-space: nowrap;
-  width: 128px;
+  /* white-space: nowrap; */
+  width: 120px;
   font-size: 15px;
 }
 .line{

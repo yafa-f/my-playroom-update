@@ -2,11 +2,9 @@ import { path } from "../../utils/server";
 
 const UpdateGame = async (game) => {
   const { GameCode } = game;
-  const bool=false;
+  const bool = false;
   try {
-    const response = await fetch(
-      `${path}gamesListRoutes/${GameCode}`,
-
+    const response = await fetch(`${path}gamesListRoutes/${GameCode}`,
       {
         method: "PUT",
         headers: {
@@ -18,7 +16,6 @@ const UpdateGame = async (game) => {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Error details:", errorData);
-
       throw new Error("Network response was not ok");
     }
     const data = await response.json();
@@ -29,6 +26,4 @@ const UpdateGame = async (game) => {
     return null; // Return null in case of an error
   }
 };
-
-
 export default UpdateGame;

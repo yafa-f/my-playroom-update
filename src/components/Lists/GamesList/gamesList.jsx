@@ -80,10 +80,10 @@ export const GamesList = () => {
             variant="contained"
             onClick={NewGame}
           >
-            + משחק
+            משחק +
           </Button>
         </div>
-        <div className="search-buttons">
+        <div className="search-buttons-game">
           {Array.isArray(searchNames) &&
             (searchNames || [])?.map((search, i) => (
               <div id={i}>

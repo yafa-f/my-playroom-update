@@ -229,11 +229,11 @@
   margin-top: 20px;
   font-size: 13px;
 }
-.search-buttons {
+.search-buttons-game {
   display: inline-flex;
   gap: 10px;
   direction: rtl;
-  margin-left: 10vw;
+  margin-left: 7vw;
 }
 
 

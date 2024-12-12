@@ -44,10 +44,14 @@ export const TakeList = () => {
       <div className="take-title">
         <div className="take-logo"></div>
         <div className="titleTake">השאלות</div>
-      </div>
-      <div className="search-buttons">
-        <SearchButtons name="שם מנוי" list={take} setTableArr={setTableArr} />{" "}
-        <SearchButtons name="שם המשחק" list={take} setTableArr={setTableArr} />{" "}
+        <div className="search-buttons">
+          <SearchButtons name="שם מנוי" list={take} setTableArr={setTableArr} />{" "}
+          <SearchButtons
+            name="שם המשחק"
+            list={take}
+            setTableArr={setTableArr}
+          />{" "}
+        </div>{" "}
       </div>
       <div className="table-title">
         <div className="taket-h3">פרטי המשחק</div>
