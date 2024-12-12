@@ -19,6 +19,8 @@ export const AddTake = () => {
   const games = useSelector((state) => state.game.games);
   const availableGames = games.filter((game) => game.IsAvailable !== "FALSE");
   const singleUser = useSelector((state) => state.singleUser.singleUser);
+  const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
+  const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const [selectedGames, setSelectedGames] = useState([{}]);
   const existingReturnIDs = useSelector((state) =>
     state.takingOrReturning.takingsOrReturnings.map((item) => item.ReturnID)
@@ -128,7 +130,14 @@ export const AddTake = () => {
 
         {selectedGames &&
           selectedGames.length > 0 &&
-          selectedGames.map((selectedGame, index) => (
+          selectedGames.map((selectedGame, index) => {
+            let age = forAgesFromStore.find(
+              (a) => a.AgeCode === selectedGame.AgeCode
+            )?.Age;
+            let tchum = typesGamesFromStore.find(
+              (t) => t.gameTypeCode === selectedGame.GameTypeCode
+            )?.gameTipeName;
+            return(
             <div key={index}>
               <div className="new-hashala">
                 {" "}
@@ -152,9 +161,9 @@ export const AddTake = () => {
                       <div className="status-row">
                         {selectedGame.CurrentStateOfGame}
                       </div>
-                      <div className="ages-row">{selectedGame.AgeCode}</div>
+                      <div className="ages-row">{age}</div>
                       <div className="tchum-row">
-                        {selectedGame.GameTypeCode}
+                        {tchum}
                       </div>
                       <div className="place-row">
                         {selectedGame.ClosetNumber}
@@ -216,7 +225,7 @@ export const AddTake = () => {
                 </div>
               )}
             </div>
-          ))}
+          )})}
         {selectedGames[0].GameName && (
           <button onClick={ApprovalTake} className="Approval-take-btn">
             {/* {circleFlag && (

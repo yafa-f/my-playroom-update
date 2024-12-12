@@ -31,7 +31,7 @@ export const GamesList = () => {
   const userName = (Id) => {
     let gameTake = torFromStore.filter((tg) => tg.GameCode === Id);
     if (gameTake.length === 0) {
-      return "No user found"; // or handle it as needed
+      return "No user found"; 
     }
     let closestDateObject = gameTake.reduce((closest, current) => {
       let currentDate = new Date(current.TakingDate);
