@@ -156,9 +156,11 @@ export const EditAddUserDetails = (props) => {
   useEffect(() => {
     if (isEdit && userToUpdate) {
       setUserData(singleUser);
+
     } 
     
   }, [isEdit, userToUpdate]);
+
 
   return (
     <div className="deposit-and-details" style={{ display: "inline-flex" }}>

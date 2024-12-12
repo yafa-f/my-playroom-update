@@ -98,6 +98,7 @@ export const NewGame = () => {
       });
     }
   }, [bool, gameToUpdate]);
+  
   useEffect(() => {}, [localGames]);
   useEffect(() => {}, [localClosets]);
   useEffect(() => {
