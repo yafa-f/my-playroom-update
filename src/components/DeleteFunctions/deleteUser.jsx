@@ -1,7 +1,6 @@
-import React from "react";
+import { path } from "../../utils/server";
 
 const deleteUser = async (row) => {
-  const path = "https://server-jnz9.onrender.com/";
 
   const { _id } = row;
   const isConfirmed = window.confirm(
@@ -20,7 +19,7 @@ const deleteUser = async (row) => {
       console.error(error);
     }
   } else {
-    console.log("Deletion canceled!");
+    console.log("Deletion user canceled!");
   }
 };
 

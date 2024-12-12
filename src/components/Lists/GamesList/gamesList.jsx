@@ -31,7 +31,7 @@ export const GamesList = () => {
   const userName = (Id) => {
     let gameTake = torFromStore.filter((tg) => tg.GameCode === Id);
     if (gameTake.length === 0) {
-      return "No user found"; // or handle it as needed
+      return "No user found"; 
     }
     let closestDateObject = gameTake.reduce((closest, current) => {
       let currentDate = new Date(current.TakingDate);
@@ -80,10 +80,10 @@ export const GamesList = () => {
             variant="contained"
             onClick={NewGame}
           >
-            + משחק
+            משחק +
           </Button>
         </div>
-        <div className="search-buttons">
+        <div className="search-buttons-game">
           {Array.isArray(searchNames) &&
             (searchNames || [])?.map((search, i) => (
               <div id={i}>

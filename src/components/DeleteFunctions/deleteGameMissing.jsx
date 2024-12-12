@@ -1,7 +1,6 @@
-import React from "react";
+import { path } from "../../utils/server";
 
 const deleteGameMissing = async (row) => {
-  const path = "https://server-jnz9.onrender.com/";
 
   const { _id } = row;
   const isConfirmed = window.confirm(
@@ -23,7 +22,7 @@ const deleteGameMissing = async (row) => {
       console.error(error);
     }
   } else {
-    console.log("Deletion canceled!");
+    console.log("Deletion gameMiss canceled!");
   }
 };
 

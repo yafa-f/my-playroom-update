@@ -1,9 +1,7 @@
-import React from "react";
+import { path } from "../../utils/server";
 
 const deleteTypeGame = async (row) => {
   const { _id } = row;
-  const path = "https://server-jnz9.onrender.com/";
-
   const isConfirmed = window.confirm(
     `Are you sure you want to delete: ${JSON.stringify(row)}?`
   );
@@ -20,7 +18,7 @@ const deleteTypeGame = async (row) => {
       console.error(error);
     }
   } else {
-    console.log("Deletion canceled!");
+    console.log("Deletion typeGame canceled!");
   }
 };
 

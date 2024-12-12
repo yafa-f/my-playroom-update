@@ -278,10 +278,10 @@ export const UsersList = () => {
           }}
           onClick={navigateToAdd}
         >
-          מנוי +
+          + מנוי 
         </Button>
 
-        <CustomTextField
+        {/* <CustomTextField
           variant="outlined"
           sx={{
             textAlign: "center",
@@ -306,8 +306,8 @@ export const UsersList = () => {
                 <SearchIcon />
               </InputAdornment>
             ),
-          }}
-        ></CustomTextField>
+          }} 
+        ></CustomTextField>*/}
         <div>
           <CustomButton
             ref={buttonRef}
@@ -319,7 +319,7 @@ export const UsersList = () => {
               fontFamily: "Open Sans Hebrew",
               color: "black",
               borderRadius: 28,
-              width: 220,
+              width: 200,
               height: 38,
               fontWeight: 700,
               wordWrap: "break-word",
@@ -409,7 +409,7 @@ export const UsersList = () => {
         <h3> </h3>
         <h3> </h3>
         <h3 style={{ marginRight: "100px" }}> פרטי בנק</h3>
-        <h3 style={{ marginRight: "60px" }}>מס' שק</h3>
+        <h3 style={{ marginRight: "40px" }}>מס' שק</h3>
       </div>
       <div className="table">
         <section className="section">
@@ -417,6 +417,8 @@ export const UsersList = () => {
             <div key={i}>
               <div
                 sx={{
+                  fontSize:"15px",
+
                   height: "15vh",
                   direction: "rtl",
                   borderBottom: "2px rgba(6, 120, 252, 0.20) solid",
@@ -425,7 +427,7 @@ export const UsersList = () => {
                 <div className="user-column">
                   <div className="user-details">
                     <div>
-                      <div style={{ marginRight: "12px" }}>
+                      <div style={{ marginRight: "8px" }}>
                         <PersonIcon color="#686464"></PersonIcon>
                       </div>
                     </div>
@@ -433,9 +435,8 @@ export const UsersList = () => {
                       className="user-attribute"
                       style={{
                         fontWeight: 600,
-                        marginRight: "0px",
-                        fontSize: "17px",
-                        width: "155px",
+                        fontSize: "15px",
+                        width: "128px",
                         backgroundColor: "white",
                         borderColor: "transparent",
                       }}
@@ -445,7 +446,7 @@ export const UsersList = () => {
                     </button>
                     <div
                       className="user-attribute"
-                      style={{ width: "150px", marginRight: "10px" }}
+                      style={{ width: "140px", marginRight: "10px" }}
                     >
                       {user.userDate}
                     </div>
@@ -460,7 +461,7 @@ export const UsersList = () => {
                     user.depositPaid === true ? (
                       <div
                         className="user-attribute"
-                        style={{ display: "inline-flex", marginLeft: "40px" }}
+                        style={{ display: "inline-flex", marginLeft: "20px" }}
                       >
                         {" "}
                         <DoneIcon color="success"></DoneIcon>שולם פקדון
@@ -470,7 +471,8 @@ export const UsersList = () => {
                         className="user-attribute"
                         style={{
                           display: "inline-flex",
-                          marginLeft: "40px",
+                          marginLeft: "30px",
+                          fontSize:"15px"
                         }}
                       >
                         {" "}
@@ -493,7 +495,7 @@ export const UsersList = () => {
                     </div>
                     <div
                       className="user-attribute"
-                      style={{ width: "180px", marginRight: "40px" }}
+                      style={{ width: "170px", marginRight: "20px" }}
                     >
                       {user.bankNumber}-{user.branchNumber}-{user.accountNumber}
                     </div>
@@ -502,7 +504,7 @@ export const UsersList = () => {
                       style={{
                         width: "1px",
                         height: "2px",
-                        marginRight: "-50px",
+                        marginRight: "-60px",
                       }}
                       onClick={() => {
                         handleEditClick(user);

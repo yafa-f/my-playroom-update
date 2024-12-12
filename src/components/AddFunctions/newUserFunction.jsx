@@ -1,8 +1,8 @@
 const NewUserFunction = async (user) => {
-  const path = "https://server-jnz9.onrender.com/";
+import { path } from "../../utils/server";
 
+const NewUserFunction = async (user) => {
   try {
-    // const response = await fetch("http://localhost:5000/userRoutes", {
     const response = await fetch(`${path}userRoutes`, {
       method: "POST",
       headers: {
@@ -14,10 +14,10 @@ const NewUserFunction = async (user) => {
       throw new Error("Network response was not ok");
     }
     const userData = await response.json();
-    console.log("add successful:", userData);
+    console.log("add user successful:", userData);
     return userData; // Return the response object
   } catch (error) {
-    console.error("Error adding game:", error);
+    console.error("Error adding user:", error);
     return null; // Return null in case of an error
   }
 };

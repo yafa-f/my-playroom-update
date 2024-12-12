@@ -7,15 +7,20 @@ import { UPDATE_GAME } from "../../../app/slices/gameSlice";
 import { ADD_TOR } from "../../../app/slices/takeOrReturnSlice";
 import UpdateGameTOR from "../../UpdateFunction/UpdateGameTOR";
 import CircularProgress from "@mui/material/CircularProgress";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const AddTake = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [buttonText, setButtonText] = useState("אישור");
   const [circleFlag, setCircleFlag] = useState(false);
+  const [status, setStatus] = useState(null);
   const games = useSelector((state) => state.game.games);
   const availableGames = games.filter((game) => game.IsAvailable !== "FALSE");
   const singleUser = useSelector((state) => state.singleUser.singleUser);
+  const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
+  const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const [selectedGames, setSelectedGames] = useState([{}]);
   const existingReturnIDs = useSelector((state) =>
     state.takingOrReturning.takingsOrReturnings.map((item) => item.ReturnID)
@@ -65,7 +70,7 @@ export const AddTake = () => {
           if (updateGame) {
             dispatch(UPDATE_GAME(updateGame));
           } else {
-            console.error("Failed to add object");
+            console.error("Failed to update tor game object");
           }
           dispatch(ADD_TOR(take));
           return { name: game.GameName, success: true };
@@ -84,8 +89,10 @@ export const AddTake = () => {
       .map((result) => result.name);
 
     if (failureMessages.length > 0) {
+      setStatus("error");
       setButtonText(`נכשל עבור: ${failureMessages.join(", ")}`);
     } else {
+      setStatus("success");
       setButtonText("כל ההשאלות נוספו בהצלחה!");
       setTimeout(() => {
         navigate("/singleUser/Taking_Returning");
@@ -100,7 +107,6 @@ export const AddTake = () => {
       setSelectedGames(newRows);
     }
   };
-  console.log("selected", selectedGames);
   return (
     <div className="add-take-screen">
       <div className="nav-bar-AddTake">
@@ -124,7 +130,14 @@ export const AddTake = () => {
 
         {selectedGames &&
           selectedGames.length > 0 &&
-          selectedGames.map((selectedGame, index) => (
+          selectedGames.map((selectedGame, index) => {
+            let age = forAgesFromStore.find(
+              (a) => a.AgeCode === selectedGame.AgeCode
+            )?.Age;
+            let tchum = typesGamesFromStore.find(
+              (t) => t.gameTypeCode === selectedGame.GameTypeCode
+            )?.gameTipeName;
+            return(
             <div key={index}>
               <div className="new-hashala">
                 {" "}
@@ -148,9 +161,9 @@ export const AddTake = () => {
                       <div className="status-row">
                         {selectedGame.CurrentStateOfGame}
                       </div>
-                      <div className="ages-row">{selectedGame.AgeCode}</div>
+                      <div className="ages-row">{age}</div>
                       <div className="tchum-row">
-                        {selectedGame.GameTypeCode}
+                        {tchum}
                       </div>
                       <div className="place-row">
                         {selectedGame.ClosetNumber}
@@ -212,13 +225,22 @@ export const AddTake = () => {
                 </div>
               )}
             </div>
-          ))}
+          )})}
         {selectedGames[0].GameName && (
           <button onClick={ApprovalTake} className="Approval-take-btn">
-            {circleFlag && (
+            {/* {circleFlag && (
               <CircularProgress sx={{ color: "white" }} size={10} />
             )}
-            {buttonText}{" "}
+            {buttonText}{" "} */}
+             {circleFlag ? (
+              <CircularProgress size={24} color="white" />
+            ) : status === "success" ? (
+              <CheckIcon />
+            ) : status === "error" ? (
+              <CloseIcon />
+            ) : (
+              "אישור"
+            )}
           </button>
         )}
       </div>

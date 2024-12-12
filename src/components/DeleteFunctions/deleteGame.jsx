@@ -1,8 +1,6 @@
-import React from "react";
+import { path } from "../../utils/server";
 
 const deleteGame = async (row) => {
-  const path = "https://server-jnz9.onrender.com/";
-
   const { _id } = row;
   const isConfirmed = window.confirm(
     `Are you sure you want to delete: ${JSON.stringify(row)}?`
@@ -12,7 +10,7 @@ const deleteGame = async (row) => {
       const response = await fetch(`${path}gamesListRoutes/${_id}`, {
         method: "DELETE",
       });
-
+   
       if (response.ok) {
         const data = await response.json();
       }
@@ -20,7 +18,7 @@ const deleteGame = async (row) => {
       console.error(error);
     }
   } else {
-    console.log("Deletion canceled!");
+    console.log("Deletion game canceled!");
   }
 };
 
