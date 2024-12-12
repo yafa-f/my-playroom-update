@@ -10,7 +10,6 @@ const deleteTypeGame = async (row) => {
       const response = await fetch(`${path}tipesOfGamesRoutes/${_id}`, {
         method: "DELETE",
       });
-      console.log(response);
       if (response.ok) {
         const data = await response.json();
         return data;

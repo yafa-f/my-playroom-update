@@ -3,8 +3,7 @@ import { useSelector } from "react-redux";
 import "./typeOfGameList.css";
 export const TypeOfGameList = () => {
   const types = useSelector((state) => state.typeGame.typesGames);
-console.log("types",types) 
- return (
+  return (
     <div className="types">
       <div className="types-title">
         <div className="type-logo"></div>
