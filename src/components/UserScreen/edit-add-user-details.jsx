@@ -142,7 +142,6 @@ export const EditAddUserDetails = (props) => {
     } else {
       let randomNumber;
       const codes = localUsers.data.map((user) => Number(user.userCode));
-
       do {
         randomNumber = Math.floor(Math.random() * 10000) + 1;
       } while (codes.includes(randomNumber));
@@ -153,6 +152,7 @@ export const EditAddUserDetails = (props) => {
       });
     }
   }, [userToUpdate]);
+
 
   return (
     <div className="deposit-and-details" style={{ display: "inline-flex" }}>

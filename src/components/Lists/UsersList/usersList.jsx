@@ -69,10 +69,12 @@ export const UsersList = () => {
     alert("נמחק");
   };
   const headers = Array.from(
-    new Set((nameOfList|| []).flatMap((item) => (item ? Object.keys(item) : [])))
+    new Set(
+      (nameOfList || []).flatMap((item) => (item ? Object.keys(item) : []))
+    )
   );
   const rows =
-   (nameOfList|| []).length > 0 && headers.length > 0
+    (nameOfList || []).length > 0 && headers.length > 0
       ? nameOfList.map((item, index) =>
           createData(index, ...Object.values(item))
         )
@@ -278,7 +280,7 @@ export const UsersList = () => {
           }}
           onClick={navigateToAdd}
         >
-          + מנוי 
+          + מנוי
         </Button>
 
         {/* <CustomTextField
@@ -311,50 +313,50 @@ export const UsersList = () => {
         <div>
           <CustomButton
             ref={buttonRef}
-            onClick={openMenu}
             variant="outlined"
             sx={{
-              textAlign: "center",
-              fontSize: 18,
-              fontFamily: "Open Sans Hebrew",
               color: "black",
               borderRadius: 28,
-              width: 200,
-              height: 38,
+              width: 180,
+              height: 36,
               fontWeight: 700,
-              wordWrap: "break-word",
+              fontSize: 15,
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
             }}
           >
             <div
-              style={{ display: "inline-flex", gap: "50px", direction: "rtl" }}
+              style={{
+                display: "inline-flex",
+                direction: "rtl",
+                width: "100%",
+              }}
             >
               <div
+                onClick={openMenu}
                 style={{
-                  width: 140,
-                  marginTop: 7,
+                  width: "100%",
+                  marginTop: 9,
                   fontWeight: 100,
-                  marginLeft: -60,
-                  marginRight: 65,
+                  textAlign: "right",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
                 }}
               >
                 {chosenUser ? chosenUser : "שם מנוי"}{" "}
               </div>
-              <div style={{ marginTop: 6 }}>
-                <Button
+              {chosenUser != "" && (
+                <CloseRoundedIcon
+                  sx={{ color: "black", marginTop: "9px" }}
                   onClick={(event) => {
                     event.stopPropagation();
                     clearUserName();
                   }}
-                >
-                  {" "}
-                  {chosenUser && (
-                    <CloseRoundedIcon
-                      sx={{ color: "black" }}
-                    ></CloseRoundedIcon>
-                  )}
-                </Button>
-              </div>
-              <div style={{ marginTop: 2, marginLeft: 80, marginRight: -70 }}>
+                ></CloseRoundedIcon>
+              )}
+              <div style={{ marginTop: 2 }}>
                 <CustomIconButton
                   sx={{
                     backgroundColor: "transparent",
@@ -417,7 +419,7 @@ export const UsersList = () => {
             <div key={i}>
               <div
                 sx={{
-                  fontSize:"15px",
+                  fontSize: "15px",
 
                   height: "15vh",
                   direction: "rtl",
@@ -472,7 +474,7 @@ export const UsersList = () => {
                         style={{
                           display: "inline-flex",
                           marginLeft: "30px",
-                          fontSize:"15px"
+                          fontSize: "15px",
                         }}
                       >
                         {" "}
