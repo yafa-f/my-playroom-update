@@ -21,13 +21,15 @@ import {
 } from "../../app/slices/gamesWiteMissingPartsSlice";
 import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
 import CircularProgress from "@mui/material/CircularProgress";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 export const Taking_Returning = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [buttonText, setButtonText] = useState("אישור");
   const [circleFlag, setCircleFlag] = useState(false);
+  const [status, setStatus] = useState(null);
   const [expanded, setExpanded] = useState({});
   const [cancelReturn, setCancelReturn] = useState({});
   const [isVisible, setIsVisible] = useState(false);
@@ -223,8 +225,10 @@ export const Taking_Returning = () => {
       .map((result) => result.name);
 
     if (failureMessages.length > 0) {
+      setStatus("error");
       setButtonText(`נכשל עבור: ${failureMessages.join(", ")}`);
     } else {
+      setStatus("success");
       setButtonText("כל המשחקים הוחזרו בהצלחה!");
       setTimeout(() => {
         navigate("/singleUser");
@@ -637,8 +641,17 @@ export const Taking_Returning = () => {
           disabled
         />
         <button onClick={ApprovalReturnGames} className="Approval-btn">
-          {circleFlag && <CircularProgress sx={{ color: "white" }} size={10} />}
-          {buttonText}{" "}
+          {/* {circleFlag && <CircularProgress sx={{ color: "white" }} size={10} />}
+          {buttonText}{" "} */}
+        {circleFlag ? (
+              <CircularProgress size={24} color="white" />
+            ) : status === "success" ? (
+              <CheckIcon />
+            ) : status === "error" ? (
+              <CloseIcon />
+            ) : (
+              "אישור"
+            )}
         </button>
       </div>}
     </div>

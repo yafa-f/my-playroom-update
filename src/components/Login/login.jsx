@@ -13,9 +13,9 @@ export const Login = (props) => {
       <div className="name-code">נא להכניס שם משתמש וסיסמא</div>
       <div type="text"></div>
       <TextField
-        defaultValue="שם משתמש"
+        placeholder="שם משתמש"
         size="small"
-        onChange={(e) => {
+        onBlur={(e) => {
           props.setName(e.target.value);
         }}
         sx={{
@@ -28,7 +28,7 @@ export const Login = (props) => {
       />
       <br />
       <TextField
-        defaultValue="סיסמא"
+        placeholder="סיסמא"
         size="small"
         onChange={(e) => {
           setCode(e.target.value);

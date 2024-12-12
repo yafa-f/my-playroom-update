@@ -43,7 +43,7 @@
 }
 .games-missing-table {
   width: 77vw;
-  height: 55vh;
+  height: 57vh;
   margin-top: 5px;
   margin-left: 3vw;
   gap: 0px;
@@ -51,7 +51,7 @@
   border: 1px 0px 0px 0px;
   background-color: rgba(255, 255, 255, 1);
   overflow: scroll;
-  /* overflow-x: hidden; */
+  overflow-x: hidden;
 }
 .section {
   height: 100vh;

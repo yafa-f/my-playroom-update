@@ -194,7 +194,7 @@ export const NewGame = () => {
           setCodeOfCloset();
           setPlaceInCloset();
         } else {
-          console.error("Failed to add object");
+          console.error("Failed to update closet object");
         }
         setFlagEqualCode(false);
       } else {
@@ -263,7 +263,7 @@ export const NewGame = () => {
         dispatch(UPDATE_CLOSET(updatedData));
         setUpdateLocation([]);
       } else {
-        console.error("Failed to add object");
+        console.error("Failed to update closet object");
       }
       dispatch(ADD_GAME(updatedFormData));
       setButtonText("המשחק נוסף בהצלחה");
