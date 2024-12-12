@@ -484,6 +484,7 @@ export const NewGame = () => {
             </div>
             <div className="line4">
               <input
+              placeholder="הערה"
                 type="text"
                 className="comment"
                 value={formData.Comment}
