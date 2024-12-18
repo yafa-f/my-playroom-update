@@ -18,15 +18,29 @@ import history2 from "../../assets/history2.svg";
 import { useState } from "react";
 export const HomePage = () => {
   const location = useLocation();
-
+  const [code, setCode] = useState();
   const [name, setName] = useState("");
   const myLocation = location.pathname;
 
-
   const navigateFromUsersArr = [
-    { name: "פרטים אישיים", src: person, srcChoosen: person2, to: "singleUser"},
-    { name: "השאלות והחזרות", src: take, srcChoosen: take2, to:"singleUser/Taking_Returning" },
-    { name: "היסטורית השאלות", src: history1, srcChoosen: history2, to: "singleUser/TakingHistory" },
+    {
+      name: "פרטים אישיים",
+      src: person,
+      srcChoosen: person2,
+      to: "singleUser",
+    },
+    {
+      name: "השאלות והחזרות",
+      src: take,
+      srcChoosen: take2,
+      to: "singleUser/Taking_Returning",
+    },
+    {
+      name: "היסטורית השאלות",
+      src: history1,
+      srcChoosen: history2,
+      to: "singleUser/TakingHistory",
+    },
   ];
   const namesArr = [
     { name: "מנויים", src: users, srcChoosen: users2, to: "UsersList" },
@@ -41,33 +55,42 @@ export const HomePage = () => {
       to: "FinesList",
     },
     { name: "טווח גילאים", src: other, srcChoosen: other2, to: "AgesList" },
-    { name: "משחקים עם חלקים חסרים", src: other, srcChoosen: other2, to: "GamesWithMissingPartsList" },
-
+    {
+      name: "משחקים עם חלקים חסרים",
+      src: other,
+      srcChoosen: other2,
+      to: "GamesWithMissingPartsList",
+    },
   ];
   return (
     <div className="image">
       <div className="nav-bar">
-        <div className="display-login-name">
-          {name===""||name==="שם משתמש"? <div></div> :  <div className="user-icon"></div>}
-      
-          <div className="login-user-name">{name}</div>
+        <div className="display-3-icon">
+          <div className="letter-icon"></div>
+          <div className="reminder-icon"></div>
+          <div className="setting-icon"></div>
         </div>
+        {name !== "" && code !== "" && (
+          <div className="display-login-name">
+            <div className="user-icon"></div>
+            <div className="login-user-name">{name}</div>
+            <div className="pas-mafrid"></div>
+          </div>
+        )}
       </div>
       <div className="logo"></div>
       {myLocation == "/" ? (
         <div className="login-comp">
-          <Login setName={setName} />
+          <Login setName={setName} setCode={setCode}/>
+        </div>
+      ) : !myLocation.includes("singleUser") ? (
+        <div className="side-bar-comp">
+          <SideBar navList={namesArr} />
         </div>
       ) : (
-       !myLocation.includes("singleUser") ? (
         <div className="side-bar-comp">
-          <SideBar navList={namesArr}/>
+          <SideBar navList={navigateFromUsersArr} />
         </div>
-        ):(
-          <div className="side-bar-comp">
-          <SideBar navList={navigateFromUsersArr}/>
-        </div>
-        )
       )}
     </div>
   );

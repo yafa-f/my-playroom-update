@@ -3,10 +3,24 @@ import "./login.css";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 export const Login = (props) => {
-  const [code, setCode] = useState();
+  const navigate = useNavigate();
 
+  const [error, setError] = useState("");
+  const [loginName, setLoginName] = useState("");
+  const [loginCode, setLoginCode] = useState("");
+
+  const handleLogin = () => {
+    if (!loginName || !loginCode) {
+      setError("עליך למלא את השדות הנדרשים");
+    } else {
+      setError("");
+      navigate("/UsersList");
+      props.setName(loginName);
+      props.setCode(loginCode);
+    }
+  };
   return (
     <div className="login-card">
       <div className="welcome">ברוכים הבאים למערכת משחקולנו</div>
@@ -15,8 +29,8 @@ export const Login = (props) => {
       <TextField
         placeholder="שם משתמש"
         size="small"
-        onBlur={(e) => {
-          props.setName(e.target.value);
+        onChange={(e) => {
+          setLoginName(e.target.value);
         }}
         sx={{
           direction: "rtl",
@@ -31,7 +45,7 @@ export const Login = (props) => {
         placeholder="סיסמא"
         size="small"
         onChange={(e) => {
-          setCode(e.target.value);
+          setLoginCode(e.target.value);
         }}
         sx={{
           direction: "rtl",
@@ -42,15 +56,26 @@ export const Login = (props) => {
         }}
       />
       <br />
-      <Link to="/UsersList">
-        <Button
-          variant="contained"
-          sx={{ marginTop: "5vh", marginLeft: "5vw", width: "9vw" }}
+      {error && (
+        <div
+          style={{
+            color: "red",
+            direction: "rtl",
+            marginTop: "20px",
+            marginRight: "20px",
+            size: "8px",
+          }}
         >
-          אישור
-        </Button>
-      </Link>
+          {error}
+        </div>
+      )}
+      <Button
+        onClick={handleLogin}
+        variant="contained"
+        sx={{ marginTop: "5vh", marginLeft: "5vw", width: "9vw" }}
+      >
+        אישור
+      </Button>
     </div>
   );
 };
-
