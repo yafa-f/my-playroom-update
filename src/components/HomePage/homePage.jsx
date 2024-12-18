@@ -2,7 +2,7 @@ import React from "react";
 import "./homePage.css";
 import { Login } from "../Login/login";
 import { SideBar } from "../SideBar/sideBar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import games from "../../assets/משחקים.svg";
 import games2 from "../../assets/משחקים2.svg";
 import users from "../../assets/מנויים.svg";
@@ -16,12 +16,15 @@ import person2 from "../../assets/person2.svg";
 import history1 from "../../assets/history1.svg";
 import history2 from "../../assets/history2.svg";
 import { useState } from "react";
+import { Button } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 export const HomePage = () => {
   const location = useLocation();
   const [code, setCode] = useState();
   const [name, setName] = useState("");
   const myLocation = location.pathname;
-
+  const navigate = useNavigate();
   const navigateFromUsersArr = [
     {
       name: "פרטים אישיים",
@@ -62,9 +65,29 @@ export const HomePage = () => {
       to: "GamesWithMissingPartsList",
     },
   ];
+  const navToHomePage = () => {
+    navigate("/UsersList");
+  };
   return (
     <div className="image">
       <div className="nav-bar">
+      {myLocation?.includes("singleUser") && (
+          <Button
+            sx={{
+              height: "40px",
+              marginLeft: "10px",
+              top: "10px",
+              backgroundColor: "rgba(240, 21, 87, 1)", 
+              border: "2px solid white",
+              marginRight:"-52px"
+            }}
+            variant="contained"
+            size="small"
+            onClick={navToHomePage}
+          >
+            <ArrowBackIcon ></ArrowBackIcon>{" "}
+          </Button>
+        )}
         <div className="display-3-icon">
           <div className="letter-icon"></div>
           <div className="reminder-icon"></div>
@@ -77,11 +100,12 @@ export const HomePage = () => {
             <div className="pas-mafrid"></div>
           </div>
         )}
+        
       </div>
       <div className="logo"></div>
       {myLocation == "/" ? (
         <div className="login-comp">
-          <Login setName={setName} setCode={setCode}/>
+          <Login setName={setName} setCode={setCode} />
         </div>
       ) : !myLocation.includes("singleUser") ? (
         <div className="side-bar-comp">
