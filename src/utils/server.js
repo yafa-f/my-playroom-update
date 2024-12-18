@@ -1,5 +1,6 @@
 
-export const path='https://server-jnz9.onrender.com/'
+export const path="https://server-jnz9.onrender.com/"
+
 export const fetchGetUsers = () => {
   return fetch(`${path}userRoutes`)
     .then((data) => {
