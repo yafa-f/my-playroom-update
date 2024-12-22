@@ -29,6 +29,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import { styled } from "@mui/system";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DoneIcon from "@mui/icons-material/Done";
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import {generatePDF} from "../../exporttopdf/exportToPDF";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import { setSingleUser } from "../../../app/slices/singleUserSlice";
 export const UsersList = () => {
@@ -165,6 +167,13 @@ export const UsersList = () => {
   const hide = () => {
     setIsEditClicked(false);
   };
+  const exportToPDF=()=>{
+    const columns = ["קוד מנוי","שם מנוי","תאריך מנוי","טלפון 1 "," טלפון 2 ","שולם פקדון?","סוג תשלום","סכום לתשלום","בנק","חשבון בנק","מס' שק","סניף","מייל"];
+    const data=updatedRows;
+    const title="משתמשים"
+    generatePDF(columns,data,title)
+  }
+
   const deleteCurrent = async (row) => {
     setCurrentDelete(row);
     const deletedUserRow = await deleteUser(row);
@@ -412,6 +421,9 @@ export const UsersList = () => {
         <h3> </h3>
         <h3 style={{ marginRight: "100px" }}> פרטי בנק</h3>
         <h3 style={{ marginRight: "40px" }}>מס' שק</h3>
+        <div className="user-pdf-icon" onClick={()=>exportToPDF()}>
+          <PictureAsPdfIcon sx={{color:"rgba(6, 120, 252, 1)"}}/>
+          </div>
       </div>
       <div className="table">
         <section className="section">

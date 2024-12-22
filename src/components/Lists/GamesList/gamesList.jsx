@@ -10,7 +10,8 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { SearchButtons } from "./SearchButtons";
-
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import {generatePDF} from "../../exporttopdf/exportToPDF";
 export const GamesList = () => {
   const searchNames = [
     { name: "תחום" },
@@ -57,12 +58,21 @@ export const GamesList = () => {
     navigate(`/GamesList/NewGame/bool/${"true"}`, { state: { gameToUpdate } });
   };
   const NewGame = () => {
+    
     navigate(`/GamesList/NewGame/bool/${"false"}`);
   };
   const deleteAgame = async (game) => {
     const deletedGameRow = await DeleteGame(game);
     dispatch(DELETE_GAME(game));
   };
+  const exportToPDF=()=>{
+    const columns = ["קוד משחק","קוד ארון","שם משחק","תחום משחק","חלקי משחק","המשחק מיועד לגילאי","מצב משחק","מדבקה?","משחק משלים?","מיקום הארון","זמין להשאלה?"];
+    const data=tableArr;
+    const title="משחקים"
+    generatePDF(columns,data,title)
+  }
+
+  
   return (
     <div>
       <div className="games">
@@ -100,6 +110,9 @@ export const GamesList = () => {
           <div className="h-3-ga">סטטוס</div>
           <div className="h-3-ga">מיקום</div>
           <div className="h-3-ga">סטטוס השאלה</div>
+          <div className="pdf-icon" onClick={()=>exportToPDF()}>
+          <PictureAsPdfIcon sx={{color:"rgba(6, 120, 252, 1)"}}/>
+          </div>
         </div>
         <div className="G-table">
           <section className="section">
