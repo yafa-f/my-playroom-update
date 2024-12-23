@@ -7,9 +7,10 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import IconButton from "@mui/material/IconButton";
 import { useSelector } from "react-redux";
+
 export const SearchButtons = (props) => {
+
   const [selectArray, setSelectArray] = useState();
-  const [selectArrayFilter, setSelectArrayFilter] = useState();
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [arrowUpAndDown, setArrowUpAndDown] = useState(false);
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -79,101 +80,13 @@ export const SearchButtons = (props) => {
     }
   }, [props.name, typesGames, forAges, closets, take, users, games]);
 
-  useEffect(() => {
-    if (chosenUser !== "") {
-      switch (props.name) {
-        case "שם מנוי":
-          {
-            const filteredUsers = users?.find(
-              (user) => user.userName === chosenUser
-            ).userCode;
-            const filteredRows = take.filter((row) => {
-              return (
-                typeof row["UserCode"] === "string" &&
-                row["UserCode"] === filteredUsers
-              );
-            });
-            setSelectArrayFilter(filteredRows);
-          }
-          break;
-        case "שם המשחק":
-          {
-            const filteredGame = games?.filter(
-              (game) => game.GameName === chosenUser
-            );
-            const gameCodesAsStrings = filteredGame?.map((game) =>
-              game?.Id?.toString()
-            );
-            const filteredGames = take.filter((game) =>
-              gameCodesAsStrings.includes(game.GameCode)
-            );
-            setSelectArrayFilter(filteredGames);
-          }
-          break;
-        case "תחום":
-          {
-            const type = typesGames.find(
-              (t) => t.gameTipeName === chosenUser
-            ).gameTypeCode;
-            const filterG = games.filter((g) => g.GameTypeCode === type);
-            setSelectArrayFilter(filterG);
-          }
-          break;
-        case "טווח גילאים":
-          {
-            const age = forAges.find((a) => a.Age === chosenUser).AgeCode;
-            const filterG = games.filter((g) => g.AgeCode === age);
-            setSelectArrayFilter(filterG);
-          }
-          break;
-        case "סטטוס משחק":
-          {
-            const filterG = games.filter(
-              (g) => g.CurrentStateOfGame === chosenUser
-            );
-            setSelectArrayFilter(filterG);
-          }
-
-          break;
-        case "מס’ ארון":
-          {
-            const filteredRows = games.filter((row) => {
-              return (
-                typeof row["ClosetNumber"] === "string" &&
-                row["ClosetNumber"] === chosenUser
-              );
-            });
-            setSelectArrayFilter(filteredRows);
-          }
-          break;
-        case "סטטוס השאלה":
-          {
-            let filterG;
-            if (chosenUser === "מושאל") {
-              filterG = games.filter((g) => g.IsAvailable === "FALSE");
-            } else {
-              filterG = games.filter((g) => g.IsAvailable !== "FALSE");
-            }
-            setSelectArrayFilter(filterG);
-          }
-          break;
-        default:
-          setSelectArrayFilter([]);
-      }
-    } else {
-      setSelectArrayFilter(props.list);
-    }
-  }, [chosenUser]);
-
-  useEffect(() => {
-    props.setTableArr(selectArrayFilter);
-  }, [selectArrayFilter]);
-
   const closeMenu = (user) => {
     setChosenUser(user);
+    props.onFilterChange(props.name, user); // Call the filter change
     setMenuAnchor(null);
   };
   const clearUserName = () => {
+    props.onFilterChange(props.name, ""); // Call the filter change
     setChosenUser("");
   };
 
