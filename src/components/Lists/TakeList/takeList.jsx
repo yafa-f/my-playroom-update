@@ -38,20 +38,60 @@ export const TakeList = () => {
   }
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString("en-GB");
+  const [filters, setFilters] = useState({});
+  useEffect(() => {
+    let filtereTake = take;
 
+    Object.keys(filters).forEach((filter) => {
+        if (filters[filter]) {
+          switch (filter) {
+            case "שם מנוי": {
+              const filteredUsers = users?.find(user => user.userName === filters[filter])?.userCode;
+              filtereTake = filtereTake.filter(row => 
+                  typeof row["UserCode"] === "string" && row["UserCode"] === filteredUsers
+              );
+              break;
+          }
+          case "שם המשחק": {
+              const filteredGame = games?.filter(game => game.GameName === filters[filter]);
+              const gameCodesAsStrings = filteredGame?.map(game => game?.Id?.toString());
+              filtereTake = filtereTake.filter(game => 
+                  gameCodesAsStrings.includes(game.GameCode)
+              );
+              break;
+          }
+          default:
+              break;
+      }
+        }
+    });
+
+    setTableArr(filtereTake);
+  }, [take, filters]);
+ 
+  const handleFilterChange = (filterName, chosenUser) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterName]: chosenUser,
+    }));
+  };
   return (
     <div className="takes">
       <div className="take-title">
         <div className="take-logo"></div>
         <div className="titleTake">השאלות</div>
         <div className="search-buttons">
-          <SearchButtons name="שם מנוי" list={take} setTableArr={setTableArr} />{" "}
+          <SearchButtons 
+          name="שם מנוי" 
+          list={take} 
+          onFilterChange={handleFilterChange}
+          />
           <SearchButtons
             name="שם המשחק"
             list={take}
-            setTableArr={setTableArr}
-          />{" "}
-        </div>{" "}
+            onFilterChange={handleFilterChange}
+          />
+        </div>
       </div>
       <div className="table-title">
         <div className="taket-h3">פרטי המשחק</div>

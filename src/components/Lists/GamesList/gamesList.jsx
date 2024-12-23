@@ -13,12 +13,13 @@ import { SearchButtons } from "./SearchButtons";
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import {generatePDF} from "../../exporttopdf/exportToPDF";
 export const GamesList = () => {
+
   const searchNames = [
     { name: "תחום" },
     { name: "טווח גילאים" },
-    { name: "סטטוס משחק" },
+    // { name: "סטטוס משחק" },
     { name: "מס’ ארון" },
-    { name: "סטטוס השאלה" },
+    // { name: "סטטוס השאלה" },
   ];
   const navigate = useNavigate();
   const games = useSelector((state) => state.game.games);
@@ -29,6 +30,48 @@ export const GamesList = () => {
   );
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const [tableArr, setTableArr] = useState();
+  const [filters, setFilters] = useState({});
+  const handleFilterChange = (filterName, chosenUser) => {
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      [filterName]: chosenUser,
+    }));
+  };
+  
+  useEffect(() => {
+    let filteredGames = games;
+
+    Object.keys(filters).forEach((filter) => {
+        if (filters[filter]) {
+            switch (filter) {
+                case "תחום":
+                    const type = typesGamesFromStore.find(t => t.gameTipeName === filters[filter]).gameTypeCode;
+                    filteredGames = filteredGames.filter(game => game.GameTypeCode === type);
+                    break;
+                case "טווח גילאים":
+                    const age = forAgesFromStore.find(a => a.Age === filters[filter]).AgeCode;
+                    filteredGames = filteredGames.filter(game => game.AgeCode === age);
+                    break;
+                // case "סטטוס משחק":
+                //     filteredGames = filteredGames.filter(game => game.CurrentStateOfGame === filters[filter]);
+                //     break;
+                case "מס’ ארון":
+                    filteredGames = filteredGames.filter(game => typeof game["ClosetNumber"] === "string" && game["ClosetNumber"] === filters[filter]);
+                    break;
+                // case "סטטוס השאלה":
+                //     filteredGames = filteredGames.filter(game => 
+                //         filters[filter] === "מושאל" ? game.IsAvailable === "FALSE" : game.IsAvailable !== "FALSE"
+                //     );
+                //     break;
+                default:
+                    break;
+            }
+        }
+    });
+
+    setTableArr(filteredGames);
+  }, [games, filters]);
+ 
   const userName = (Id) => {
     let gameTake = torFromStore.filter((tg) => tg.GameCode === Id);
     if (gameTake.length === 0) {
@@ -65,11 +108,20 @@ export const GamesList = () => {
     const deletedGameRow = await DeleteGame(game);
     dispatch(DELETE_GAME(game));
   };
+  const formatNestedObjects = (data) => {
+    return data.map(({ _id,GameCode, ...item }) => {
+      return {
+        ...item,
+       Parts: item.Parts.map(part => `${part.name} ${part.amount}`).join(', ') // Adjust according to your object structure
+      };
+    });
+  };
+  
   const exportToPDF=()=>{
-    const columns = ["קוד משחק","קוד ארון","שם משחק","תחום משחק","חלקי משחק","המשחק מיועד לגילאי","מצב משחק","מדבקה?","משחק משלים?","מיקום הארון","זמין להשאלה?"];
-    const data=tableArr;
+    const columns = ["קוד משחק","קוד ארון","שם משחק","תחום משחק","חלקי משחק","המשחק מיועד לגילאי","מצב משחק","מדבקה?","משחק משלים?","מיקום הארון","זמין להשאלה?","מיקום בארון"];
+    const formattedData = formatNestedObjects(tableArr);
     const title="משחקים"
-    generatePDF(columns,data,title)
+    generatePDF(columns,formattedData,title)
   }
 
   
@@ -100,8 +152,8 @@ export const GamesList = () => {
                 <SearchButtons
                   name={search.name}
                   list={games}
-                  setTableArr={setTableArr}
-                />{" "}
+                  onFilterChange={handleFilterChange}
+                />
               </div>
             ))}
         </div>
