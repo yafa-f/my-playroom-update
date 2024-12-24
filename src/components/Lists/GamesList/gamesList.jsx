@@ -10,10 +10,9 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { SearchButtons } from "./SearchButtons";
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import {generatePDF} from "../../exporttopdf/exportToPDF";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import { generatePDF } from "../../exporttopdf/exportToPDF";
 export const GamesList = () => {
-
   const searchNames = [
     { name: "תחום" },
     { name: "טווח גילאים" },
@@ -28,6 +27,9 @@ export const GamesList = () => {
   const torFromStore = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
+  const gamesMissing = useSelector(
+    (state) => state.gamesWithMissingPart.gamesWithMissingParts
+  ).data;
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const [tableArr, setTableArr] = useState();
   const [filters, setFilters] = useState({});
@@ -37,45 +39,57 @@ export const GamesList = () => {
       [filterName]: chosenUser,
     }));
   };
-  
+
   useEffect(() => {
     let filteredGames = games;
 
     Object.keys(filters).forEach((filter) => {
-        if (filters[filter]) {
-            switch (filter) {
-                case "תחום":
-                    const type = typesGamesFromStore.find(t => t.gameTipeName === filters[filter]).gameTypeCode;
-                    filteredGames = filteredGames.filter(game => game.GameTypeCode === type);
-                    break;
-                case "טווח גילאים":
-                    const age = forAgesFromStore.find(a => a.Age === filters[filter]).AgeCode;
-                    filteredGames = filteredGames.filter(game => game.AgeCode === age);
-                    break;
-                // case "סטטוס משחק":
-                //     filteredGames = filteredGames.filter(game => game.CurrentStateOfGame === filters[filter]);
-                //     break;
-                case "מס’ ארון":
-                    filteredGames = filteredGames.filter(game => typeof game["ClosetNumber"] === "string" && game["ClosetNumber"] === filters[filter]);
-                    break;
-                // case "סטטוס השאלה":
-                //     filteredGames = filteredGames.filter(game => 
-                //         filters[filter] === "מושאל" ? game.IsAvailable === "FALSE" : game.IsAvailable !== "FALSE"
-                //     );
-                //     break;
-                default:
-                    break;
-            }
+      if (filters[filter]) {
+        switch (filter) {
+          case "תחום":
+            const type = typesGamesFromStore.find(
+              (t) => t.gameTipeName === filters[filter]
+            ).gameTypeCode;
+            filteredGames = filteredGames.filter(
+              (game) => game.GameTypeCode === type
+            );
+            break;
+          case "טווח גילאים":
+            const age = forAgesFromStore.find(
+              (a) => a.Age === filters[filter]
+            ).AgeCode;
+            filteredGames = filteredGames.filter(
+              (game) => game.AgeCode === age
+            );
+            break;
+          // case "סטטוס משחק":
+          //     filteredGames = filteredGames.filter(game => game.CurrentStateOfGame === filters[filter]);
+          //     break;
+          case "מס’ ארון":
+            filteredGames = filteredGames.filter(
+              (game) =>
+                typeof game["ClosetNumber"] === "string" &&
+                game["ClosetNumber"] === filters[filter]
+            );
+            break;
+          // case "סטטוס השאלה":
+          //     filteredGames = filteredGames.filter(game =>
+          //         filters[filter] === "מושאל" ? game.IsAvailable === "FALSE" : game.IsAvailable !== "FALSE"
+          //     );
+          //     break;
+          default:
+            break;
         }
+      }
     });
 
     setTableArr(filteredGames);
   }, [games, filters]);
- 
+
   const userName = (Id) => {
     let gameTake = torFromStore.filter((tg) => tg.GameCode === Id);
     if (gameTake.length === 0) {
-      return "No user found"; 
+      return "No user found";
     }
     let closestDateObject = gameTake.reduce((closest, current) => {
       let currentDate = new Date(current.TakingDate);
@@ -101,7 +115,6 @@ export const GamesList = () => {
     navigate(`/GamesList/NewGame/bool/${"true"}`, { state: { gameToUpdate } });
   };
   const NewGame = () => {
-    
     navigate(`/GamesList/NewGame/bool/${"false"}`);
   };
   const deleteAgame = async (game) => {
@@ -109,22 +122,36 @@ export const GamesList = () => {
     dispatch(DELETE_GAME(game));
   };
   const formatNestedObjects = (data) => {
-    return data.map(({ _id,GameCode, ...item }) => {
+    return data.map(({ _id, GameCode, ...item }) => {
       return {
         ...item,
-       Parts: item.Parts.map(part => `${part.name} ${part.amount}`).join(', ') // Adjust according to your object structure
+        Parts: item.Parts.map((part) => `${part.name} ${part.amount}`).join(
+          ", "
+        ), // Adjust according to your object structure
       };
     });
   };
-  
-  const exportToPDF=()=>{
-    const columns = ["קוד משחק","קוד ארון","שם משחק","תחום משחק","חלקי משחק","המשחק מיועד לגילאי","מצב משחק","מדבקה?","משחק משלים?","מיקום הארון","זמין להשאלה?","מיקום בארון"];
-    const formattedData = formatNestedObjects(tableArr);
-    const title="משחקים"
-    generatePDF(columns,formattedData,title)
-  }
 
-  
+  const exportToPDF = () => {
+    const columns = [
+      "קוד משחק",
+      "קוד ארון",
+      "שם משחק",
+      "תחום משחק",
+      "חלקי משחק",
+      "המשחק מיועד לגילאי",
+      "מצב משחק",
+      "מדבקה?",
+      "משחק משלים?",
+      "מיקום הארון",
+      "זמין להשאלה?",
+      "מיקום בארון",
+    ];
+    const formattedData = formatNestedObjects(tableArr);
+    const title = "משחקים";
+    generatePDF(columns, formattedData, title);
+  };
+
   return (
     <div>
       <div className="games">
@@ -162,21 +189,24 @@ export const GamesList = () => {
           <div className="h-3-ga">סטטוס</div>
           <div className="h-3-ga">מיקום</div>
           <div className="h-3-ga">סטטוס השאלה</div>
-          <div className="pdf-icon" onClick={()=>exportToPDF()}>
-          <PictureAsPdfIcon sx={{color:"rgba(6, 120, 252, 1)"}}/>
+          <div className="pdf-icon" onClick={() => exportToPDF()}>
+            <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
           </div>
         </div>
         <div className="G-table">
           <section className="section">
             {Array.isArray(tableArr) &&
               tableArr.map((game, i) => {
+                let missP;
                 let age = forAgesFromStore.find(
                   (a) => a.AgeCode === game.AgeCode
                 )?.Age;
                 let tchum = typesGamesFromStore.find(
                   (t) => t.gameTypeCode === game.GameTypeCode
                 )?.gameTipeName;
-
+                if (game.CurrentStateOfGame == "חסרים חלקים") {
+                  missP = gamesMissing.find((g) => g.Id === game.Id);
+                }
                 return (
                   <div key={i}>
                     <Accordion
@@ -319,6 +349,38 @@ export const GamesList = () => {
                           </div>
                           <div className="acordi-comment">{game.Comment}</div>
                         </div>
+                        {game.CurrentStateOfGame == "חסרים חלקים" &&
+                          missP &&
+                          missP.MissingParts && (
+                            <div className="AccordionDetails-missParts">
+                              <div className="game-parts">
+                                <div style={{ display: "block" }}>
+                                  <div className="game-parts-name">
+                                    חלקים חסרים במשחק:
+                                  </div>
+                                  <div className="parts-table">
+                                    {missP.MissingParts[0].rows.map(
+                                      (part, j) => (
+                                        <>
+                                          {part.amount - part.afterReturn >
+                                            0 && (
+                                            <div key={j} className="parts">
+                                              <div>
+                                                (
+                                                {part.amount - part.afterReturn}
+                                                )
+                                              </div>
+                                              <div>{part.name}</div>
+                                            </div>
+                                          )}
+                                        </>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                       </AccordionDetails>
                     </Accordion>
                   </div>

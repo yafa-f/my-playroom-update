@@ -169,7 +169,7 @@ export const UsersList = () => {
   };
   const exportToPDF=()=>{
     const columns = ["קוד מנוי","שם מנוי","תאריך מנוי","טלפון 1 "," טלפון 2 ","שולם פקדון?","סוג תשלום","סכום לתשלום","בנק","חשבון בנק","מס' שק","סניף","מייל"];
-    const data=updatedRows;
+    const data = chosenUser ? filteredRows : updatedRows;
     const title="משתמשים"
     generatePDF(columns,data,title)
   }
