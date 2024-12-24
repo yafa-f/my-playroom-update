@@ -32,14 +32,14 @@
   margin-top: 15vh;
   position: fixed;
 }
-.display-login-name{
+.display-login-name {
   direction: rtl;
   display: inline-flex;
   gap: 15px;
   margin-left: 2vw;
   margin-top: 20px;
 }
-.display-3-icon{
+.display-3-icon {
   display: inline-flex;
   direction: rtl;
   margin-top: 20px;
@@ -59,24 +59,34 @@
   color: rgba(255, 255, 255, 1);
   border-right: 1px;
 }
-.setting-icon{
-  background-image: url("../../assets/setting.svg");
-  width: 20px;
-  height: 21px;
+.setting-icon {
+  /* background-image: url("../../assets/setting.svg"); */
+  width: 22px;
+  height: 27px;
 }
-.reminder-icon{
-  background-image: url("../../assets/reminder.svg");
-  width: 18px;
+.reminder-icon {
   height: 21px;
+  margin-top: -30px;
+  color: white;
 }
-.letter-icon{
+.letter-icon {
   background-image: url("../../assets/letters.svg");
   width: 29px;
   height: 23px;
 }
-.pas-mafrid{
+.pas-mafrid {
   background-image: url("../../assets/mafrid.svg");
-  width:2px;
-   height:19px;
+  width: 2px;
+  height: 19px;
 }
-
+.changePassword {
+  width: 18px;
+  height: 21px;
+  margin-top: -10px;
+}
+.enterAsAdmin {
+  width: 18px;
+  height: 21px;
+  margin-top: -8.5px;
+  margin-right: -12px;
+}
