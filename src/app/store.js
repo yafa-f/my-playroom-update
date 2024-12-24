@@ -12,6 +12,7 @@ import {TORSlice} from "./slices/takeOrReturnSlice";
 import {ForAgeSlice} from "./slices/forAgeSlice";
 import {SingleUserSlice} from "./slices/singleUserSlice";
 import {GamesWithMissingPartsSlice} from "./slices/gamesWiteMissingPartsSlice";
+import { AdminSlice } from "./slices/adminSlice";
 
 const persistConfig = {
   key: "root",
@@ -29,6 +30,7 @@ const rootReducer = {
   forAge: ForAgeSlice.reducer,
   singleUser: persistReducer(persistConfig, SingleUserSlice.reducer),
   gamesWithMissingPart: GamesWithMissingPartsSlice.reducer,
+  admin:AdminSlice.reducer
 };
 
 export const reduxStore = configureStore({
