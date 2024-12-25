@@ -159,6 +159,7 @@ export const UsersList = () => {
   const handleEditClick = (user) => {
     setIsEditClicked(true);
     setClickedRow(user);
+    dispatch(setSingleUser(user));
     navigate("/singleUser/editUser", { state: { user } });
   };
   const updateEditState = () => {
