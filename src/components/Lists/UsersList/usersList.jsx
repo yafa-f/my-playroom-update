@@ -159,7 +159,7 @@ export const UsersList = () => {
   const handleEditClick = (user) => {
     setIsEditClicked(true);
     setClickedRow(user);
-    navigate("editUser", { state: { user } });
+    navigate("/singleUser/editUser", { state: { user } });
   };
   const updateEditState = () => {
     setIsEdit(!isEdit);
