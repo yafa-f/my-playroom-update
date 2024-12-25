@@ -22,6 +22,9 @@ export const AddTake = () => {
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const [selectedGames, setSelectedGames] = useState([{}]);
+  const gamesMissing = useSelector(
+    (state) => state.gamesWithMissingPart.gamesWithMissingParts
+  ).data;
   const existingReturnIDs = useSelector((state) =>
     state.takingOrReturning.takingsOrReturnings.map((item) => item.ReturnID)
   );
@@ -131,108 +134,130 @@ export const AddTake = () => {
         {selectedGames &&
           selectedGames.length > 0 &&
           selectedGames.map((selectedGame, index) => {
+            let missP;
             let age = forAgesFromStore.find(
               (a) => a.AgeCode === selectedGame.AgeCode
             )?.Age;
             let tchum = typesGamesFromStore.find(
               (t) => t.gameTypeCode === selectedGame.GameTypeCode
             )?.gameTipeName;
-            return(
-            <div key={index}>
-              <div className="new-hashala">
-                {" "}
-                <div style={{ width: "80vw", display: "inline-flex" }}>
-                  <select
-                    onChange={selectGameName(index)}
-                    className="select-game-take"
-                  >
-                    <option value="" disabled selected>
-                      בחר משחק
-                    </option>
-                    {availableGames.map((game) => (
-                      <option key={game.Id} value={game.Id}>
-                        {game.GameName}
+            if (selectedGame.CurrentStateOfGame == "חסרים חלקים") {
+              missP = gamesMissing.find((g) => g.Id === selectedGame.Id);
+            }
+            return (
+              <div key={index}>
+                <div className="new-hashala">
+                  {" "}
+                  <div style={{ width: "80vw", display: "inline-flex" }}>
+                    <select
+                      onChange={selectGameName(index)}
+                      className="select-game-take"
+                    >
+                      <option value="" disabled selected>
+                        בחר משחק
                       </option>
-                    ))}
-                  </select>
-
-                  {selectedGame && (
-                    <>
-                      <div className="status-row">
-                        {selectedGame.CurrentStateOfGame}
-                      </div>
-                      <div className="ages-row">{age}</div>
-                      <div className="tchum-row">
-                        {tchum}
-                      </div>
-                      <div className="place-row">
-                        {selectedGame.ClosetNumber}
-                        {selectedGame.Location}
-                      </div>
-                      <div className="Complementar-Available-take">
-                        {selectedGame.HaveComplementaryGame === "on" ||
-                        selectedGame.HaveComplementaryGame === "TRUE" ? (
-                          <div className="Complementar-take">
-                            <div className="v-logo-take"></div>קיים משחק משלים
-                          </div>
-                        ) : (
-                          <div></div>
-                        )}
-                        {selectedGame.IsAvailable === "on" ||
-                        selectedGame.IsAvailable === "TRUE" ? (
-                          <div className="Available-take">
-                            <div className="v-logo-take"></div>זמין להשאלה
-                          </div>
-                        ) : (
-                          <div></div>
-                        )}
-                      </div>
-                    </>
-                  )}
-                </div>
-                <div
-                  className="garb-icon-take"
-                  onClick={() => handleDeleteTakegame(index)}
-                ></div>
-              </div>
-              {selectedGame && (
-                <div
-                  style={{
-                    display: "inline-flex",
-                    borderBottom: "1px rgba(230, 230, 230, 1) solid",
-                    width: "90vw",
-                    marginRight: "5vw",
-                  }}
-                >
-                  {selectedGame &&
-                    selectedGame.Parts &&
-                    Array.isArray(selectedGame.Parts) && (
-                      <div className="parts-game-take">
-                        <div className="game-parts-name-take">חלקים במשחק</div>
-                        <div className="parts-table-take">
-                          {selectedGame.Parts.map((part, p) => (
-                            <div key={p} className="parts-take">
-                              <div>{part.amount}</div>
-                              <div>{part.name}</div>
-                            </div>
-                          ))}
+                      {availableGames.map((game) => (
+                        <option key={game.Id} value={game.Id}>
+                          {game.GameName}
+                        </option>
+                      ))}
+                    </select>
+                    {selectedGame && (
+                      <>
+                        <div className="status-row">
+                          {selectedGame.CurrentStateOfGame}
                         </div>
-                      </div>
+                        <div className="ages-row">{age}</div>
+                        <div className="tchum-row">{tchum}</div>
+                        <div className="place-row">
+                          {selectedGame.ClosetNumber}
+                          {selectedGame.Location}
+                        </div>
+                        <div className="Complementar-Available-take">
+                          {selectedGame.HaveComplementaryGame === "on" ||
+                          selectedGame.HaveComplementaryGame === "TRUE" ? (
+                            <div className="Complementar-take">
+                              <div className="v-logo-take"></div>קיים משחק משלים
+                            </div>
+                          ) : (
+                            <div></div>
+                          )}
+                          {selectedGame.IsAvailable === "on" ||
+                          selectedGame.IsAvailable === "TRUE" ? (
+                            <div className="Available-take">
+                              <div className="v-logo-take"></div>זמין להשאלה
+                            </div>
+                          ) : (
+                            <div></div>
+                          )}
+                        </div>
+                      </>
                     )}
-                  <div style={{ marginTop: "10vh", marginRight: "20vw" }}>
-                    {selectedGame.Comment}
                   </div>
+                  <div
+                    className="garb-icon-take"
+                    onClick={() => handleDeleteTakegame(index)}
+                  ></div>
                 </div>
-              )}
-            </div>
-          )})}
+                {selectedGame && (
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      borderBottom: "1px rgba(230, 230, 230, 1) solid",
+                      width: "90vw",
+                      marginRight: "5vw",
+                    }}
+                  >
+                    {selectedGame &&
+                      selectedGame.Parts &&
+                      Array.isArray(selectedGame.Parts) && (
+                        <div className="parts-game-take">
+                          <div className="game-parts-name-take">
+                            חלקים במשחק
+                          </div>
+                          <div className="parts-table-take">
+                            {selectedGame.Parts.map((part, p) => (
+                              <div key={p} className="parts-take">
+                                <div>{part.amount}</div>
+                                <div>{part.name}</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    {selectedGame.CurrentStateOfGame == "חסרים חלקים" &&
+                      missP &&
+                      missP.MissingParts && (
+                        <div className="missParts">
+                          <div style={{ display: "block" }}>
+                            <div className="game-parts-name-take">
+                              חלקים חסרים במשחק:
+                            </div>
+                            <div className="parts-table">
+                              {missP.MissingParts[0].rows.map((part, j) => (
+                                <>
+                                  {part.amount - part.afterReturn > 0 && (
+                                    <div key={j} className="parts">
+                                      <div>
+                                        {part.amount - part.afterReturn}
+                                      </div>
+                                      <div>{part.name}</div>
+                                    </div>
+                                  )}
+                                </>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         {selectedGames[0].GameName && (
           <button onClick={ApprovalTake} className="Approval-take-btn">
-            {/* {circleFlag && (
-              <CircularProgress sx={{ color: "white" }} size={10} />
-            )}
-            {buttonText}{" "} */}
-             {circleFlag ? (
+            {circleFlag ? (
               <CircularProgress size={24} color="white" />
             ) : status === "success" ? (
               <CheckIcon />
