@@ -11,7 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { SearchButtons } from "./SearchButtons";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import StyleIcon from "@mui/icons-material/Style";
 import { generatePDF } from "../../exporttopdf/exportToPDF";
+import { stickerPDF } from "../../exporttopdf/exportSticker";
 export const GamesList = () => {
   const searchNames = [
     { name: "תחום" },
@@ -131,7 +133,15 @@ export const GamesList = () => {
       };
     });
   };
-
+  const printAsticker = (game) => {
+    const data={code:game.Id,name:game.GameName}
+    const color=typesGamesFromStore.find((t)=>t.gameTypeCode===game.GameTypeCode).stickerColor;
+    console.log("color",color)
+    if(color){
+      stickerPDF(data,color)
+    }
+    else stickerPDF(data,"green")
+  };
   const exportToPDF = () => {
     const columns = [
       "קוד משחק",
@@ -298,19 +308,20 @@ export const GamesList = () => {
                             )}
                           </div>
                           <div className="update-delete-icons">
-                            <Button
+                           
+                            <div
+                              className="update-icon"
                               onClick={() => navToNewGame(game)}
-                              size="small"
-                              sx={{ width: "2px" }}
-                            >
-                              <div className="update-icon"></div>
-                            </Button>
-                            <Button
+                            ></div>
+                            <div
+                              className="delete-icon"
                               onClick={() => deleteAgame(game)}
-                              size="small"
-                            >
-                              <div className="delete-icon"></div>
-                            </Button>
+                            ></div>
+                             <StyleIcon
+                              onClick={() => printAsticker(game)}
+                              className="sticker"
+                              sx={{ color: "rgba(6, 120, 252, 1)" }}
+                            ></StyleIcon>
                           </div>
                         </div>
                       </AccordionSummary>

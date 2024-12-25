@@ -177,18 +177,24 @@
 }
 .update-delete-icons {
   display: inline-flex;
-  /* gap: 10px; */
-  margin-top: 5px;
+  margin-top: 20px;
+  margin-right: 20px;
+
 }
 .update-icon {
   background-image: url("../../../assets/pen.svg");
   width: 19px;
   height: 19px;
+  margin-left: 20px;
 }
 .delete-icon {
   background-image: url("../../../assets/garbage.svg");
   width: 13px;
   height: 17px;
+  margin-left: 20px;
+}
+.sticker{
+  margin-left: 20px;
 }
 .game-parts-name {
   font-size: 14px;
@@ -241,6 +247,3 @@
   direction: rtl;
   margin-left: 7vw;
 }
-
-
-

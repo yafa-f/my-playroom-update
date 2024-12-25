@@ -5,14 +5,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 export const FinesList = () => {
   const fines = useSelector((state) => state.fine.fines);
-const addPartFine=()=>{
-}
+// const addPartFine=()=>{
+// }
   return (
     <div className="fines">
       <div className="fines-title">
         <div className="fine-logo"></div>
         <div className="titleFine">קנסות עבור חלקים חסרים</div>
-        <div className="add-fine-icon">
+        {/* <div className="add-fine-icon">
           {" "}
           <FontAwesomeIcon
             icon={faPlusCircle}
@@ -21,7 +21,7 @@ const addPartFine=()=>{
             style={{borderRadius:"150px" ,border:" rgba(6, 120, 252, 1) solid"}}
            onClick={addPartFine}
           />
-        </div>
+        </div> */}
       </div>
 
       <div className="table-title">
