@@ -76,7 +76,7 @@ export const TakeList = () => {
     }));
   };
   return (
-    <div className="takes">
+    <div className="takes-abs">
       <div className="take-title">
         <div className="take-logo"></div>
         <div className="titleTake">השאלות</div>
