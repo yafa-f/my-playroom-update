@@ -44,6 +44,20 @@ export const fetchGetFines = () => {
       return null;
     });
 };
+export const fetchGetDebts = () => {
+  return fetch(`${path}debtsRoutes`)
+    .then((data) => {
+      console.log("data ", data);
+      if (data.ok) {
+        return data.json().then((debt) => {
+          return debt;
+        });
+      } else alert("not defined");
+    })
+    .catch((e) => {
+      return null;
+    });
+};
 export const fetchGetTypesGames = () => {
   return fetch(`${path}tipesOfGamesRoutes`)
     .then((data) => {
