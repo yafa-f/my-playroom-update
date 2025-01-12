@@ -2,30 +2,31 @@ import React, { useState } from "react";
 import "./adminLoginModal.css"; // Ensure to create a CSS file for styling
 import { SET_IS_ADMIN } from "../../app/slices/adminSlice";
 import { useDispatch, useSelector } from "react-redux";
-export const AdminLoginModal = () => {
-  const [isOpen, setIsOpen] = useState(true);
+
+export const AdminLoginModal = ({ isModalOpen, closeModal }) => {
+  const [isOpen, setIsOpen] = useState(isModalOpen);
   const [password, setPassword] = useState("");
-  const toggleModal = () => setIsOpen(false);
-  const adminPassword = useSelector((state) => state.admin.adminPassword);
   const dispatch = useDispatch();
+  const adminPassword = useSelector((state) => state.admin.adminPassword);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle password submission logic here
-    console.log("Password submitted:", password);
-    toggleModal();
+    checkIsAdmin();
   };
+
   const checkIsAdmin = () => {
     if (password === adminPassword) {
       dispatch(SET_IS_ADMIN(true));
+      closeModal(); // Close modal after successful login
     }
   };
+
   return (
     isOpen && (
       <div>
         <div className="modal-overlay">
           <div className="modal">
-            <button className="close" onClick={handleSubmit}>
+            <button className="close" onClick={closeModal}>
               X
             </button>
             <h2>הכנס סיסמא</h2>
@@ -37,9 +38,7 @@ export const AdminLoginModal = () => {
                 placeholder="נא להכניס סיסמא"
                 required
               />
-              <button type="submit" onClick={checkIsAdmin}>
-                אישור
-              </button>
+              <button type="submit">אישור</button>
             </form>
           </div>
         </div>
