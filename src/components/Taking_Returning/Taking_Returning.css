@@ -156,7 +156,7 @@
   font-weight: 400;
   line-height: 25.5px;
   text-align: right;
-  color: (188, 55, 55, 1);
+  color: rgba(188, 55, 55, 1);
 }
 .delay-message2-SU {
   font-size: 14px;
@@ -226,24 +226,26 @@
   display: inline-block;
 }
 .heart {
-  width: 50px;
-  height: 50px;
-  border: 1px black solid;
-  clip-path: polygon(
-    0% 0%,
-    100% 0%,
-    100% 75%,
-    59% 75%,
-    51% 92%,
-    43% 75%,
-    0% 75%
-  );
-  position: absolute;
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+  font-size: 10px;
+  width: 80px;
+  height: 20px; 
+  border: 2px black solid; 
+  border-radius: 10px; 
+  position: relative; 
+  background-color: white; 
 }
-.content {
-  position: relative;
-  z-index: 1;
-  color: black;
+.heart::after {
+  content: '';
+  position: absolute;
+  bottom: -10px; 
+  left: 50%; 
+  transform: translateX(-50%);
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 10px solid black; 
 }
 .Approval-btn {
   width: 8vw;
@@ -255,7 +257,7 @@
   font-weight: 600;
   border: 1px rgba(6, 120, 252, 1) solid;
   margin-right: 2vw;
-  font-size: 10px;
+  font-size: 12px;
 }
 .Approval {
   direction: rtl;

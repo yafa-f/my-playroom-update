@@ -23,6 +23,11 @@ import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunc
 import CircularProgress from "@mui/material/CircularProgress";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import NewDebtFunction from "../AddFunctions/NewDebtFunction";
+import { ADD_DEBT } from "../../app/slices/debtSlice";
 
 export const Taking_Returning = () => {
   const dispatch = useDispatch();
@@ -33,10 +38,10 @@ export const Taking_Returning = () => {
   const [expanded, setExpanded] = useState({});
   const [cancelReturn, setCancelReturn] = useState({});
   const [isVisible, setIsVisible] = useState(false);
-  const [fineIchur, setFineIchur] = useState();
-  const [finePart, setFinePart] = useState();
-  const [weekNum, setWeekNum] = useState();
-  const [finesSum, setFinesSum] = useState(0);
+  const [fineIchur, setFineIchur] = useState({});
+  const [finePart, setFinePart] = useState({});
+  const [weekNum, setWeekNum] = useState({});
+  const [finesSum, setFinesSum] = useState({});
   const [returnStatus, setReturnStatus] = useState({});
   const [amountOfPartAfterReturn, setAmountOfPartAfterReturn] = useState({});
   const [tableDataPart, setTableDataPart] = useState([]);
@@ -44,7 +49,13 @@ export const Taking_Returning = () => {
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString("en-GB");
   const [selectedValue, setSelectedValue] = useState({});
-  let totalFine = dataTable.reduce((acc, item) => acc + item.fine, 0);
+  const [totalFine, setTotalFine] = useState();
+  useEffect(() => {
+    console.log("datatable", dataTable);
+    let tot = dataTable.reduce((acc, item) => acc + item.fine, 0);
+    console.log("tot", tot);
+    setTotalFine(tot);
+  }, [dataTable]);
   const singleUser = useSelector((state) => state.singleUser.singleUser);
   const take = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
@@ -57,6 +68,29 @@ export const Taking_Returning = () => {
   const gamesWithMissing = useSelector(
     (state) => state.gamesWithMissingPart.gamesWithMissingParts
   ).data;
+
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    if (totalFine > 0) setOpen(true);
+    else ApprovalReturnGames();
+  };
+  const handleClosePaid = () => {
+    setOpen(false);
+    ApprovalReturnGames();
+  };
+  const handleCloseDebt = async () => {
+    let debtObj = {
+      userCode: singleUser.userCode,
+      debt: totalFine,
+      date: new Date().toISOString().split("T")[0],
+    };
+    const addResponse = await NewDebtFunction(debtObj);
+    if (addResponse) {
+      dispatch(ADD_DEBT(addResponse));
+      setOpen(false);
+      ApprovalReturnGames();
+    }
+  };
   useEffect(() => {
     const filteredItems = take.filter(
       (item) =>
@@ -116,21 +150,17 @@ export const Taking_Returning = () => {
       GameCode: gamecode,
       date: currentDate,
       status: selectedValue[ReturnID],
+      fine: finesSum[ReturnID] || 0,
     };
     if (selectedValue[ReturnID] === "חסרים חלקים") {
-      newEntry.fine = finesSum;
       newEntry.table = tableObject;
     }
+
     setDataTable((prevData) => [...prevData, newEntry]);
     setExpanded((prevExpanded) => ({
       ...prevExpanded,
       [ReturnID]: !prevExpanded[ReturnID],
     }));
-
-    setFineIchur();
-    setFinePart();
-    setFinesSum();
-    setWeekNum();
   };
   const handleReturnToggle = (ReturnID) => {
     if (cancelReturn[ReturnID]) {
@@ -238,10 +268,14 @@ export const Taking_Returning = () => {
     setDataTable([]);
     setSelectedValue({});
   };
-  const handleBlurFine = () => {
-    let a = Number(fineIchur) * Number(weekNum);
-    let b = Number(finePart) + a;
-    setFinesSum(b);
+  const handleBlurFine = (item) => {
+    let a = Number(fineIchur[item]) * Number(weekNum[item]);
+    let b = Number(finePart[item]) + a;
+    if (b > 0)
+      setFinesSum((prevFineSum) => ({
+        ...prevFineSum,
+        [item]: b,
+      }));
   };
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -269,7 +303,6 @@ export const Taking_Returning = () => {
         phone={singleUser.phone}
         cellphone={singleUser.cellphone}
         email={singleUser.email}
-        
       ></UserTitle>
       <div className="single-user-take-title">
         <div className="single-user-take-logo"></div>
@@ -294,368 +327,400 @@ export const Taking_Returning = () => {
         <div className="single-taket-h3">תאריך החזרה</div>
       </div>
       <div className="single-user-table">
-          {newFilteredList.map((item, i) => {
-            let game = games.find((game) => game.Id === item.GameCode);
-            let age = forAgesFromStore.find(
-              (a) => a.AgeCode === game.AgeCode
-            )?.Age;
-            let tchum = typesGamesFromStore.find(
-              (t) => t.gameTypeCode === game.GameTypeCode
-            )?.gameTipeName;
-            const returnDate = formatDate(item.ReturnDate);
-            const delayMessage = calculateDaysBetween(
-              returnDate,
-              formattedDate
-            );
-            return (
-              <div key={i} style={{ marginBottom: "10px" }}>
-                <Accordion
-                  expanded={!!expanded[item.ReturnID]}
-                  sx={[
-                    {
-                      ...(expanded[item.ReturnID]
-                        ? {
-                            "& .MuiAccordion-region": {
-                              height: "auto",
-                            },
-                            "& .MuiAccordionDetails-root": {
-                              display: "block",
-                            },
-                          }
-                        : {
-                            "& .MuiAccordion-region": {
-                              height: 0,
-                            },
-                            "& .MuiAccordionDetails-root": {
-                              display: "none",
-                            },
-                          }),
-                      direction: "rtl",
-                    },
-                  ]}
+        {newFilteredList.map((item, i) => {
+          let game = games.find((game) => game.Id === item.GameCode);
+          let age = forAgesFromStore.find(
+            (a) => a.AgeCode === game.AgeCode
+          )?.Age;
+          let tchum = typesGamesFromStore.find(
+            (t) => t.gameTypeCode === game.GameTypeCode
+          )?.gameTipeName;
+          const returnDate = formatDate(item.ReturnDate);
+          const delayMessage = calculateDaysBetween(returnDate, formattedDate);
+          return (
+            <div key={i} style={{ marginBottom: "10px" }}>
+              <Accordion
+                expanded={!!expanded[item.ReturnID]}
+                sx={[
+                  {
+                    ...(expanded[item.ReturnID]
+                      ? {
+                          "& .MuiAccordion-region": {
+                            height: "auto",
+                          },
+                          "& .MuiAccordionDetails-root": {
+                            display: "block",
+                          },
+                        }
+                      : {
+                          "& .MuiAccordion-region": {
+                            height: 0,
+                          },
+                          "& .MuiAccordionDetails-root": {
+                            display: "none",
+                          },
+                        }),
+                    direction: "rtl",
+                  },
+                ]}
+              >
+                <AccordionSummary
+                  aria-controls="panel1-content"
+                  id="panel1-header"
                 >
-                  <AccordionSummary
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                  >
-                    <div className="one-item-SU" key={i}>
-                      <div className="game-details-SU">
-                        <div className="game-names-SU">{game.GameName}</div>
-                        <div className="game-names-second-SU">
-                          <div className="age-SU">
-                            <div className="child-logo-SU"></div>
-                            {age}
-                          </div>
-                          <div className="pas-SU">|</div>
-                          <div className="type-SU">
-                            <div className="tchum-SU">תחום:</div>
-                            <div>{tchum}</div>
-                          </div>
+                  <div className="one-item-SU" key={i}>
+                    <div className="game-details-SU">
+                      <div className="game-names-SU">{game.GameName}</div>
+                      <div className="game-names-second-SU">
+                        <div className="age-SU">
+                          <div className="child-logo-SU"></div>
+                          {age}
+                        </div>
+                        <div className="pas-SU">|</div>
+                        <div className="type-SU">
+                          <div className="tchum-SU">תחום:</div>
+                          <div>{tchum}</div>
                         </div>
                       </div>
-                      <div className="status-SU">
-                        <div
-                          className={`SU-CurrentStateOfGame ${
-                            game.CurrentStateOfGame == "תקין" ||
-                            game.CurrentStateOfGame == ""
-                              ? "green"
-                              : game.CurrentStateOfGame == "חסרים חלקים"
-                              ? "red"
-                              : ""
-                          }`}
-                        ></div>
-                        <div>{game.CurrentStateOfGame || "תקין"}</div>
-                      </div>
-                      <div className="date-SU">
-                        <div className="take-date-SU">
-                          {item?.TakingDate ? formatDate(item.TakingDate) : ""}
-                        </div>
-                        <div className="makav-SU">-</div>
-                        <div className="back-date-SU">
-                          {item?.ReturnDate ? formatDate(item.ReturnDate) : ""}
-                        </div>
-                      </div>
-                      {delayMessage > 30 ? (
-                        <div className="delay-SU">
-                          <div className="delay-icon-SU"> </div>
-                          <div className="delay-message2-SU">
-                            איחור מעל חודש
-                          </div>{" "}
-                        </div>
-                      ) : delayMessage >= 1 && delayMessage > 30 ? (
-                        <div className="delay-SU">
-                          <div className="delay-icon-SU"> </div>
-                          <div className="delay-message-SU">איחור</div>
-                        </div>
-                      ) : (
-                        <div className="delay-SU"></div>
-                      )}
-                      <button
-                        key={i}
-                        className={`return-btn ${
-                          returnStatus[item.ReturnID] == true ? "cancel" : ""
+                    </div>
+                    <div className="status-SU">
+                      <div
+                        className={`SU-CurrentStateOfGame ${
+                          game.CurrentStateOfGame == "תקין" ||
+                          game.CurrentStateOfGame == ""
+                            ? "green"
+                            : game.CurrentStateOfGame == "חסרים חלקים"
+                            ? "red"
+                            : ""
                         }`}
-                        onClick={() => handleReturnToggle(item.ReturnID)}
-                      >
-                        <div
-                          className={`return-btn-text ${
-                            returnStatus[item.ReturnID] == true ? "cancel" : ""
-                          }`}
-                        >
-                          <ExpandMoreIcon
-                            sx={{
-                              color: returnStatus[item.ReturnID]
-                                ? "rgba(255, 255, 255, 1)"
-                                : "rgba(6, 120, 252, 1)",
-                            }}
-                          />
-                          <div style={{ marginTop: "5px" }}>
-                            {" "}
-                            {returnStatus[item.ReturnID]
-                              ? "ביטול החזרה"
-                              : "החזרה"}
-                          </div>
-                        </div>
-                      </button>
+                      ></div>
+                      <div>{game.CurrentStateOfGame || "תקין"}</div>
                     </div>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <div className="return-details">
-                      <div className="return-details-title">פרטי החזרה</div>
-                      <div className="return-details-status">
-                        <div className="status-in-return">
-                          מצב המשחק בהחזרה:
-                        </div>
-                        <div key={item.ReturnID}>
-                          <RadioGroup
-                            aria-labelledby="demo-radio-buttons-group-label"
-                            name="radio-buttons-group"
-                            value={selectedValue[item.ReturnID] || ""}
-                            onChange={(e) =>
-                              handleChangeSelectedValue(
-                                item.ReturnID,
-                                e.target.value
-                              )
-                            }
-                          >
-                            <div style={{ display: "inline-flex" }}>
-                              <FormControlLabel
-                                value="תקין"
-                                control={
-                                  <Radio
-                                    sx={{ color: "rgba(26, 94, 169, 1)" }}
-                                  />
-                                }
-                                label="תקין"
-                              />
-                              <FormControlLabel
-                                value="חסרים חלקים"
-                                control={
-                                  <Radio
-                                    sx={{ color: "rgba(26, 94, 169, 1)" }}
-                                  />
-                                }
-                                label="חסרים חלקים"
-                              />
-                            </div>
-                          </RadioGroup>
-                        </div>
+                    <div className="date-SU">
+                      <div className="take-date-SU">
+                        {item?.TakingDate ? formatDate(item.TakingDate) : ""}
+                      </div>
+                      <div className="makav-SU">-</div>
+                      <div className="back-date-SU">
+                        {item?.ReturnDate ? formatDate(item.ReturnDate) : ""}
                       </div>
                     </div>
-
-                    {selectedValue[item.ReturnID] === "חסרים חלקים" && (
-                      <>
-                        {" "}
-                        <table
-                          style={{
-                            width: "35vw",
-                            backgroundColor: "rgba(248, 248, 248, 1)",
-                            marginTop: "10px",
-                          }}
-                        >
-                          <thead>
-                            <tr
-                              style={{
-                                textAlign: "center",
-                                fontSize: "16px",
-                                fontWeight: 700,
-                                lineHeight: "21.79px",
-                                borderBottom:
-                                  "1px rgba(6, 120, 252, 0.5) solid",
-                                color: "rgba(104, 100, 100, 1)",
-                                marginRight: "10px",
-                              }}
-                            >
-                              <th>שם החלק</th>
-                              <th style={{ marginRight: "10px" }}>
-                                מס’ חלקים מקורי
-                              </th>
-                              <th style={{ marginRight: "100px" }}>
-                                מס’ חלקים לאחר החזרה
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody style={{ width: "37vw" }}>
-                            {game.Parts.map((part, p, i) => (
-                              <tr
-                                style={{
-                                  fontSize: "16px",
-                                  fontWeight: "400",
-                                  lineHeight: "24px",
-                                  textAlign: "center",
-                                  color: "rgba(104, 100, 100, 1)",
-                                  gridTemplateColumns: "5vw 5vw 5vw",
-                                }}
-                              >
-                                <td>{part.name}</td>
-                                <td>{part.amount}</td>
-                                <td>
-                                  <input
-                                    key={item.ReturnID}
-                                    value={amountOfPartAfterReturn[item.ReturnID]?.[p] ||"" ||
-                                      lastGameWithMiss[item.ReturnID]?.[0]
-                                        ?.rows[p]?.afterReturn
-                                    }
-                                    onChange={(e) =>
-                                      handleInputChange(
-                                        item.ReturnID,
-                                        p,
-                                        e.target.value
-                                      )
-                                    }
-                                    onBlur={() =>
-                                      addAmountOfPartAfterReturn({
-                                        ...part,
-                                        afterReturn:
-                                          amountOfPartAfterReturn[
-                                            item.ReturnID
-                                          ]?.[p] || "",
-                                      })
-                                    }
-                                    style={{
-                                      borderRadius: "28px",
-                                      border: "1px rgba(35, 31, 32, 0.4) solid",
-                                      width: "2vw",
-                                      height: "3vh",
-                                    }}
-                                  />
-                                </td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                        <div
-                          className="heart-container"
-                          style={{
-                            visibility: isVisible ? "visible" : "hidden",
-                            marginTop: "5vh",
-                            marginBottom: "5vh",
-                            marginRight: "12vw",
-                          }}
-                        >
-                          <div className="heart"></div>
-                          <div className="content">מס’ שבועות</div>
-                        </div>
-                        <div className="calculate-inputs">
-                          <input
-                            placeholder="קנס עבור איחור בודד"
-                            value={fineIchur}
-                            onChange={(e) => setFineIchur(e.target.value)}
-                            style={{
-                              textAlign: "center",
-                              width: "10vw",
-                              height: "4vh",
-                              borderRadius: "28px",
-                            }}
-                          ></input>
-                          x
-                          <input
-                            value={weekNum}
-                            onChange={(e) => setWeekNum(e.target.value)}
-                            style={{
-                              width: "2vw",
-                              textAlign: "center",
-                              height: "4vh",
-                              borderRadius: "999px",
-                            }}
-                            onMouseOver={popover}
-                            onMouseLeave={popover}
-                          />
-                          +
-                          <input
-                            placeholder="קנס עבור חלקים חסרים"
-                            value={finePart}
-                            onChange={(e) => setFinePart(e.target.value)}
-                            style={{
-                              textAlign: "center",
-                              width: "10vw",
-                              height: "4vh",
-                              borderRadius: "28px",
-                              marginLeft: "30px",
-                            }}
-                            onBlur={handleBlurFine}
-                          ></input>
-                          סה”כ קנס:
-                          <input
-                            value={finesSum}
-                            onChange={(e) => setFinesSum(e.target.value)}
-                            style={{
-                              textAlign: "center",
-                              width: "10vw",
-                              height: "4vh",
-                              borderRadius: "28px",
-                              borderColor: "rgba(255, 255, 255, 1)",
-                              backgroundColor: "rgba(184, 184, 184, 0.28)",
-                            }}
-                          />
-                        </div>
-                      </>
+                    {delayMessage > 30 ? (
+                      <div className="delay-SU">
+                        <div className="delay-icon-SU"> </div>
+                        <div className="delay-message2-SU">
+                          איחור מעל חודש
+                        </div>{" "}
+                      </div>
+                    ) : delayMessage >= 1 && delayMessage < 30 ? (
+                      <div className="delay-SU">
+                        <div className="delay-icon-SU"> </div>
+                        <div className="delay-message-SU">איחור</div>
+                      </div>
+                    ) : (
+                      <div className="delay-SU"></div>
                     )}
                     <button
-                      onClick={() =>
-                        handleSaveData(item.ReturnID, item.GameCode)
-                      }
-                      style={{
-                        color: "rgba(255, 255, 255, 1)",
-                        backgroundColor: "rgba(6, 120, 252, 1)",
-                        width: "7vw",
-                        height: "4vh",
-                        marginRight: "65vw",
-                        borderRadius: "28px",
-                        borderColor: "rgba(6, 120, 252, 1)",
-                      }}
+                      key={i}
+                      className={`return-btn ${
+                        returnStatus[item.ReturnID] == true ? "cancel" : ""
+                      }`}
+                      onClick={() => handleReturnToggle(item.ReturnID)}
                     >
-                      שמירת נתונים
+                      <div
+                        className={`return-btn-text ${
+                          returnStatus[item.ReturnID] == true ? "cancel" : ""
+                        }`}
+                      >
+                        <ExpandMoreIcon
+                          sx={{
+                            color: returnStatus[item.ReturnID]
+                              ? "rgba(255, 255, 255, 1)"
+                              : "rgba(6, 120, 252, 1)",
+                          }}
+                        />
+                        <div style={{ marginTop: "5px" }}>
+                          {" "}
+                          {returnStatus[item.ReturnID]
+                            ? "ביטול החזרה"
+                            : "החזרה"}
+                        </div>
+                      </div>
                     </button>
-                  </AccordionDetails>
-                </Accordion>
-              </div>
-            );
-          })}
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div className="return-details">
+                    <div className="return-details-title">פרטי החזרה</div>
+                    <div className="return-details-status">
+                      <div className="status-in-return">מצב המשחק בהחזרה:</div>
+                      <div key={item.ReturnID}>
+                        <RadioGroup
+                          aria-labelledby="demo-radio-buttons-group-label"
+                          name="radio-buttons-group"
+                          value={selectedValue[item.ReturnID] || ""}
+                          onChange={(e) =>
+                            handleChangeSelectedValue(
+                              item.ReturnID,
+                              e.target.value
+                            )
+                          }
+                        >
+                          <div style={{ display: "inline-flex" }}>
+                            <FormControlLabel
+                              value="תקין"
+                              control={
+                                <Radio sx={{ color: "rgba(26, 94, 169, 1)" }} />
+                              }
+                              label="תקין"
+                            />
+                            <FormControlLabel
+                              value="חסרים חלקים"
+                              control={
+                                <Radio sx={{ color: "rgba(26, 94, 169, 1)" }} />
+                              }
+                              label="חסרים חלקים"
+                            />
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    </div>
+                  </div>
+
+                  {selectedValue[item.ReturnID] === "חסרים חלקים" && (
+                    <>
+                      {" "}
+                      <table
+                        style={{
+                          width: "35vw",
+                          backgroundColor: "rgba(248, 248, 248, 1)",
+                          marginTop: "10px",
+                        }}
+                      >
+                        <thead>
+                          <tr
+                            style={{
+                              textAlign: "center",
+                              fontSize: "16px",
+                              fontWeight: 700,
+                              lineHeight: "21.79px",
+                              borderBottom: "1px rgba(6, 120, 252, 0.5) solid",
+                              color: "rgba(104, 100, 100, 1)",
+                              marginRight: "10px",
+                            }}
+                          >
+                            <th>שם החלק</th>
+                            <th style={{ marginRight: "10px" }}>
+                              מס’ חלקים מקורי
+                            </th>
+                            <th style={{ marginRight: "100px" }}>
+                              מס’ חלקים לאחר החזרה
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody style={{ width: "37vw" }}>
+                          {game.Parts.map((part, p, i) => (
+                            <tr
+                              style={{
+                                fontSize: "16px",
+                                fontWeight: "400",
+                                lineHeight: "24px",
+                                textAlign: "center",
+                                color: "rgba(104, 100, 100, 1)",
+                                gridTemplateColumns: "5vw 5vw 5vw",
+                              }}
+                            >
+                              <td>{part.name}</td>
+                              <td>{part.amount}</td>
+                              <td>
+                                <input
+                                  key={item.ReturnID}
+                                  value={
+                                    amountOfPartAfterReturn[item.ReturnID]?.[
+                                      p
+                                    ] ||
+                                    "" ||
+                                    lastGameWithMiss[item.ReturnID]?.[0]?.rows[
+                                      p
+                                    ]?.afterReturn
+                                  }
+                                  onChange={(e) =>
+                                    handleInputChange(
+                                      item.ReturnID,
+                                      p,
+                                      e.target.value
+                                    )
+                                  }
+                                  onBlur={() =>
+                                    addAmountOfPartAfterReturn({
+                                      ...part,
+                                      afterReturn:
+                                        amountOfPartAfterReturn[
+                                          item.ReturnID
+                                        ]?.[p] || "",
+                                    })
+                                  }
+                                  style={{
+                                    borderRadius: "28px",
+                                    border: "1px rgba(35, 31, 32, 0.4) solid",
+                                    width: "2vw",
+                                    height: "3vh",
+                                  }}
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </>
+                  )}
+                  {(delayMessage >= 1 ||
+                    selectedValue[item.ReturnID] === "חסרים חלקים") && (
+                    <>
+                      <div
+                        className="heart-container"
+                        style={{
+                          visibility: isVisible ? "visible" : "hidden",
+                          marginTop: "5vh",
+                          marginBottom: "5vh",
+                          marginRight: "12vw",
+                        }}
+                      >
+                        <div className="heart">מס' שבועות</div>
+                      </div>
+                      <div className="calculate-inputs">
+                        <input
+                          placeholder="קנס עבור איחור בודד"
+                          value={fineIchur[item.ReturnID]}
+                          onChange={(e) =>
+                            setFineIchur((prevFineIchur) => ({
+                              ...prevFineIchur,
+                              [item.ReturnID]: e.target.value,
+                            }))
+                          }
+                          style={{
+                            textAlign: "center",
+                            width: "10vw",
+                            height: "4vh",
+                            borderRadius: "28px",
+                          }}
+                        ></input>
+                        x
+                        <input
+                          value={weekNum[item.ReturnID]}
+                          onChange={(e) =>
+                            setWeekNum((prevWeekNum) => ({
+                              ...prevWeekNum,
+                              [item.ReturnID]: e.target.value,
+                            }))
+                          }
+                          style={{
+                            width: "2vw",
+                            textAlign: "center",
+                            height: "4vh",
+                            borderRadius: "999px",
+                          }}
+                          onMouseOver={popover}
+                          onMouseLeave={popover}
+                        />
+                        +
+                        <input
+                          placeholder="קנס עבור חלקים חסרים"
+                          value={finePart[item.ReturnID]}
+                          onChange={(e) =>
+                            setFinePart((prevFinePart) => ({
+                              ...prevFinePart,
+                              [item.ReturnID]: e.target.value,
+                            }))
+                          }
+                          style={{
+                            textAlign: "center",
+                            width: "10vw",
+                            height: "4vh",
+                            borderRadius: "28px",
+                            marginLeft: "30px",
+                          }}
+                          onBlur={() => handleBlurFine(item.ReturnID)}
+                        ></input>
+                        סה”כ קנס:
+                        <input
+                          value={finesSum[item.ReturnID]}
+                          onChange={(e) =>
+                            setFinesSum((prevFineSum) => ({
+                              ...prevFineSum,
+                              [item.ReturnID]: e.target.value,
+                            }))
+                          }
+                          style={{
+                            textAlign: "center",
+                            width: "10vw",
+                            height: "4vh",
+                            borderRadius: "28px",
+                            borderColor: "rgba(255, 255, 255, 1)",
+                            backgroundColor: "rgba(184, 184, 184, 0.28)",
+                          }}
+                        />
+                      </div>
+                    </>
+                  )}
+                  <button
+                    onClick={() => handleSaveData(item.ReturnID, item.GameCode)}
+                    style={{
+                      color: "rgba(255, 255, 255, 1)",
+                      backgroundColor: "rgba(6, 120, 252, 1)",
+                      width: "7vw",
+                      height: "4vh",
+                      marginRight: "65vw",
+                      borderRadius: "28px",
+                      borderColor: "rgba(6, 120, 252, 1)",
+                    }}
+                  >
+                    שמירת נתונים
+                  </button>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          );
+        })}
       </div>
-      {newFilteredList.length>0&&
-      <div className="Approval">
-        סה"כ קנסות:
-        <input
-          type="text"
-          className="Approval-input"
-          value={`${totalFine} ש"ח`}
-          disabled
-        />
-        <button onClick={ApprovalReturnGames} className="Approval-btn">
-          {/* {circleFlag && <CircularProgress sx={{ color: "white" }} size={10} />}
-          {buttonText}{" "} */}
-        {circleFlag ? (
-              <CircularProgress size={24} color="white" />
-            ) : status === "success" ? (
-              <CheckIcon />
-            ) : status === "error" ? (
-              <CloseIcon />
-            ) : (
-              "אישור"
-            )}
-        </button>
-      </div>}
+      {newFilteredList.length > 0 && (
+        <div className="Approval">
+          סה"כ קנסות:
+          <input
+            type="text"
+            className="Approval-input"
+            value={`${totalFine} ש"ח`}
+            disabled
+          />
+          <React.Fragment>
+            {/* //onClick={ApprovalReturnGames} */}
+            <button onClick={handleClickOpen} className="Approval-btn">
+              {circleFlag ? (
+                <CircularProgress size={24} color="white" />
+              ) : status === "success" ? (
+                <CheckIcon />
+              ) : status === "error" ? (
+                <CloseIcon />
+              ) : (
+                "אישור"
+              )}
+            </button>
+            <Dialog
+              open={open}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title" sx={{ direction: "rtl" }}>
+                {"האם שולם הקנס בעת ההחזרה?"}
+              </DialogTitle>
+              <DialogActions sx={{ direction: "rtl" }}>
+                <Button onClick={handleClosePaid}>שולם</Button>
+                <Button onClick={handleCloseDebt}>לרשום כחוב</Button>
+              </DialogActions>
+            </Dialog>
+          </React.Fragment>
+        </div>
+      )}
     </div>
   );
 };

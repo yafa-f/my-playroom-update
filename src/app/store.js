@@ -13,7 +13,7 @@ import {ForAgeSlice} from "./slices/forAgeSlice";
 import {SingleUserSlice} from "./slices/singleUserSlice";
 import {GamesWithMissingPartsSlice} from "./slices/gamesWiteMissingPartsSlice";
 import { AdminSlice } from "./slices/adminSlice";
-
+import { DebtSlice } from "./slices/debtSlice";
 const persistConfig = {
   key: "root",
   storage,
@@ -30,7 +30,8 @@ const rootReducer = {
   forAge: ForAgeSlice.reducer,
   singleUser: persistReducer(persistConfig, SingleUserSlice.reducer),
   gamesWithMissingPart: GamesWithMissingPartsSlice.reducer,
-  admin:AdminSlice.reducer
+  admin:AdminSlice.reducer,
+  debt:DebtSlice.reducer
 };
 
 export const reduxStore = configureStore({
