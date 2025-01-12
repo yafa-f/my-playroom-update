@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
 import "./homePage.css";
-
 import Badge from "@mui/material/Badge";
 import { AdminLoginModal } from "../AdminLoginModal/adminLoginModal";
 import { Login } from "../Login/login";
@@ -18,7 +17,6 @@ import person from "../../assets/person.svg";
 import person2 from "../../assets/person2.svg";
 import history1 from "../../assets/history1.svg";
 import history2 from "../../assets/history2.svg";
-import { useState } from "react";
 import { Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import Tooltip from "@mui/material/Tooltip";
@@ -29,6 +27,7 @@ import LockIcon from "@mui/icons-material/Lock";
 import { useDispatch, useSelector } from "react-redux";
 import { SET_IS_ADMIN } from "../../app/slices/adminSlice";
 import PasswordChangeModal from "../ChangePassword/changePassword";
+
 export const HomePage = () => {
   const location = useLocation();
   const [code, setCode] = useState();
@@ -36,21 +35,28 @@ export const HomePage = () => {
   const myLocation = location.pathname;
   const isAdmin = useSelector((state) => state.admin.isAdmin);
   const dispatch = useDispatch();
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [isChangePasswordVisible, setChangePasswordVisible] = useState(false);
+  const takes = useSelector(
+    (state) => state.takingOrReturning.takingsOrReturnings
+  );
+  const filteredTakes = takes.filter(
+    (item) => !item.hasOwnProperty("ActualReturnDate")
+  ).length;
+
   const navigate = useNavigate();
   const enterAsAdmin = () => {
-    setModalVisible(true);
+    setIsModalVisible(true);
   };
   const exitAsAdmin = () => {
     dispatch(SET_IS_ADMIN(false));
+    setIsModalVisible(false);
+    navigate("/UsersList");
   };
-  const handleDelay=()=>{
-    navigate('/ReturnAfterTimeList');
-  }
-  // const hideModal = () => {
-  //   setModalVisible(false);
-  // };
+  const handleDelay = () => {
+    navigate("/ReturnAfterTimeList");
+  };
+
   const changePassword = () => {
     setChangePasswordVisible(true);
   };
@@ -97,10 +103,12 @@ export const HomePage = () => {
   const navToHomePage = () => {
     navigate("/UsersList");
   };
+
   return (
     <div className="image">
       <div className="nav-bar">
-        {myLocation?.includes("singleUser") && (
+        {(myLocation?.includes("singleUser") ||
+          myLocation?.includes("ReturnAfterTimeList")) && (
           <Button
             sx={{
               height: "40px",
@@ -114,16 +122,20 @@ export const HomePage = () => {
             size="small"
             onClick={navToHomePage}
           >
-            <ArrowBackIcon></ArrowBackIcon>{" "}
+            <ArrowBackIcon />
           </Button>
         )}
         <div className="display-3-icon">
-          <div className="letter-icon"></div>
-
-          <IconButton onClick={handleDelay}>
-            <NotificationsIcon className="reminder-icon"></NotificationsIcon>
-            <Badge badgeContent={4} color="error" />
-          </IconButton>
+          {isAdmin && (
+            <IconButton onClick={handleDelay}>
+              <NotificationsIcon className="reminder-icon" />
+              <Badge
+                badgeContent={filteredTakes}
+                className="badge"
+                color="error"
+              />
+            </IconButton>
+          )}
           <Tooltip
             className="enterAsAdmin"
             title={isAdmin ? "יציאה מניהול מערכת" : "כניסה כמנהל"}
@@ -165,19 +177,26 @@ export const HomePage = () => {
         )}
       </div>
       <div className="logo"></div>
-      {isModalVisible && <AdminLoginModal />}
+      {isModalVisible && (
+        <AdminLoginModal
+          isModalOpen={true}
+          closeModal={() => setIsModalVisible(false)}
+        />
+      )}
       {isChangePasswordVisible && <PasswordChangeModal />}
-      {myLocation == "/" ? (
+      {myLocation === "/" ? (
         <div className="login-comp">
           <Login setName={setName} setCode={setCode} />
         </div>
-      ) : !myLocation.includes("singleUser") ? (
+      ) : myLocation.endsWith(
+          "ReturnAfterTimeList"
+        ) ? null : myLocation.includes("singleUser") ? (
         <div className="side-bar-comp">
-          <SideBar navList={namesArr} />
+          <SideBar navList={navigateFromUsersArr} />
         </div>
       ) : (
         <div className="side-bar-comp">
-          <SideBar navList={navigateFromUsersArr} />
+          <SideBar navList={namesArr} />
         </div>
       )}
     </div>

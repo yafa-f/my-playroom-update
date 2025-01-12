@@ -90,3 +90,7 @@
   margin-top: -8.5px;
   margin-right: -12px;
 }
+.badge {
+  top: 0;
+  right: 0;
+}

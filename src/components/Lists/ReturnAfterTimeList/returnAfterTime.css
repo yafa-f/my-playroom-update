@@ -1,0 +1,91 @@
+.takes-and-title{
+align-items: center;
+align-content: center;
+text-align: center;
+margin-top: -65px;
+}
+.takes {
+  background-color: white;
+  width: 55%; /* Adjust width as needed */
+  height: 650px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-right: 100px;
+  margin-left: 500px;
+  direction: rtl;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.ret-title {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+  padding: 10px;
+  border-bottom: 2px solid #000;
+  text-align: center;
+  height: 0px;
+  /* margin-top: -70px; */
+  padding: 30px;
+}
+
+.titleReturns {
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  
+}
+.warning-logo{
+    margin-top: 13px;
+}
+.title-icon-caption{
+    display: inline-flex;
+    direction: rtl;
+    margin-left: 480px;
+    margin-bottom: 7px;
+    gap: 15px;
+}
+.table-title {
+  display: flex;
+  background-color: #f2f2f2;
+  padding: 10px;
+  font-weight: bold;
+  align-items: center;
+  align-content: center;
+  text-align: center;
+}
+
+.h-3-ret {
+  flex: 1;
+  text-align: center;
+  font-weight: bold;
+
+}
+
+.retuen-after-time-table {
+  max-height: 587px; 
+  overflow-y: auto; 
+  direction: rtl; 
+}
+
+.one-item-return {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.return-user-name,
+.return-game-name,
+.duration-of-delay {
+  flex: 1;
+  text-align: center;
+}
+
+.one-item-return:hover {
+  background-color: #f9f9f9; /* Highlight on hover */
+}

@@ -12,16 +12,12 @@ const PasswordChangeModal = () => {
   const thisToggleModal = () => setIsOpen(false);
   const adminPassword = useSelector((state) => state.admin.adminPassword);
   const dispatch = useDispatch();
-
   const handleSubmitChangePassword = (e) => {
-    debugger
     e.preventDefault();
     if (oldPassword === adminPassword) {
-        dispatch(SET_CURRENT_PASSWORD(newPassword))
-      setMessage("הסיסמה עודכנה בהצלחה",newPassword);
+      dispatch(SET_CURRENT_PASSWORD(newPassword));
+      setMessage("הסיסמה עודכנה בהצלחה", newPassword);
       thisToggleModal();
-
-      // Here you would typically handle the password change logic
     } else {
       setMessage("הסיסמה לא נכונה נסה שוב");
     }
@@ -29,10 +25,7 @@ const PasswordChangeModal = () => {
   const onClose = () => {
     thisToggleModal();
   };
-  //   if (!isOpen) return null;
-  useEffect(() => {
-    // setIsOpen(true);
-  }, [isOpen]);
+  useEffect(() => {}, [isOpen]);
 
   return (
     isOpen && (
