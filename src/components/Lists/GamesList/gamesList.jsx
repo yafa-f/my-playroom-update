@@ -18,14 +18,13 @@ export const GamesList = () => {
   const searchNames = [
     { name: "תחום" },
     { name: "טווח גילאים" },
-    // { name: "סטטוס משחק" },
     { name: "מס’ ארון" },
-    // { name: "סטטוס השאלה" },
   ];
   const navigate = useNavigate();
   const games = useSelector((state) => state.game.games);
   const usersFromStore = useSelector((state) => state.user.users).data;
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
+  const closetFromStore=useSelector((state) => state.closet.closets);
   const torFromStore = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
@@ -35,6 +34,7 @@ export const GamesList = () => {
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const [tableArr, setTableArr] = useState();
   const [filters, setFilters] = useState({});
+
   const handleFilterChange = (filterName, chosenUser) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
@@ -42,44 +42,36 @@ export const GamesList = () => {
     }));
   };
 
+
   useEffect(() => {
     let filteredGames = games;
 
     Object.keys(filters).forEach((filter) => {
-      if (filters[filter]) {
+      if (filters[filter]?.length) {
         switch (filter) {
           case "תחום":
-            const type = typesGamesFromStore.find(
-              (t) => t.gameTipeName === filters[filter]
-            ).gameTypeCode;
-            filteredGames = filteredGames.filter(
-              (game) => game.GameTypeCode === type
+            const types = typesGamesFromStore
+              .filter((t) => filters[filter].includes(t.gameTipeName))
+              .map((t) => t.gameTypeCode);
+            filteredGames = filteredGames.filter((game) =>
+              types.includes(game.GameTypeCode)
             );
             break;
           case "טווח גילאים":
-            const age = forAgesFromStore.find(
-              (a) => a.Age === filters[filter]
-            ).AgeCode;
-            filteredGames = filteredGames.filter(
-              (game) => game.AgeCode === age
+            const ages = forAgesFromStore
+              .filter((a) => filters[filter].includes(a.Age))
+              .map((a) => a.AgeCode);
+            filteredGames = filteredGames.filter((game) =>
+              ages.includes(game.AgeCode)
             );
             break;
-          // case "סטטוס משחק":
-          //     filteredGames = filteredGames.filter(game => game.CurrentStateOfGame === filters[filter]);
-          //     break;
-          case "מס’ ארון":
-            filteredGames = filteredGames.filter(
-              (game) =>
-                typeof game["ClosetNumber"] === "string" &&
-                game["ClosetNumber"] === filters[filter]
-            );
-            break;
-          // case "סטטוס השאלה":
-          //     filteredGames = filteredGames.filter(game =>
-          //         filters[filter] === "מושאל" ? game.IsAvailable === "FALSE" : game.IsAvailable !== "FALSE"
-          //     );
-          //     break;
-          default:
+            case "מס’ ארון":
+              const cabinets = closetFromStore
+                .filter(c => filters[filter].includes(c.closetCode))
+                .map(c => c.closetCode);
+              filteredGames = filteredGames.filter(game => cabinets.includes(game.ClosetNumber));
+              break;
+              default:
             break;
         }
       }
@@ -87,6 +79,7 @@ export const GamesList = () => {
 
     setTableArr(filteredGames);
   }, [games, filters]);
+
 
   const userName = (Id) => {
     let gameTake = torFromStore.filter((tg) => tg.GameCode === Id);
@@ -106,7 +99,7 @@ export const GamesList = () => {
     let user = usersFromStore.find(
       (u) => u.userCode === closestDateObject.UserCode
     )?.userName;
-    return user || "Unknown User"; // Handle case where user is not found
+    return user || "Unknown User"; 
   };
   useEffect(() => {
     setTableArr(games);
@@ -129,18 +122,19 @@ export const GamesList = () => {
         ...item,
         Parts: item.Parts.map((part) => `${part.name} ${part.amount}`).join(
           ", "
-        ), // Adjust according to your object structure
+        ), 
       };
     });
   };
   const printAsticker = (game) => {
-    const data={code:game.Id,name:game.GameName}
-    const color=typesGamesFromStore.find((t)=>t.gameTypeCode===game.GameTypeCode).stickerColor;
-    console.log("color",color)
-    if(color){
-      stickerPDF(data,color)
-    }
-    else stickerPDF(data,"green")
+    const data = { code: game.Id, name: game.GameName };
+    const color = typesGamesFromStore.find(
+      (t) => t.gameTypeCode === game.GameTypeCode
+    ).stickerColor;
+    console.log("color", color);
+    if (color) {
+      stickerPDF(data, color);
+    } else stickerPDF(data, "green");
   };
   const exportToPDF = () => {
     const columns = [
@@ -308,7 +302,6 @@ export const GamesList = () => {
                             )}
                           </div>
                           <div className="update-delete-icons">
-                           
                             <div
                               className="update-icon"
                               onClick={() => navToNewGame(game)}
@@ -317,7 +310,7 @@ export const GamesList = () => {
                               className="delete-icon"
                               onClick={() => deleteAgame(game)}
                             ></div>
-                             <StyleIcon
+                            <StyleIcon
                               onClick={() => printAsticker(game)}
                               className="sticker"
                               sx={{ color: "rgba(6, 120, 252, 1)" }}

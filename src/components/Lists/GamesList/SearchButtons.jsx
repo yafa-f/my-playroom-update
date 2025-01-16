@@ -1,24 +1,15 @@
-import { useState, useRef, useEffect } from "react";
-import "./gamesList.css";
-import { Button, MenuItem, Menu } from "@mui/material";
-import { styled } from "@mui/system";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import IconButton from "@mui/material/IconButton";
+import React from "react";
+import { useState, useEffect } from "react";
+import { Autocomplete, Checkbox, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
+import "./gamesList.css";
 
 export const SearchButtons = (props) => {
-
   const [selectArray, setSelectArray] = useState();
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [arrowUpAndDown, setArrowUpAndDown] = useState(false);
-  const [menuAnchor, setMenuAnchor] = useState(null);
-  const [chosenUser, setChosenUser] = useState("");
+  const [chosenUsers, setChosenUsers] = useState([]);
   const typesGames = useSelector((state) => state.typeGame.typesGames);
   const forAges = useSelector((state) => state.forAge.forAges).data;
   const closets = useSelector((state) => state.closet.closets);
-  const buttonRef = useRef(null);
   const take = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
@@ -79,127 +70,66 @@ export const SearchButtons = (props) => {
         setSelectArray([]);
     }
   }, [props.name, typesGames, forAges, closets, take, users, games]);
-
-  const closeMenu = (user) => {
-    setChosenUser(user);
-    props.onFilterChange(props.name, user); // Call the filter change
-    setMenuAnchor(null);
+  const handleChange = (event, value) => {
+    setChosenUsers(value);
+    props.onFilterChange(props.name, value); // העברת הערכים הנבחרים
   };
-  const clearUserName = () => {
-    props.onFilterChange(props.name, ""); // Call the filter change
-    setChosenUser("");
-  };
-
-  const openMenu = (event) => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setPosition({ top: rect.bottom, left: rect.left });
-    }
-    setMenuAnchor(event.currentTarget);
-    setArrowUpAndDown(!arrowUpAndDown);
-  };
-
-  const CustomIconButton = styled(IconButton)(({ theme }) => ({
-    backgroundColor: "transparent",
-    border: "1px solid black",
-    "&:hover": {
-      backgroundColor: "transparent",
-    },
-  }));
-  const CustomButton = styled(Button)(({ theme }) => ({
-    borderColor: "transparent",
-    backgroundColor: "white",
-    "&:hover": {
-      borderColor: "transparent",
-      backgroundColor: "white",
-      boxShadow: "none",
-    },
-  }));
 
   return (
-    <div>
-      <CustomButton
-        ref={buttonRef}
-        variant="outlined"
-        sx={{
-          color: "black",
-          borderRadius: 28,
-          width: 180,
-          height: 36,
-          fontWeight: 700,
-          overflow: "hidden", 
-          textOverflow: "ellipsis", 
-          whiteSpace: "nowrap", 
-        }}
-      >
-        <div
-          style={{ display: "inline-flex", direction: "rtl", width: "100%" }}
-        >
-          <div
-            onClick={openMenu}
-            style={{
-              width: "100%",
-              marginTop: 9,
-              fontWeight: 100,
+    <Autocomplete
+      multiple
+      limitTags={2}
+      id="multiple-limit-tags"
+      options={selectArray}
+      onChange={handleChange}
+      disableCloseOnSelect
+      getOptionLabel={(option) => option}
+      renderOption={(props, option, { selected }) => (
+        <li {...props} style={{ direction: "rtl" }}>
+          <Checkbox style={{ marginRight: 8 }} checked={selected} />
+          {option}
+        </li>
+      )}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={props.name}
+          placeholder="בחר"
+          sx={{
+            backgroundColor: "white",
+            borderRadius: "15px",
+            height: "50px",
+            direction: "rtl",
+
+            "& .MuiInputLabel-root": {
               textAlign: "right",
-              overflow: "hidden", 
-              textOverflow: "ellipsis", 
-              whiteSpace: "nowrap", 
-            }}
-          >
-            {chosenUser !== "" ? chosenUser : props.name}
-          </div>
-          {chosenUser != "" && (
-            <CloseRoundedIcon
-              sx={{ color: "black", marginTop: "9px" }}
-              onClick={(event) => {
-                event.stopPropagation();
-                clearUserName();
-              }}
-            ></CloseRoundedIcon>
-          )}
-          <div style={{ marginTop: 2 }}>
-            <CustomIconButton
-              sx={{
-                backgroundColor: "transparent",
+              right: 50,
+              left: "auto",
+            },
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
                 border: "none",
-                "&:hover": {
-                  backgroundColor: "transparent",
-                  border: "none",
-                },
-              }}
-            >
-              {menuAnchor ? (
-                <KeyboardArrowUpIcon></KeyboardArrowUpIcon>
-              ) : (
-                <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
-              )}
-            </CustomIconButton>
-          </div>
-        </div>
-      </CustomButton>
-      <Menu
-        sx={{
-          height: 500,
-          position: "absolute",
-          top: position.top,
-          left: position.left,
-        }}
-        anchorEl={menuAnchor}
-        open={Boolean(menuAnchor)}
-        onClose={() => setMenuAnchor(null)}
-      >
-        {Array.isArray(selectArray) &&
-          selectArray.map((item) => (
-            <MenuItem
-              sx={{ direction: "rtl" }}
-              key={item}
-              onClick={() => closeMenu(item)}
-            >
-              {item}
-            </MenuItem>
-          ))}
-      </Menu>
-    </div>
+              },
+              "&:hover fieldset": {
+                border: "none",
+              },
+              "&.Mui-focused fieldset": {
+                border: "none",
+              },
+            },
+          }}
+        />
+      )}
+      sx={{
+        minWidth: "15vw",
+        "& .MuiAutocomplete-inputRoot": {
+          height: "50px",
+        },
+        "& .MuiOutlinedInput-root": {
+          height: "50px",
+          border: "none",
+        },
+      }}
+    />
   );
 };
