@@ -19,8 +19,8 @@ export const DebtSlice = createSlice({
       state.debts.push(action.payload);
     },
     DELETE_DEBT: (state, action) => {
-      state.debts = state.fines.filter(
-        (fine) => fine._id !== action.payload._id
+      state.debts = state.debts.filter(
+        (debt) => debt._id !== action.payload._id
       );
     },
     UPDATE_DEBT: (state, action) => {
