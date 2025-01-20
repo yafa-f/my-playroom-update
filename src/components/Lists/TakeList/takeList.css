@@ -98,7 +98,7 @@
   font-weight: 400;
   line-height: 25.5px;
   text-align: right;
-  color: (188, 55, 55, 1);
+  color: rgba(188, 55, 55, 1);
 }
 .delay-message2 {
   font-size: 14px;
@@ -122,5 +122,5 @@
   gap: 10px;
   direction: rtl;
   margin-left: 5vw;
-margin-top: 5vh;
+  margin-top: 5vh;
 }

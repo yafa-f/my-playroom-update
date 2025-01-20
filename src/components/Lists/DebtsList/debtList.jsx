@@ -5,27 +5,29 @@ import { generatePDF } from "../../exporttopdf/exportToPDF";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import deleteDebt from "../../DeleteFunctions/deleteDebt";
 import { DELETE_DEBT } from "../../../app/slices/debtSlice";
+
 export const DebtList = () => {
   const dispatch = useDispatch();
   const debt = useSelector((state) => state.debt.debts);
-
   const summedDebts = debt.reduce((acc, item) => {
-    const { userCode, debt: debtValue } = item;
-
+    const { userCode, userName, debt: debtValue } = item;
     if (!acc[userCode]) {
-      acc[userCode] = { userCode, totalDebt: 0 };
+      acc[userCode] = { userCode, userName, totalDebt: 0 };
     }
-
     acc[userCode].totalDebt += debtValue;
-
     return acc;
   }, {});
 
   const result = Object.values(summedDebts);
   const exportToPDF = () => {
-    const columns = ["קוד משתמש", "סכום החוב"];
+    const columns = ["קוד משתמש", "שם משתמש", "סכום החוב"];
     const title = "חובות";
     generatePDF(columns, result, title);
+  };
+  const exportToPDFDebtByUser = (item) => {
+    const columns = ["קוד משתמש", "שם משתמש", "סכום החוב"];
+    const title = `חוב עבור משתמש ${item.userName}`;
+    generatePDF(columns, [item], title);
   };
   const cancalDebt = (id) => {
     debt.map(async (d) => {
@@ -52,12 +54,18 @@ export const DebtList = () => {
                 return (
                   <>
                     <div className="one-item-debt" key={i}>
-                      <div className="debt-user-name">{item.userCode}</div>
-                      <div className="sum-of-debt">{item.totalDebt}</div>
-                      <button onClick={() => cancalDebt(item.userCode)}>
+                      <div className="debt-user-name">{item.userName}</div>
+                      <div className="sum-of-debt">{`${item.totalDebt} ש"ח `}</div>
+                      <button
+                        onClick={() => cancalDebt(item.userCode)}
+                        className="cancel-debt"
+                      >
                         לביטול החוב
                       </button>
-                      <div className="pdf-icon" onClick={() => exportToPDF()}>
+                      <div
+                        className="debt-pdf-icon"
+                        onClick={() => exportToPDFDebtByUser(item)}
+                      >
                         <PictureAsPdfIcon
                           sx={{ color: "rgba(6, 120, 252, 1)" }}
                         />

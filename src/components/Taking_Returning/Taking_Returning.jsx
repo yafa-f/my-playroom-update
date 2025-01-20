@@ -81,6 +81,7 @@ export const Taking_Returning = () => {
   const handleCloseDebt = async () => {
     let debtObj = {
       userCode: singleUser.userCode,
+      userName: singleUser.userName,
       debt: totalFine,
       date: new Date().toISOString().split("T")[0],
     };
@@ -131,7 +132,6 @@ export const Taking_Returning = () => {
       },
     }));
   };
-
   const addAmountOfPartAfterReturn = (part) => {
     setTableDataPart((prevData) => [...prevData, part]);
   };
@@ -155,7 +155,6 @@ export const Taking_Returning = () => {
     if (selectedValue[ReturnID] === "חסרים חלקים") {
       newEntry.table = tableObject;
     }
-
     setDataTable((prevData) => [...prevData, newEntry]);
     setExpanded((prevExpanded) => ({
       ...prevExpanded,
