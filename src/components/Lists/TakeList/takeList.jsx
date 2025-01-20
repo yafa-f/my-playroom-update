@@ -134,7 +134,7 @@ export const TakeList = () => {
                       <div className="delay-icon"> </div>
                       <div className="delay-message2">איחור מעל חודש</div>{" "}
                     </div>
-                  ) : delayMessage >= 1 && delayMessage > 30 ? (
+                  ) : delayMessage >= 1 && delayMessage < 30 ? (
                     <div className="delay">
                       <div className="delay-icon"> </div>
                       <div className="delay-message">איחור</div>

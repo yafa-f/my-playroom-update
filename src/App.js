@@ -11,7 +11,7 @@ import {
   fetchGetTakingOrReturning,
   fetchGetTypesGames,
   fetchGetUsers,
-  fetchGetGamesWithMissingParts
+  fetchGetGamesWithMissingParts,
 } from "./utils/server";
 import { BrowserRouter } from "react-router-dom";
 import { setUsers } from "./app/slices/usersSlice";
@@ -25,8 +25,8 @@ import { setForAges } from "./app/slices/forAgeSlice";
 import { BaseScreen } from "./components/BaseScreen";
 import { setGamesWithMissingParts } from "./app/slices/gamesWiteMissingPartsSlice";
 import { setDebts } from "./app/slices/debtSlice";
+
 function App() {
-  
   const dispatch = useDispatch();
 
   useEffect(() => {
