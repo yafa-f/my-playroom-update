@@ -15,6 +15,8 @@ import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
 import { useNavigate } from "react-router-dom";
 import UpdateGameWithMissPart from "../UpdateFunction/UpdateGameWithMissPart";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import { generatePDF } from "../exporttopdf/exportToPDF";
 import {
   ADD_GAMES_WITH_MISSING_PARTS,
   UPDATE_GAMES_WITH_MISSING_PARTS,
@@ -295,6 +297,27 @@ export const Taking_Returning = () => {
   const popover = () => {
     setIsVisible(!isVisible);
   };
+  const exportToPDF = () => {
+    const columns = [
+      "שם משחק",
+      "סטטוס המשחק",
+
+      "תאריך השאלה",
+      "תאריך מיועד להחזרה",
+    ];
+    const rows = newFilteredList.map((item) => {
+      let g = games.find((g) => g.Id === item.GameCode)?.GameName;
+      return {
+        name: g,
+        status: item.IsMissingParts ? "חסרים חלקים" : "תקין",
+        takingDate: formatDate(item.TakingDate),
+        returnDate: formatDate(item.ReturnDate),
+      };
+    });
+    const title = `משחקים מושאלים אצל ${singleUser.userName}`;
+    generatePDF(columns, rows, title);
+  };
+  console.log("newFilteredList", newFilteredList);
   return (
     <div className="single-user">
       <UserTitle
@@ -324,6 +347,9 @@ export const Taking_Returning = () => {
         <div className="single-taket-h3">סטטוס</div>
         <div className="single-taket-h3">תאריך השאלה</div>
         <div className="single-taket-h3">תאריך החזרה</div>
+        <div className="pdf-icon-tor" onClick={() => exportToPDF()}>
+          <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
+        </div>
       </div>
       <div className="single-user-table">
         {newFilteredList.map((item, i) => {

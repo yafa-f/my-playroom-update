@@ -11,25 +11,24 @@
   position: absolute;
 }
 .games-missing-title {
-    display: inline-flex;
-    direction: rtl;
+  display: inline-flex;
+  direction: rtl;
 }
 .game-missing-logo {
-    background-image: url("../../../assets/אחר2.svg");
-    width: 65px;
-    height: 65px;
-    margin-top: 10px;
+  background-image: url("../../../assets/אחר2.svg");
+  width: 65px;
+  height: 65px;
+  margin-top: 10px;
 }
 .titleMissing {
-    font-size: 55px;
-    font-weight: 900;
-    color: rgba(6, 120, 252, 1);
-    margin-left: 38vw;
-    margin-right:-3vw;
-    text-align: center;
-    width: 40vw;
+  font-size: 55px;
+  font-weight: 900;
+  color: rgba(6, 120, 252, 1);
+  margin-left: 38vw;
+  margin-right: -3vw;
+  text-align: center;
+  width: 40vw;
 }
-
 
 .table-title {
   width: 77vw;
@@ -67,6 +66,10 @@
   font-weight: 600;
   overflow: auto;
 }
+.pdf-icon-gamesMissing {
+  margin-top: 20px;
+  margin-right: 40vw;
+}
 .tbl {
   border-collapse: collapse;
   table-layout: fixed;
@@ -76,11 +79,10 @@
   padding-left: 20vw;
   background-color: red;
 }
-
 .tbl th {
   position: sticky;
   top: 0;
-  padding-right: 20px; 
+  padding-right: 20px;
   z-index: 1;
 }
 .tbl td {
@@ -88,9 +90,8 @@
   padding-right: 20px;
 }
 .tbl thead {
-    position: sticky;
-    top: 0;
-    background: white;
-    z-index: 1; 
-  }
-  
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}

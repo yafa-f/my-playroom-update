@@ -4,6 +4,8 @@ import { useState } from "react";
 import { SearchButtons } from "../GamesList/SearchButtons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import { generatePDF } from "../../exporttopdf/exportToPDF";
 
 export const TakeList = () => {
   const games = useSelector((state) => state.game.games);
@@ -43,37 +45,61 @@ export const TakeList = () => {
     let filtereTake = take;
 
     Object.keys(filters).forEach((filter) => {
-        if (filters[filter]) {
-          switch (filter) {
-            case "שם מנוי": {
-              const filteredUsers = users?.find(user => user.userName === filters[filter])?.userCode;
-              filtereTake = filtereTake.filter(row => 
-                  typeof row["UserCode"] === "string" && row["UserCode"] === filteredUsers
-              );
-              break;
+      if (filters[filter]) {
+        switch (filter) {
+          case "שם מנוי": {
+            const filteredUsers = users?.find(
+              (user) => user.userName === filters[filter]
+            )?.userCode;
+            filtereTake = filtereTake.filter(
+              (row) =>
+                typeof row["UserCode"] === "string" &&
+                row["UserCode"] === filteredUsers
+            );
+            break;
           }
           case "שם המשחק": {
-              const filteredGame = games?.filter(game => game.GameName === filters[filter]);
-              const gameCodesAsStrings = filteredGame?.map(game => game?.Id?.toString());
-              filtereTake = filtereTake.filter(game => 
-                  gameCodesAsStrings.includes(game.GameCode)
-              );
-              break;
+            const filteredGame = games?.filter(
+              (game) => game.GameName === filters[filter]
+            );
+            const gameCodesAsStrings = filteredGame?.map((game) =>
+              game?.Id?.toString()
+            );
+            filtereTake = filtereTake.filter((game) =>
+              gameCodesAsStrings.includes(game.GameCode)
+            );
+            break;
           }
           default:
-              break;
-      }
+            break;
         }
+      }
     });
 
     setTableArr(filtereTake);
   }, [take, filters]);
- 
+
   const handleFilterChange = (filterName, chosenUser) => {
     setFilters((prevFilters) => ({
       ...prevFilters,
       [filterName]: chosenUser,
     }));
+  };
+
+  const exportToPDF = () => {
+    const columns = ["שם משחק", "בהשאלה אצל", "תאריך השאלה", "תאריך החזרה"];
+    const title = "משחקים בהשאלה";
+    const rows = tableArr.map((item) => {
+      let gameName = games.find((g) => g.Id === item.GameCode)?.GameName;
+      let userName = users.find((u) => u.userCode === item.UserCode).userName;
+      return {
+        gameName: gameName,
+        userName: userName,
+        TakingDate: formatDate(item.TakingDate),
+        ReturnDate: formatDate(item.ReturnDate),
+      };
+    });
+    generatePDF(columns, rows, title);
   };
   return (
     <div className="takes-abs">
@@ -81,11 +107,6 @@ export const TakeList = () => {
         <div className="take-logo"></div>
         <div className="titleTake">השאלות</div>
         <div className="search-buttons">
-          <SearchButtons 
-          name="שם מנוי" 
-          list={take} 
-          onFilterChange={handleFilterChange}
-          />
           <SearchButtons
             name="שם המשחק"
             list={take}
@@ -98,6 +119,9 @@ export const TakeList = () => {
         <div className="taket-h3">בהשאלה אצל</div>
         <div className="taket-h3">תאריך השאלה</div>
         <div className="taket-h3">תאריך החזרה</div>
+        <div className="pdf-icon-takeList" onClick={() => exportToPDF()}>
+          <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
+        </div>
       </div>
       <div className="take-table">
         <section className="section">
