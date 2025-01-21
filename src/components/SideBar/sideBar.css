@@ -31,6 +31,11 @@
   width: 22px;
   height: 22px;
 }
+.accor-img-icon {
+  margin-left: 20px;
+  width: 22px;
+  height: 22px;
+}
 .side-names {
   margin-right: 10px;
   text-decoration: none;
@@ -48,4 +53,27 @@
   background-color: rgba(255, 255, 255, 1);
   align-items: center;
   align-content: center;
+}
+
+.accor-side-names {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 1);
+  margin-top: 2vh;
+}
+.accor-side-names.choosen {
+  text-decoration: none;
+  color: rgba(6, 120, 252, 0.6);
+  margin-top: 2vh;
+}
+.accor-list-names {
+  height: 5vh;
+  align-items: center;
+  align-content: center;
+}
+.accor-list-names.choosen {
+  background-color: rgba(255, 255, 255, 1);
+  height: 5vh;
+  align-items: center;
+  align-content: center;
+  border-radius: 10px;
 }

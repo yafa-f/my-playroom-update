@@ -83,32 +83,36 @@ export const HomePage = () => {
   const namesArr = [
     { name: "מנויים", src: users, srcChoosen: users2, to: "UsersList" },
     { name: "משחקים", src: games, srcChoosen: games2, to: "GamesList" },
-    { name: "השאלות ", src: take, srcChoosen: take2, to: "TakeList" },
-    { name: "ארונות", src: other, srcChoosen: other2, to: "ClosetsList" },
-    { name: "תחומי משחק", src: other, srcChoosen: other2, to: "GameTopicList" },
     {
-      name: "קנסות לחלקים חסרים",
-      src: other,
-      srcChoosen: other2,
-      to: "FinesList",
+      name: "דוחות",
+      src: take,
+      srcChoosen: take2,
+      to: [
+        { name: "חובות", to: "DebtList" },
+        { name: "השאלות לאחר זמן", to: "ReturnAfterTimeList" },
+      ],
     },
-    { name: "טווח גילאים", src: other, srcChoosen: other2, to: "AgesList" },
     {
-      name: "משחקים עם חלקים חסרים",
+      name: "רשימות",
       src: other,
       srcChoosen: other2,
-      to: "GamesWithMissingPartsList",
+      to: [
+        { name: "השאלות", to: "TakeList" },
+        { name: "ארונות", to: "ClosetsList" },
+        { name: "תחומי משחק", to: "GameTopicList" },
+        { name: "טווח גילאים", to: "AgesList" },
+        { name: "קנסות לחלקים חסרים", to: "FinesList" },
+        { name: "משחקים עם חלקים חסרים", to: "GamesWithMissingPartsList" },
+      ],
     },
   ];
   const navToHomePage = () => {
     navigate("/UsersList");
   };
-
   return (
     <div className="image">
       <div className="nav-bar">
-        {(myLocation?.includes("singleUser") ||
-          myLocation?.includes("ReturnAfterTimeList")) && (
+        {myLocation?.includes("singleUser") && (
           <Button
             sx={{
               height: "40px",
@@ -188,9 +192,7 @@ export const HomePage = () => {
         <div className="login-comp">
           <Login setName={setName} setCode={setCode} />
         </div>
-      ) : myLocation.endsWith(
-          "ReturnAfterTimeList"
-        ) ? null : myLocation.includes("singleUser") ? (
+      ) : myLocation.includes("singleUser") ? (
         <div className="side-bar-comp">
           <SideBar navList={navigateFromUsersArr} />
         </div>

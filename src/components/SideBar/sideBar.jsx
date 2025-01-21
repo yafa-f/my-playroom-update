@@ -2,12 +2,21 @@ import React from "react";
 import "./sideBar.css";
 import { useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export const SideBar = (props) => {
+  const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
   const isAdmin = useSelector((state) => state.admin.isAdmin);
   const navList = props.navList;
   const location = useLocation();
   const myLocation = location.pathname;
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
 
   return (
     <div className={`side-bar ${myLocation === "/" ? "login" : ""}`}>
@@ -27,18 +36,105 @@ export const SideBar = (props) => {
             myLocation.endsWith(`/${name.to}`);
 
           return (
-            <div className={`side-list ${isActive ? "choosen" : ""}`} key={i}>
-              <img
-                className={"img-icon"}
-                src={isActive ? name.srcChoosen : name.src}
-                alt={name.name}
-              />
-              <Link
-                className={`side-names ${isActive ? "choosen" : ""}`}
-                to={name.to}
-              >
-                {name.name}
-              </Link>
+
+            <div key={i}>
+              {name.name === "רשימות" || name.name === "דוחות" ? (
+                <Accordion
+                  expanded={expanded === `panel${i}`}
+                  onChange={handleChange(`panel${i}`)}
+                  sx={{
+                    direction: "rtl",
+                    backgroundColor: "rgba(6, 120, 252, 0.0)",
+                    color: "white",
+                    marginTop: "4vh",
+                    fontWeight: "500",
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+                  >
+                    <img className="accor-img-icon" src={name.src} />
+                    {name.name}
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{
+                      direction: "rtl",
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
+                    {name.to.map((item, index) => (
+                      <div
+                        className={`accor-list-names ${
+                          nameTo
+                            ? myLocation.includes(`/${item.to}`)
+                              ? "choosen"
+                              : ""
+                            : myLocation.endsWith(`/${item.to}`)
+                            ? "choosen"
+                            : ""
+                        }`}
+                      >
+                        <Link
+                          to={item.to}
+                          key={index}
+                          className={`accor-side-names ${
+                            nameTo
+                              ? myLocation.includes(`/${item.to}`)
+                                ? "choosen"
+                                : ""
+                              : myLocation.endsWith(`/${item.to}`)
+                              ? "choosen"
+                              : ""
+                          }`}
+                        >
+                          {item.name}
+                        </Link>
+                      </div>
+                    ))}
+                  </AccordionDetails>
+                </Accordion>
+              ) : (
+                <div
+                  className={`side-list ${
+                    nameTo
+                      ? myLocation.includes(`/${name.to}`)
+                        ? "choosen"
+                        : ""
+                      : myLocation.endsWith(`/${name.to}`)
+                      ? "choosen"
+                      : ""
+                  }`}
+                  key={i}
+                >
+                  <img
+                    className={"img-icon"}
+                    src={
+                      nameTo
+                        ? myLocation.includes(`/${name.to}`)
+                          ? name.srcChoosen
+                          : name.src
+                        : myLocation.endsWith(`/${name.to}`)
+                        ? name.srcChoosen
+                        : name.src
+                    }
+                  />
+                  <Link
+                    className={`side-names ${
+                      nameTo
+                        ? myLocation.includes(`/${name.to}`)
+                          ? "choosen"
+                          : ""
+                        : myLocation.endsWith(`/${name.to}`)
+                        ? "choosen"
+                        : ""
+                    }`}
+                    to={name.to}
+                  >
+                    {name.name}
+                  </Link>
+                </div>
+              )}
             </div>
           );
         }

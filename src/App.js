@@ -4,13 +4,14 @@ import { useDispatch } from "react-redux";
 import {
   fetchGetClosets,
   fetchGetFines,
+  fetchGetDebts,
   fetchGetFinesForMissingParts,
   fetchGetForAges,
   fetchGetGames,
   fetchGetTakingOrReturning,
   fetchGetTypesGames,
   fetchGetUsers,
-  fetchGetGamesWithMissingParts
+  fetchGetGamesWithMissingParts,
 } from "./utils/server";
 import { BrowserRouter } from "react-router-dom";
 import { setUsers } from "./app/slices/usersSlice";
@@ -23,6 +24,7 @@ import { setTakingOrReturning } from "./app/slices/takeOrReturnSlice";
 import { setForAges } from "./app/slices/forAgeSlice";
 import { BaseScreen } from "./components/BaseScreen";
 import { setGamesWithMissingParts } from "./app/slices/gamesWiteMissingPartsSlice";
+import { setDebts } from "./app/slices/debtSlice";
 
 function App() {
   const dispatch = useDispatch();
@@ -56,6 +58,14 @@ function App() {
       try {
         const response = await fetchGetFines();
         dispatch(setFines(response));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    const fetchDebts = async () => {
+      try {
+        const response = await fetchGetDebts();
+        dispatch(setDebts(response));
       } catch (error) {
         console.error(error);
       }
@@ -104,6 +114,7 @@ function App() {
     fetchGames();
     fetchClosets();
     fetchFines();
+    fetchDebts();
     fetchFinesForMissingParts();
     fetchTypesOfGames();
     fetchTakingOrReturning();

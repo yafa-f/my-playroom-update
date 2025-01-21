@@ -21,11 +21,21 @@ import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
 import UpdateGameWithMissPart from "../UpdateFunction/UpdateGameWithMissPart";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import { generatePDF } from "../exporttopdf/exportToPDF";
 import {
   ADD_GAMES_WITH_MISSING_PARTS,
   UPDATE_GAMES_WITH_MISSING_PARTS,
 } from "../../app/slices/gamesWiteMissingPartsSlice";
 import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
+import CircularProgress from "@mui/material/CircularProgress";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogTitle from "@mui/material/DialogTitle";
+import NewDebtFunction from "../AddFunctions/NewDebtFunction";
+import { ADD_DEBT } from "../../app/slices/debtSlice";
 
 export const Taking_Returning = () => {
   const dispatch = useDispatch();
@@ -37,10 +47,10 @@ export const Taking_Returning = () => {
   const [expanded, setExpanded] = useState({});
   const [cancelReturn, setCancelReturn] = useState({});
   const [isVisible, setIsVisible] = useState(false);
-  const [fineIchur, setFineIchur] = useState();
-  const [finePart, setFinePart] = useState();
-  const [weekNum, setWeekNum] = useState();
-  const [finesSum, setFinesSum] = useState(0);
+  const [fineIchur, setFineIchur] = useState({});
+  const [finePart, setFinePart] = useState({});
+  const [weekNum, setWeekNum] = useState({});
+  const [finesSum, setFinesSum] = useState({});
   const [returnStatus, setReturnStatus] = useState({});
   const [amountOfPartAfterReturn, setAmountOfPartAfterReturn] = useState({});
   const [tableDataPart, setTableDataPart] = useState([]);
@@ -50,7 +60,13 @@ export const Taking_Returning = () => {
   const [selectedValue, setSelectedValue] = useState({});
   const [newFilteredList, setNewFilteredList] = useState([]);
   const [lastGameWithMiss, setLastGameWithMiss] = useState({});
-
+  const [totalFine, setTotalFine] = useState();
+  useEffect(() => {
+    console.log("datatable", dataTable);
+    let tot = dataTable.reduce((acc, item) => acc + item.fine, 0);
+    console.log("tot", tot);
+    setTotalFine(tot);
+  }, [dataTable]);
   const singleUser = useSelector((state) => state.singleUser.singleUser);
   const take = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
@@ -63,7 +79,29 @@ export const Taking_Returning = () => {
   ).data;
 
   const totalFine = dataTable.reduce((acc, item) => acc + item.fine, 0);
-
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => {
+    if (totalFine > 0) setOpen(true);
+    else ApprovalReturnGames();
+  };
+  const handleClosePaid = () => {
+    setOpen(false);
+    ApprovalReturnGames();
+  };
+  const handleCloseDebt = async () => {
+    let debtObj = {
+      userCode: singleUser.userCode,
+      userName: singleUser.userName,
+      debt: totalFine,
+      date: new Date().toISOString().split("T")[0],
+    };
+    const addResponse = await NewDebtFunction(debtObj);
+    if (addResponse) {
+      dispatch(ADD_DEBT(addResponse));
+      setOpen(false);
+      ApprovalReturnGames();
+    }
+  };
   useEffect(() => {
     const filteredItems = take.filter(
       (item) =>
@@ -106,7 +144,6 @@ export const Taking_Returning = () => {
       },
     }));
   };
-
   const addAmountOfPartAfterReturn = (part) => {
     setTableDataPart((prevData) => [...prevData, part]);
   };
@@ -128,10 +165,10 @@ export const Taking_Returning = () => {
       GameCode: gamecode,
       date: currentDate,
       status: selectedValue[ReturnID],
+      fine: finesSum[ReturnID] || 0,
     };
 
     if (selectedValue[ReturnID] === "חסרים חלקים") {
-      newEntry.fine = finesSum;
       newEntry.table = tableObject;
     }
 
@@ -140,11 +177,6 @@ export const Taking_Returning = () => {
       ...prevExpanded,
       [ReturnID]: !prevExpanded[ReturnID],
     }));
-
-    setFineIchur();
-    setFinePart();
-    setFinesSum();
-    setWeekNum();
   };
 
   const handleReturnToggle = (ReturnID) => {
@@ -261,10 +293,14 @@ export const Taking_Returning = () => {
     setSelectedValue({});
   };
 
-  const handleBlurFine = () => {
-    const a = Number(fineIchur) * Number(weekNum);
-    const b = Number(finePart) + a;
-    setFinesSum(b);
+  const handleBlurFine = (item) => {
+    let a = Number(fineIchur[item]) * Number(weekNum[item]);
+    let b = Number(finePart[item]) + a;
+    if (b > 0)
+      setFinesSum((prevFineSum) => ({
+        ...prevFineSum,
+        [item]: b,
+      }));
   };
 
   const formatDate = (dateString) => {
@@ -289,6 +325,27 @@ export const Taking_Returning = () => {
     setIsVisible(!isVisible);
   };
 
+  const exportToPDF = () => {
+    const columns = [
+      "שם משחק",
+      "סטטוס המשחק",
+
+      "תאריך השאלה",
+      "תאריך מיועד להחזרה",
+    ];
+    const rows = newFilteredList.map((item) => {
+      let g = games.find((g) => g.Id === item.GameCode)?.GameName;
+      return {
+        name: g,
+        status: item.IsMissingParts ? "חסרים חלקים" : "תקין",
+        takingDate: formatDate(item.TakingDate),
+        returnDate: formatDate(item.ReturnDate),
+      };
+    });
+    const title = `משחקים מושאלים אצל ${singleUser.userName}`;
+    generatePDF(columns, rows, title);
+  };
+  console.log("newFilteredList", newFilteredList);
   return (
     <div className="single-user">
       <UserTitle
@@ -297,6 +354,7 @@ export const Taking_Returning = () => {
         cellphone={singleUser.cellphone}
         email={singleUser.email}
       />
+     
       <div className="single-user-take-title">
         <div className="single-user-take-logo"></div>
         <div className="single-user-titleTake">משחקים בהשאלה</div>
@@ -318,6 +376,9 @@ export const Taking_Returning = () => {
         <div className="single-taket-h3">סטטוס</div>
         <div className="single-taket-h3">תאריך השאלה</div>
         <div className="single-taket-h3">תאריך החזרה</div>
+        <div className="pdf-icon-tor" onClick={() => exportToPDF()}>
+          <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
+        </div>
       </div>
       <div className="single-user-table">
         {newFilteredList.map((item, i) => {
@@ -326,22 +387,46 @@ export const Taking_Returning = () => {
             (a) => a.AgeCode === game.AgeCode
           )?.Age;
           const tchum = typesGamesFromStore.find(
+
             (t) => t.gameTypeCode === game.GameTypeCode
           )?.gameTipeName;
           const returnDate = formatDate(item.ReturnDate);
           const delayMessage = calculateDaysBetween(returnDate, formattedDate);
-
+          
           return (
             <div key={i} style={{ marginBottom: "10px" }}>
               <Accordion
                 expanded={!!expanded[item.ReturnID]}
-                sx={{ direction: "rtl" }}
+               
+                sx={[
+                  {
+                    ...(expanded[item.ReturnID]
+                      ? {
+                          "& .MuiAccordion-region": {
+                            height: "auto",
+                          },
+                          "& .MuiAccordionDetails-root": {
+                            display: "block",
+                          },
+                        }
+                      : {
+                          "& .MuiAccordion-region": {
+                            height: 0,
+                          },
+                          "& .MuiAccordionDetails-root": {
+                            display: "none",
+                          },
+                        }),
+                    direction: "rtl",
+                  },
+                ]}
               >
                 <AccordionSummary
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
-                  <div className="one-item-SU">
+
+                  <div className="one-item-SU" key={i}>
                     <div className="game-details-SU">
                       <div className="game-names-SU">{game.GameName}</div>
                       <div className="game-names-second-SU">
@@ -380,12 +465,15 @@ export const Taking_Returning = () => {
                     </div>
                     {delayMessage > 30 ? (
                       <div className="delay-SU">
-                        <div className="delay-icon-SU"></div>
-                        <div className="delay-message2-SU">איחור מעל חודש</div>
+
+                        <div className="delay-icon-SU"> </div>
+                        <div className="delay-message2-SU">
+                          איחור מעל חודש
+                        </div>{" "}
                       </div>
-                    ) : delayMessage >= 1 ? (
+                    ) : delayMessage >= 1 && delayMessage < 30 ? (
                       <div className="delay-SU">
-                        <div className="delay-icon-SU"></div>
+                        <div className="delay-icon-SU"> </div>
                         <div className="delay-message-SU">איחור</div>
                       </div>
                     ) : (
@@ -394,12 +482,15 @@ export const Taking_Returning = () => {
                     <button
                       className={`return-btn ${
                         returnStatus[item.ReturnID] ? "cancel" : ""
+                      key={i}
+                    
                       }`}
                       onClick={() => handleReturnToggle(item.ReturnID)}
                     >
                       <div
                         className={`return-btn-text ${
                           returnStatus[item.ReturnID] ? "cancel" : ""
+                         
                         }`}
                       >
                         <ExpandMoreIcon
@@ -410,6 +501,7 @@ export const Taking_Returning = () => {
                           }}
                         />
                         <div style={{ marginTop: "5px" }}>
+
                           {returnStatus[item.ReturnID]
                             ? "ביטול החזרה"
                             : "החזרה"}
@@ -458,6 +550,7 @@ export const Taking_Returning = () => {
 
                   {selectedValue[item.ReturnID] === "חסרים חלקים" && (
                     <>
+
                       <table
                         style={{
                           width: "35vw",
@@ -487,7 +580,9 @@ export const Taking_Returning = () => {
                           </tr>
                         </thead>
                         <tbody style={{ width: "37vw" }}>
-                          {game.Parts.map((part, p) => (
+
+                          {game.Parts.map((part, p, i) => (
+
                             <tr
                               key={p}
                               style={{
@@ -496,20 +591,25 @@ export const Taking_Returning = () => {
                                 lineHeight: "24px",
                                 textAlign: "center",
                                 color: "rgba(104, 100, 100, 1)",
+                                gridTemplateColumns: "5vw 5vw 5vw",
                               }}
                             >
                               <td>{part.name}</td>
                               <td>{part.amount}</td>
                               <td>
                                 <input
+
+
+                                  key={item.ReturnID}
                                   value={
                                     amountOfPartAfterReturn[item.ReturnID]?.[
                                       p
                                     ] ||
+=
+                                    "" ||
                                     lastGameWithMiss[item.ReturnID]?.[0]?.rows[
                                       p
-                                    ]?.afterReturn ||
-                                    ""
+                                    ]?.afterReturn
                                   }
                                   onChange={(e) =>
                                     handleInputChange(
@@ -539,6 +639,13 @@ export const Taking_Returning = () => {
                           ))}
                         </tbody>
                       </table>
+
+
+                    </>
+                  )}
+                  {(delayMessage >= 1 ||
+                    selectedValue[item.ReturnID] === "חסרים חלקים") && (
+                    <>
                       <div
                         className="heart-container"
                         style={{
@@ -548,25 +655,37 @@ export const Taking_Returning = () => {
                           marginRight: "12vw",
                         }}
                       >
-                        <div className="heart"></div>
-                        <div className="content">מס’ שבועות</div>
+
+                        <div className="heart">מס' שבועות</div>
                       </div>
                       <div className="calculate-inputs">
                         <input
                           placeholder="קנס עבור איחור בודד"
-                          value={fineIchur}
-                          onChange={(e) => setFineIchur(e.target.value)}
+                          value={fineIchur[item.ReturnID]}
+                          onChange={(e) =>
+                            setFineIchur((prevFineIchur) => ({
+                              ...prevFineIchur,
+                              [item.ReturnID]: e.target.value,
+                            }))
+                          }
+
                           style={{
                             textAlign: "center",
                             width: "10vw",
                             height: "4vh",
                             borderRadius: "28px",
                           }}
-                        />
+
+                        ></input>
                         x
                         <input
-                          value={weekNum}
-                          onChange={(e) => setWeekNum(e.target.value)}
+                          value={weekNum[item.ReturnID]}
+                          onChange={(e) =>
+                            setWeekNum((prevWeekNum) => ({
+                              ...prevWeekNum,
+                              [item.ReturnID]: e.target.value,
+                            }))
+                          }
                           style={{
                             width: "2vw",
                             textAlign: "center",
@@ -579,8 +698,13 @@ export const Taking_Returning = () => {
                         +
                         <input
                           placeholder="קנס עבור חלקים חסרים"
-                          value={finePart}
-                          onChange={(e) => setFinePart(e.target.value)}
+                          value={finePart[item.ReturnID]}
+                          onChange={(e) =>
+                            setFinePart((prevFinePart) => ({
+                              ...prevFinePart,
+                              [item.ReturnID]: e.target.value,
+                            }))
+                          }
                           style={{
                             textAlign: "center",
                             width: "10vw",
@@ -588,12 +712,18 @@ export const Taking_Returning = () => {
                             borderRadius: "28px",
                             marginLeft: "30px",
                           }}
-                          onBlur={handleBlurFine}
-                        />
+                         
+                          onBlur={() => handleBlurFine(item.ReturnID)}
+                        ></input>
                         סה”כ קנס:
                         <input
-                          value={finesSum}
-                          onChange={(e) => setFinesSum(e.target.value)}
+                          value={finesSum[item.ReturnID]}
+                          onChange={(e) =>
+                            setFinesSum((prevFineSum) => ({
+                              ...prevFineSum,
+                              [item.ReturnID]: e.target.value,
+                            }))
+                          }
                           style={{
                             textAlign: "center",
                             width: "10vw",
@@ -635,17 +765,33 @@ export const Taking_Returning = () => {
             value={`${totalFine} ש"ח`}
             disabled
           />
-          <button onClick={ApprovalReturnGames} className="Approval-btn">
-            {circleFlag ? (
-              <CircularProgress size={24} color="white" />
-            ) : status === "success" ? (
-              <CheckIcon />
-            ) : status === "error" ? (
-              <CloseIcon />
-            ) : (
-              "אישור"
-            )}
-          </button>
+          <React.Fragment>
+            {/* //onClick={ApprovalReturnGames} */}
+            <button onClick={handleClickOpen} className="Approval-btn">
+              {circleFlag ? (
+                <CircularProgress size={24} color="white" />
+              ) : status === "success" ? (
+                <CheckIcon />
+              ) : status === "error" ? (
+                <CloseIcon />
+              ) : (
+                "אישור"
+              )}
+            </button>
+            <Dialog
+              open={open}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title" sx={{ direction: "rtl" }}>
+                {"האם שולם הקנס בעת ההחזרה?"}
+              </DialogTitle>
+              <DialogActions sx={{ direction: "rtl" }}>
+                <Button onClick={handleClosePaid}>שולם</Button>
+                <Button onClick={handleCloseDebt}>לרשום כחוב</Button>
+              </DialogActions>
+            </Dialog>
+          </React.Fragment>
         </div>
       )}
     </div>
