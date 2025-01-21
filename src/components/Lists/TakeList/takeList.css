@@ -4,7 +4,6 @@
 .take-title {
   display: inline-flex;
   direction: rtl;
-  /* margin-left: 7vw; */
 }
 .take-logo {
   background-image: url("../../../assets/השאלות2.svg");

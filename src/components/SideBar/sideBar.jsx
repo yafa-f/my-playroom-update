@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "./sideBar.css";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -9,7 +9,6 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export const SideBar = (props) => {
   const [expanded, setExpanded] = useState(false);
-
   const navigate = useNavigate();
   const isAdmin = useSelector((state) => state.admin.isAdmin);
   const navList = props.navList;
@@ -18,26 +17,26 @@ export const SideBar = (props) => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
   return (
     <div className={`side-bar ${myLocation === "/" ? "login" : ""}`}>
       {navList?.map((name, i) => {
-        let nameTo;
-        if (
+        const isBoolPath =
           myLocation.includes("bool") ||
-          myLocation.startsWith("/singleUser/editUser")
-        ) {
-          nameTo = true;
-        } else {
-          nameTo = false;
-        }
-        // Check if isAdmin is true or if name.to matches the specified values
-        if (
+          myLocation.startsWith("/singleUser/editUser");
+        const isSelected =
           isAdmin ||
           name.to === "GamesList" ||
           name.to === "UsersList" ||
-          myLocation.includes("singleUser")
-        ) {
+          myLocation.includes("singleUser");
+
+        if (isSelected) {
+          const isActive =
+            (isBoolPath && myLocation.includes(`/${name.to}`)) ||
+            myLocation.endsWith(`/${name.to}`);
+
           return (
+
             <div key={i}>
               {name.name === "רשימות" || name.name === "דוחות" ? (
                 <Accordion
@@ -139,7 +138,7 @@ export const SideBar = (props) => {
             </div>
           );
         }
-        return null; // Return null for items that should not be rendered
+        return null;
       })}
     </div>
   );

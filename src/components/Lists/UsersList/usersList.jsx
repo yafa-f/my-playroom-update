@@ -1,116 +1,80 @@
-import React, { useState } from "react";
-import { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { TextField } from "@mui/material";
-import { Button } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ButtonGroup from "@mui/material/ButtonGroup";
 import { DELETE_USER } from "../../../app/slices/usersSlice";
 import deleteUser from "../../DeleteFunctions/deleteUser";
+import { generatePDF } from "../../exporttopdf/exportToPDF";
+import { setSingleUser } from "../../../app/slices/singleUserSlice";
 import Supervisor from "../../../assets/supervisor_account.svg";
+import "./usersList.css";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import DoneIcon from "@mui/icons-material/Done";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import { styled } from "@mui/system";
+import { Button } from "@mui/material";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import "./usersList.css";
-import PersonIcon from "@mui/icons-material/Person";
-import { styled } from "@mui/system";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import DoneIcon from "@mui/icons-material/Done";
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
-import {generatePDF} from "../../exporttopdf/exportToPDF";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import { setSingleUser } from "../../../app/slices/singleUserSlice";
+
 export const UsersList = () => {
   const dispatch = useDispatch();
   const location = useLocation();
-  const { name } = location.state || {};
-  const [nameOfList, setNameOfList] = useState([]);
-  const users = useSelector((state) => state.user.users);
-  const [currentField, setCurrentField] = useState("");
-  const [fieldValue, setFieldValue] = useState("");
-  const [currentStore, setCurrentStore] = useState(null);
-  const [currentDelete, setCurrentDelete] = useState("");
-  const [currentEdit, setCurrentEdit] = useState("");
-  const [isEditClicked, setIsEditClicked] = useState(false);
-  const [clickedRow, setClickedRow] = useState(null);
-  const [onSearch, setOnSearch] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
-  const [arrowUpAndDown, setArrowUpAndDown] = useState(false);
-  const [menuAnchor, setMenuAnchor] = useState(null);
-  const [chosenUser, setChosenUser] = useState("");
-  const buttonRef = useRef(null);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
-  const [prevLocation, setPrevLocation] = useState(location);
   const navigate = useNavigate();
+  const { name } = location.state || {};
+  const users = useSelector((state) => state.user.users);
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const buttonRef = useRef(null);
+  const [nameOfList, setNameOfList] = useState([]);
+  const [chosenUser, setChosenUser] = useState("");
+  const [filteredRows, setFilteredRows] = useState([]);
+  const [arrowUpAndDown, setArrowUpAndDown] = useState(false);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+
   useEffect(() => {
-    setNameOfList(users.data);
-    setOnSearch(false);
-    setFieldValue("");
-    setCurrentField("");
-  }, [name, users]);
+    if (users && users.data) {
+      setNameOfList(users.data);
+    } else {
+      setNameOfList([]);
+    }
+  }, [users]);
+
   useEffect(() => {
-    setPrevLocation(location);
-  }, [dispatch, currentStore, isEdit, location, prevLocation]);
+    if (nameOfList) {
+      setFilteredRows(
+        nameOfList.filter((row) => row["userName"]?.includes(chosenUser))
+      );
+    }
+  }, [nameOfList, chosenUser]);
 
   const handleDeleteUser = async (user) => {
-    const deleteCurrentUser = await deleteUser(user);
+    await deleteUser(user);
     dispatch(DELETE_USER(user));
     alert("נמחק");
   };
-  const headers = Array.from(
-    new Set(
-      (nameOfList || []).flatMap((item) => (item ? Object.keys(item) : []))
-    )
-  );
-  const rows =
-    (nameOfList || []).length > 0 && headers.length > 0
-      ? nameOfList.map((item, index) =>
-          createData(index, ...Object.values(item))
-        )
-      : [];
 
-  const updatedRows = rows.map((row) => {
-    const updatedRow = {};
-    headers.forEach((header, index) => {
-      updatedRow[header] = row[index];
-    });
-    return updatedRow;
-  });
-  const filteredRows = updatedRows.filter((row) => {
-    return (
-      typeof row["userName"] === "string" &&
-      row["userName"].includes(chosenUser)
-    );
-  });
+  const exportToPDF = () => {
+    const columns = [
+      "קוד מנוי",
+      "שם מנוי",
+      "תאריך מנוי",
+      "טלפון 1",
+      "טלפון 2",
+      "שולם פקדון?",
+      "סוג תשלום",
+      "סכום לתשלום",
+      "בנק",
+      "חשבון בנק",
+      "מס' שק",
+      "סניף",
+      "מייל",
+    ];
+    const data = chosenUser ? filteredRows : nameOfList;
+    generatePDF(columns, data, "משתמשים");
+  };
 
-  const columns = headers.map((header, index) => ({
-    width: 200,
-    label: header,
-    dataKey: index.toString(),
-    numeric: false,
-  }));
-  function createData(id, ...values) {
-    const data = {};
-    headers.forEach((header, index) => {
-      data[index.toString()] = values[index];
-    });
-    return { id, ...data };
-  }
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
   const CustomButton = styled(Button)(({ theme }) => ({
     borderColor: "transparent",
     backgroundColor: "white",
@@ -120,21 +84,7 @@ export const UsersList = () => {
       boxShadow: "none",
     },
   }));
-  const CustomTextField = styled(TextField)({
-    "& .MuiOutlinedInput-root": {
-      "& fieldset": {
-        borderColor: "transparent",
-      },
-      "&:hover fieldset": {
-        borderColor: "transparent",
-      },
-      "&.Mui-focused fieldset": {
-        borderColor: "transparent",
-        boxShadow: "none",
-      },
-      backgroundColor: "white",
-    },
-  });
+
   const CustomIconButton = styled(IconButton)(({ theme }) => ({
     backgroundColor: "transparent",
     border: "1px solid black",
@@ -143,51 +93,11 @@ export const UsersList = () => {
     },
   }));
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleFilter = (name) => {
-    setOnSearch(true);
-    setCurrentField(name);
-    setAnchorEl(null);
-    setFieldValue("");
-  };
   const handleEditClick = (user) => {
-    setIsEditClicked(true);
-    setClickedRow(user);
     dispatch(setSingleUser(user));
     navigate("/singleUser/editUser", { state: { user } });
   };
-  const updateEditState = () => {
-    setIsEdit(!isEdit);
-  };
-  const hide = () => {
-    setIsEditClicked(false);
-  };
-  const exportToPDF=()=>{
-    const columns = ["קוד מנוי","שם מנוי","תאריך מנוי","טלפון 1 "," טלפון 2 ","שולם פקדון?","סוג תשלום","סכום לתשלום","בנק","חשבון בנק","מס' שק","סניף","מייל"];
-    const data = chosenUser ? filteredRows : updatedRows;
-    const title="משתמשים"
-    generatePDF(columns,data,title)
-  }
 
-  const deleteCurrent = async (row) => {
-    setCurrentDelete(row);
-    const deletedUserRow = await deleteUser(row);
-    dispatch(DELETE_USER(currentDelete));
-    setCurrentStore(() => DELETE_USER);
-  };
-  const handleDoubleClick = (user) => {
-    dispatch(setSingleUser(user));
-    navigate("/singleUser", { state: { user } });
-  };
-  const navigateToAdd = () => {
-    navigate(`/UsersList/newUser`);
-  };
   const openMenu = (event) => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
@@ -196,79 +106,20 @@ export const UsersList = () => {
     setMenuAnchor(event.currentTarget);
     setArrowUpAndDown(!arrowUpAndDown);
   };
+
   const closeMenu = (user) => {
     setChosenUser(user);
     setMenuAnchor(null);
   };
+
   const clearUserName = () => {
     setChosenUser("");
   };
-  const VirtuosoTableComponents = {
-    Scroller: React.forwardRef((props, ref) => (
-      <TableContainer component={Paper} {...props} ref={ref} />
-    )),
-    Table: (props) => (
-      <Table
-        {...props}
-        sx={{ borderCollapse: "separate", tableLayout: "fixed" }}
-      />
-    ),
-    TableHead,
-    TableRow: ({ item: _item, ...props }) => <TableRow {...props} />,
-    TableBody: React.forwardRef((props, ref) => (
-      <TableBody {...props} ref={ref} />
-    )),
-  };
 
-  function fixedHeaderContent() {
-    return (
-      <TableRow>
-        {columns.map((column) => (
-          <TableCell
-            key={column.dataKey}
-            variant="head"
-            align={column.numeric || false ? "right" : "left"}
-            style={{ width: column.width }}
-            sx={{
-              backgroundColor: "background.paper",
-            }}
-          >
-            {column.label}
-          </TableCell>
-        ))}
-      </TableRow>
-    );
-  }
-  function rowContent(_index, row) {
-    return (
-      <React.Fragment>
-        {headers.map((header) => (
-          <TableCell
-            key={header}
-            align={typeof row[header] === "number" ? "right" : "left"}
-          >
-            {typeof row[header] === "object"
-              ? JSON.stringify(row[header])
-              : row[header]}
-          </TableCell>
-        ))}
-        <TableCell>
-          <ButtonGroup variant="outlined" aria-label="Basic button group">
-            <Button onClick={() => handleEditClick(row)}>
-              עריכה <EditIcon></EditIcon>
-            </Button>
-            <Button
-              onClick={() => {
-                deleteCurrent(row);
-              }}
-            >
-              מחיקה<DeleteForeverIcon></DeleteForeverIcon>
-            </Button>
-          </ButtonGroup>
-        </TableCell>
-      </React.Fragment>
-    );
-  }
+  const handleDoubleClick = (user) => {
+    dispatch(setSingleUser(user));
+    navigate("/singleUser", { state: { user } });
+  };
 
   return (
     <div className="table-container">
@@ -288,38 +139,12 @@ export const UsersList = () => {
             wordWrap: "break-word",
             marginLeft: "-23.2vw",
           }}
-          onClick={navigateToAdd}
+          onClick={() => {
+            navigate(`/UsersList/newUser`);
+          }}
         >
           + מנוי
         </Button>
-
-        {/* <CustomTextField
-          variant="outlined"
-          sx={{
-            textAlign: "center",
-            fontSize: 18,
-            fontFamily: "Open Sans Hebrew",
-            color: "black",
-            borderRadius: 28,
-            width: 220,
-            height: 20,
-            fontWeight: 700,
-            wordWrap: "break-word",
-            "& .MuiOutlinedInput-root": {
-              borderRadius: "28px",
-              height: "38px",
-              direction: "rtl",
-            },
-          }}
-          placeholder="חיפוש"
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }} 
-        ></CustomTextField>*/}
         <div>
           <CustomButton
             ref={buttonRef}
@@ -336,28 +161,11 @@ export const UsersList = () => {
               whiteSpace: "nowrap",
             }}
           >
-            <div
-              style={{
-                display: "inline-flex",
-                direction: "rtl",
-                width: "100%",
-              }}
-            >
-              <div
-                onClick={openMenu}
-                style={{
-                  width: "100%",
-                  marginTop: 9,
-                  fontWeight: 100,
-                  textAlign: "right",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                }}
-              >
+            <div className="arroundOpenMenu">
+              <div className="openMenu" onClick={openMenu}>
                 {chosenUser ? chosenUser : "שם מנוי"}{" "}
               </div>
-              {chosenUser != "" && (
+              {chosenUser !== "" && (
                 <CloseRoundedIcon
                   sx={{ color: "black", marginTop: "9px" }}
                   onClick={(event) => {
@@ -397,7 +205,7 @@ export const UsersList = () => {
             open={Boolean(menuAnchor)}
             onClose={() => setMenuAnchor(null)}
           >
-            {updatedRows.map((user) => (
+            {filteredRows.map((user) => (
               <MenuItem
                 sx={{ direction: "rtl" }}
                 key={user.userName}
@@ -408,143 +216,93 @@ export const UsersList = () => {
             ))}
           </Menu>
         </div>
+
         <div className="usersCaptionWithIcon">
           <div className="menuim">מנויים</div>
-          <img src={Supervisor.toString()}></img>
+          <img src={Supervisor} alt="Supervisor" />
         </div>
       </div>
-      <div className="u-table-title">
-        <h3 style={{ marginRight: "105px" }}> שם</h3>
-        <h3 style={{ marginRight: "-27px" }}>תאריך מנוי</h3>
-        <h3 style={{ marginRight: "17px" }}>טלפון 1</h3>
-        <h3 style={{ marginRight: "14px" }}>טלפון 2 </h3>
-        <h3> </h3>
-        <h3> </h3>
-        <h3 style={{ marginRight: "100px" }}> פרטי בנק</h3>
-        <h3 style={{ marginRight: "40px" }}>מס' שק</h3>
-        <div className="user-pdf-icon" onClick={()=>exportToPDF()}>
-          <PictureAsPdfIcon sx={{color:"rgba(6, 120, 252, 1)"}}/>
-          </div>
-      </div>
-      <div className="table">
-        <section className="section">
-          {(chosenUser ? filteredRows : updatedRows)?.map((user, i) => (
-            <div key={i}>
-              <div
-                sx={{
-                  fontSize: "15px",
 
-                  height: "15vh",
-                  direction: "rtl",
-                  borderBottom: "2px rgba(6, 120, 252, 0.20) solid",
+      <div className="u-table-title">
+        <h3 style={{ marginRight: "40px" }}>שם</h3>
+        <h3 style={{ marginRight: "-12px" }}>תאריך מנוי</h3>
+        <h3 style={{ marginRight: "52px" }}>טלפון 1</h3>
+        <h3 style={{ marginRight: "22px" }}>טלפון 2</h3>
+        <h3></h3>
+        <h3></h3>
+        <h3 style={{ marginRight: "130px" }}>פרטי בנק</h3>
+        <h3 style={{ marginRight: "60px" }}>מס' שק</h3>
+      </div>
+
+      <div className="table">
+        {filteredRows.map((user, i) => {
+          const isDepositPaid =
+            user.depositPaid?.toLowerCase() === "true" ||
+            user.depositPaid === true;
+
+          return (
+            <div
+              key={i}
+              className="user-row"
+              onDoubleClick={() => handleDoubleClick(user)}
+            >
+              <div
+                className="user-data"
+                style={{
+                  fontWeight: 600,
+                  marginRight: 15,
                 }}
               >
-                <div className="user-column">
-                  <div className="user-details">
-                    <div>
-                      <div style={{ marginRight: "8px" }}>
-                        <PersonIcon color="#686464"></PersonIcon>
-                      </div>
-                    </div>
-                    <button
-                      className="user-attribute"
-                      style={{
-                        fontWeight: 600,
-                        fontSize: "15px",
-                        width: "128px",
-                        backgroundColor: "white",
-                        borderColor: "transparent",
-                      }}
-                      onDoubleClick={() => handleDoubleClick(user)}
-                    >
-                      {user.userName}
-                    </button>
-                    <div
-                      className="user-attribute"
-                      style={{ width: "140px", marginRight: "10px" }}
-                    >
-                      {user.userDate}
-                    </div>
-                    <div
-                      className="user-attribute"
-                      style={{ marginRight: "-47px" }}
-                    >
-                      {user.cellphone}
-                    </div>
-                    <div className="user-attribute">{user.phone}</div>
-                    {user.depositPaid?.toLowerCase() === "true" ||
-                    user.depositPaid === true ? (
-                      <div
-                        className="user-attribute"
-                        style={{ display: "inline-flex", marginLeft: "20px" }}
-                      >
-                        {" "}
-                        <DoneIcon color="success"></DoneIcon>שולם פקדון
-                      </div>
-                    ) : (
-                      <div
-                        className="user-attribute"
-                        style={{
-                          display: "inline-flex",
-                          marginLeft: "30px",
-                          fontSize: "15px",
-                        }}
-                      >
-                        {" "}
-                        <CloseRoundedIcon
-                          sx={{ color: "red" }}
-                        ></CloseRoundedIcon>
-                        לא שולם פקדון{" "}
-                      </div>
-                    )}
-                    <div
-                      className="user-attribute"
-                      style={{ display: "inline-flex", width: "160px" }}
-                    >
-                      <div className="coinsImg"></div>
-                      <div className="total">
-                        {user.totalPayment ? user.totalPayment : "0.00"} ש"ח
-                      </div>
-                      <div className="line"> </div>
-                      <div className="type">{user.paymentType}</div>
-                    </div>
-                    <div
-                      className="user-attribute"
-                      style={{ width: "170px", marginRight: "20px" }}
-                    >
-                      {user.bankNumber}-{user.branchNumber}-{user.accountNumber}
-                    </div>
-                    <div className="user-attribute">{user.checkNumber}</div>
-                    <Button
-                      style={{
-                        width: "1px",
-                        height: "2px",
-                        marginRight: "-60px",
-                      }}
-                      onClick={() => {
-                        handleEditClick(user);
-                      }}
-                    >
-                      <EditIcon></EditIcon>{" "}
-                    </Button>{" "}
-                    <Button
-                      style={{
-                        width: "1px",
-                        height: "2px",
-                        marginRight: "-10px",
-                      }}
-                      onClick={() => {
-                        handleDeleteUser(user);
-                      }}
-                    >
-                      <DeleteOutlineIcon></DeleteOutlineIcon>{" "}
-                    </Button>{" "}
-                  </div>
-                </div>
+                {user.userName}
+              </div>
+              <div className="user-data">{user.userDate}</div>
+              <div className="user-data">{user.cellphone}</div>
+              <div className="user-data">{user.phone}</div>
+              <div
+                className="user-data"
+                style={{ display: "inline-flex", width: "160px" }}
+              >
+                {isDepositPaid ? (
+                  <DoneIcon color="success" />
+                ) : (
+                  <CloseRoundedIcon color="warning" />
+                )}
+                {isDepositPaid ? "שולם פקדון" : "לא שולם פקדון"}
+              </div>
+              <div
+                className="user-attribute"
+                style={{ display: "inline-flex", width: "210px" }}
+              >
+                <div className="coinsImg" />
+                <div className="total">{user.totalPayment || "0.00"} ש"ח</div>
+                <div className="line" />
+                <div className="type">{user.paymentType}</div>
+              </div>
+              <div />
+              <div
+                className="user-data"
+                style={{ width: "180px" }}
+              >{`${user.bankNumber}-${user.branchNumber}-${user.accountNumber}`}</div>
+              <div className="user-data" style={{ width: "100px" }}>
+                {user.checkNumber}
+              </div>
+              <div className="user-data">
+                <Button
+                  className="user-data-icon"
+                  onClick={() => handleEditClick(user)}
+                >
+                  <EditIcon />
+                </Button>
+                <Button
+                  className="user-data-icon"
+                  onClick={() => handleDeleteUser(user)}
+                >
+                  <DeleteOutlineIcon />
+                </Button>
               </div>
             </div>
-          ))}
-        </section>
+          );
+        })}
       </div>
     </div>
   );
