@@ -60,6 +60,10 @@
   height: 10vh;
   gap: 1vw;
 }
+.pdf-icon-tor {
+  margin-top: 20px;
+  margin-right: 17vw;
+}
 .date-SU {
   border-left: 1px rgba(6, 120, 252, 0.2) solid;
   display: inline-flex;
@@ -226,26 +230,26 @@
   display: inline-block;
 }
 .heart {
-  display: flex; 
+  display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   font-size: 10px;
   width: 80px;
-  height: 20px; 
-  border: 2px black solid; 
-  border-radius: 10px; 
-  position: relative; 
-  background-color: white; 
+  height: 20px;
+  border: 2px black solid;
+  border-radius: 10px;
+  position: relative;
+  background-color: white;
 }
 .heart::after {
-  content: '';
+  content: "";
   position: absolute;
-  bottom: -10px; 
-  left: 50%; 
+  bottom: -10px;
+  left: 50%;
   transform: translateX(-50%);
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  border-top: 10px solid black; 
+  border-top: 10px solid black;
 }
 .Approval-btn {
   width: 8vw;
