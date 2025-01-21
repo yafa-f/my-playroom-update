@@ -44,19 +44,18 @@ export const EditAddUserDetails = (props) => {
     useSelector((state) => state.user.users)
   );
   const generateUserCode = (userToUpdate, localUsers) => {
-    
     if (userToUpdate.userCode) {
       return userToUpdate.userCode;
     }
-  
+
     const codes = localUsers.data.map((user) => Number(user.userCode));
-    
+
     let randomNumber;
-  
+
     do {
       randomNumber = Math.floor(Math.random() * 10000) + 1;
     } while (codes.includes(randomNumber));
-  
+
     return randomNumber;
   };
   const handleSaveClick = () => {
@@ -156,66 +155,23 @@ export const EditAddUserDetails = (props) => {
   useEffect(() => {
     if (isEdit && userToUpdate) {
       setUserData(singleUser);
-
-    } 
-    
+    }
   }, [isEdit, userToUpdate]);
 
-
   return (
-    <div className="deposit-and-details" style={{ display: "inline-flex" }}>
+    <div className="deposit-and-details">
       <div className="deposit-and-save">
-        <div
-          className="depositDiv"
-          style={{
-            width: "700px",
-            height: "380px",
-            marginTop: "10px",
-            marginLeft: "50px",
-            gap: "0px",
-            borderRadius: "28px",
-            border: "1px 0px 0px 0px",
-            backgroundColor: "white",
-            direction: "rtl",
-          }}
-        >
-          <div>
-            <div
-              style={{
-                display: "inline-flex",
-                marginTop: "18px",
-                marginRight: "30px",
-                paddingTop: "-10px",
-              }}
-            >
-              <div className="coins-icon"> </div>{" "}
-              <div
-                style={{
-                  width: "113px",
-                  height: "27px",
-                  fontWeight: 600,
-                  fontSize: "18px",
-                  marginRight: "20px",
-                }}
-              >
-                פיקדון
-              </div>
-            </div>
+        <div className="depositDiv">
+          <div className="insideDepositDiv">
+            <div className="coins-icon"> </div>{" "}
+            <div className="beside-coins-icon">פיקדון</div>
           </div>
 
-          <div
-            className="isPaid-cost-wayPaid"
-            style={{
-              display: "inline-flex",
-              marginTop: "30px",
-              marginRight: "30px",
-            }}
-          >
+          <div className="isPaid-cost-wayPaid">
             <input
               type="checkbox"
               checked={isChecked}
               className="custom-checkbox"
-              style={{ width: "15px", height: "15px" }}
               onChange={(event) => {
                 setIsChecked(!isChecked);
                 setUserData({
@@ -224,73 +180,27 @@ export const EditAddUserDetails = (props) => {
                 });
               }}
             />
-            <div
-              className="isPaid"
-              style={{
-                width: "100px",
-                display: "inline-flex",
-                marginRight: "18px",
-              }}
-            >
-              שולם פיקדון
-            </div>
+            <div className="isPaid">שולם פיקדון</div>
             <div
               className="cost"
               style={{
                 width: "180px",
-                borderRight: "3px solid #0678FC33",
-                textAlign: "center",
-                display: "inline-flex",
-                direction: "rtl",
               }}
             >
-              <div
-                className="isPaid"
-                style={{
-                  width: "3vw",
-                  display: "inline-flex",
-                  marginRight: "20px",
-                }}
-              >
-                סכום
-              </div>
+              <div className="costText">סכום</div>
               <input
-                style={{
-                  width: "5vw",
-                  height: "3.5vh",
-                  borderRadius: "28px",
-                  border: "1px rgba(35, 31, 32, 0.4) solid",
-                }}
                 type="text"
                 value={userData.totalPayment}
+                className="totalPaymentText"
                 onChange={(event) =>
                   setUserData({ ...userData, totalPayment: event.target.value })
                 }
               ></input>{" "}
             </div>
-            <div
-              className="wayPaidPlusInput"
-              style={{ borderRight: "3px solid #0678FC33" }}
-            >
-              <div
-                className="wayPaid"
-                style={{
-                  height: "4vh",
-                  textAlign: "center",
-                  display: "inline-flex",
-                  marginRight: "20px",
-                }}
-              >
+            <div className="wayPaidPlusInput">
+              <div className="wayPaidText">
                 אמצעי תשלום
                 <select
-                  style={{
-                    height: "3.5vh",
-                    borderRadius: "28px",
-                    border: "1px rgba(35, 31, 32, 0.4) solid",
-                    display: "inline-flex",
-                    width: "6vw",
-                    marginRight: "20px",
-                  }}
                   name="paymentType"
                   id="paymentType"
                   className="payment-type-select"
@@ -314,22 +224,12 @@ export const EditAddUserDetails = (props) => {
             </div>
           </div>
           {isPaymentTypeIsCheck && (
-            <div
-              className="details"
-              style={{ marginRight: "10px", marginTop: "20px" }}
-            >
-              <div
-                className="all-details-with-attributes"
-                style={{ marginTop: "10px", display: "grid" }}
-              >
+            <div className="details">
+              <div className="all-details-with-attributes">
                 <div className="detail-with-attribute">
                   <div className="detail-attribute"> מס' בנק</div>{" "}
                   <input
-                    style={{
-                      height: "3.5vh",
-                      borderRadius: "28px",
-                      border: "1px rgba(35, 31, 32, 0.4) solid",
-                    }}
+                    className="detail-input"
                     type="text"
                     value={userData.bankNumber}
                     onChange={(event) =>
@@ -343,11 +243,7 @@ export const EditAddUserDetails = (props) => {
                 <div className="detail-with-attribute">
                   <div className="detail-attribute">מס' סניף </div>{" "}
                   <input
-                    style={{
-                      height: "3.5vh",
-                      borderRadius: "28px",
-                      border: "1px rgba(35, 31, 32, 0.4) solid",
-                    }}
+                    className="detail-input"
                     type="text"
                     value={userData.branchNumber}
                     onChange={(event) =>
@@ -362,11 +258,7 @@ export const EditAddUserDetails = (props) => {
                 <div className="detail-with-attribute">
                   <div className="detail-attribute">מס' חשבון </div>{" "}
                   <input
-                    style={{
-                      height: "3.5vh",
-                      borderRadius: "28px",
-                      border: "1px rgba(35, 31, 32, 0.4) solid",
-                    }}
+                    className="detail-input"
                     type="text"
                     value={userData.accountNumber}
                     onChange={(event) =>
@@ -380,11 +272,7 @@ export const EditAddUserDetails = (props) => {
                 <div className="detail-with-attribute">
                   <div className="detail-attribute"> מס' שק</div>{" "}
                   <input
-                    style={{
-                      height: "3.5vh",
-                      borderRadius: "28px",
-                      border: "1px rgba(35, 31, 32, 0.4) solid",
-                    }}
+                    className="detail-input"
                     type="text"
                     value={userData.checkNumber}
                     onChange={(event) =>
@@ -400,24 +288,20 @@ export const EditAddUserDetails = (props) => {
           )}
         </div>
         <Button
-          type="button"
           className="save"
           value={buttonText}
-          style={{
+          onClick={handleSaveClick}
+          sx={{
             width: "70px",
             height: "30px",
             borderRadius: "28px",
-            backgroundColor: "#0678FC",
-            marginLeft: "50px",
             marginTop: "30px",
-            textAlign: "center",
-            color: "white",
-            fontWeight: 700,
-            alignContent: "center",
-            marginLeft: "55px",
+            backgroundColor: "#0678fc",
+            fontWeight: "700",
             display: "block",
+            color: "white",
+            marginLeft: "52px",
           }}
-          onClick={handleSaveClick}
         >
           {circleFlag ? (
             <CircularProgress size={24} color="white" />
@@ -430,51 +314,18 @@ export const EditAddUserDetails = (props) => {
           )}
         </Button>
       </div>
-      <div
-        className="personalDetails"
-        style={{
-          width: "420px",
-          height: "380px",
-          marginTop: "10px",
-          marginLeft: "45px",
-          gap: "0px",
-          borderRadius: "28px",
-          border: "1px 0px 0px 0px",
-          backgroundColor: "white",
-          direction: "rtl",
-        }}
-      >
-        <div
-          style={{
-            display: "inline-flex",
-            marginTop: "18px",
-            marginRight: "30px",
-          }}
-        >
+      <div className="personalDetails">
+        <div className="personalDetailsTextAndIcon">
           <PersonIcon
             sx={{ color: "#0678FC", width: "35px", height: "35px" }}
           ></PersonIcon>
-          <div
-            style={{
-              width: "113px",
-              height: "27px",
-              fontWeight: 600,
-              fontSize: "18px",
-              marginRight: "10px",
-            }}
-          >
-            פרטים אישיים
-          </div>{" "}
+          <div className="personalDetailsText">פרטים אישיים</div>{" "}
         </div>
         <div className="details">
           <div className="detail-with-attribute">
             <div className="detail-attribute">שם </div>{" "}
             <input
-              style={{
-                height: "3.5vh",
-                borderRadius: "28px",
-                border: "1px rgba(35, 31, 32, 0.4) solid",
-              }}
+              className="detail-input"
               type="text"
               value={userData.userName}
               onChange={(event) =>
@@ -485,11 +336,7 @@ export const EditAddUserDetails = (props) => {
           <div className="detail-with-attribute">
             <div className="detail-attribute">מייל</div>{" "}
             <input
-              style={{
-                height: "3.5vh",
-                borderRadius: "28px",
-                border: "1px rgba(35, 31, 32, 0.4) solid",
-              }}
+              className="detail-input"
               type="text"
               value={userData.email}
               onChange={(event) =>
@@ -500,11 +347,7 @@ export const EditAddUserDetails = (props) => {
           <div className="detail-with-attribute">
             <div className="detail-attribute">טלפון 1</div>{" "}
             <input
-              style={{
-                height: "3.5vh",
-                borderRadius: "28px",
-                border: "1px rgba(35, 31, 32, 0.4) solid",
-              }}
+              className="detail-input"
               type="text"
               value={userData.cellphone}
               onChange={(event) =>
@@ -515,11 +358,7 @@ export const EditAddUserDetails = (props) => {
           <div className="detail-with-attribute">
             <div className="detail-attribute">טלפון 2</div>{" "}
             <input
-              style={{
-                height: "3.5vh",
-                borderRadius: "28px",
-                border: "1px rgba(35, 31, 32, 0.4) solid",
-              }}
+              className="detail-input"
               type="text"
               value={userData.phone}
               onChange={(event) =>

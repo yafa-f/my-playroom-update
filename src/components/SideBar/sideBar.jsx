@@ -1,54 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import "./sideBar.css";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { Button } from "@mui/material";
+
 export const SideBar = (props) => {
-  const navigate = useNavigate();
   const isAdmin = useSelector((state) => state.admin.isAdmin);
   const navList = props.navList;
   const location = useLocation();
   const myLocation = location.pathname;
+
   return (
     <div className={`side-bar ${myLocation === "/" ? "login" : ""}`}>
       {navList?.map((name, i) => {
-        let nameTo;
-        if (myLocation.includes("bool")||myLocation.startsWith("/singleUser/editUser")) {
-          nameTo=true
-        } else {
-          nameTo=false
-        }
-        // Check if isAdmin is true or if name.to matches the specified values
-        if (
+        const isBoolPath =
+          myLocation.includes("bool") ||
+          myLocation.startsWith("/singleUser/editUser");
+        const isSelected =
           isAdmin ||
           name.to === "GamesList" ||
           name.to === "UsersList" ||
-          myLocation.includes("singleUser")
-        ) {
+          myLocation.includes("singleUser");
+
+        if (isSelected) {
+          const isActive =
+            (isBoolPath && myLocation.includes(`/${name.to}`)) ||
+            myLocation.endsWith(`/${name.to}`);
+
           return (
-            <div
-              className={`side-list ${
-                nameTo? myLocation.includes(`/${name.to}`) ? "choosen" : "":
-                myLocation.endsWith(`/${name.to}`) ? "choosen" : ""
-              }`}
-              key={i}
-            >
+            <div className={`side-list ${isActive ? "choosen" : ""}`} key={i}>
               <img
                 className={"img-icon"}
-                src={
-                  nameTo?  myLocation.includes(`/${name.to}`)
-                  ? name.srcChoosen
-                  : name.src:
-                  myLocation.endsWith(`/${name.to}`)
-                    ? name.srcChoosen
-                    : name.src
-                }
+                src={isActive ? name.srcChoosen : name.src}
+                alt={name.name}
               />
               <Link
-                className={`side-names ${
-                  nameTo? myLocation.includes(`/${name.to}`) ? "choosen" : "":
-                  myLocation.endsWith(`/${name.to}`) ? "choosen" : ""
-                }`}
+                className={`side-names ${isActive ? "choosen" : ""}`}
                 to={name.to}
               >
                 {name.name}
@@ -56,7 +42,7 @@ export const SideBar = (props) => {
             </div>
           );
         }
-        return null; // Return null for items that should not be rendered
+        return null;
       })}
     </div>
   );
