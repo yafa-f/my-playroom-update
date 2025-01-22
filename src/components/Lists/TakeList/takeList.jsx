@@ -1,11 +1,13 @@
 import React from "react";
 import "./takeList.css";
 import { useState } from "react";
-import { SearchButtons } from "../GamesList/SearchButtons";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { generatePDF } from "../../exporttopdf/exportToPDF";
+import { TextField } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import InputAdornment from "@mui/material/InputAdornment";
 
 export const TakeList = () => {
   const games = useSelector((state) => state.game.games);
@@ -18,6 +20,7 @@ export const TakeList = () => {
     const filter = take.filter((item) => item.ActualReturnDate === undefined);
     setTableArr(filter);
   }, [take]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -75,16 +78,10 @@ export const TakeList = () => {
         }
       }
     });
-
     setTableArr(filtereTake);
   }, [take, filters]);
 
-  const handleFilterChange = (filterName, chosenUser) => {
-    setFilters((prevFilters) => ({
-      ...prevFilters,
-      [filterName]: chosenUser,
-    }));
-  };
+
 
   const exportToPDF = () => {
     const columns = ["שם משחק", "בהשאלה אצל", "תאריך השאלה", "תאריך החזרה"];
@@ -101,16 +98,49 @@ export const TakeList = () => {
     });
     generatePDF(columns, rows, title);
   };
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    let filteredTake = take;
+
+    if (searchTerm) {
+      const filteredGameCodes = games
+        .filter((game) => game.GameName.startsWith(searchTerm))
+        .map((game) => game.Id.toString());
+
+      filteredTake = filteredTake.filter((item) =>
+        filteredGameCodes.includes(item.GameCode)
+      );
+    }
+
+    setTableArr(filteredTake);
+  }, [take, searchTerm, games]);
+
   return (
     <div className="takes-abs">
       <div className="take-title">
         <div className="take-logo"></div>
         <div className="titleTake">השאלות</div>
         <div className="search-buttons">
-          <SearchButtons
-            name="שם המשחק"
-            list={take}
-            onFilterChange={handleFilterChange}
+          <TextField
+            dir="rtl"
+            size="small"
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                backgroundColor: "white",
+                borderRadius: "28px",
+              },
+            }}
+            placeholder="חפש לפי שם משחק"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+              ),
+            }}
           />
         </div>
       </div>
