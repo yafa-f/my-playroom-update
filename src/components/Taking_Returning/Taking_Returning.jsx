@@ -28,9 +28,7 @@ import {
   UPDATE_GAMES_WITH_MISSING_PARTS,
 } from "../../app/slices/gamesWiteMissingPartsSlice";
 import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
-import CircularProgress from "@mui/material/CircularProgress";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
+
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -60,7 +58,8 @@ export const Taking_Returning = () => {
   const [selectedValue, setSelectedValue] = useState({});
   const [newFilteredList, setNewFilteredList] = useState([]);
   const [lastGameWithMiss, setLastGameWithMiss] = useState({});
-  const [totalFine, setTotalFine] = useState();
+  const [totalFine,setTotalFine] = useState();
+
   useEffect(() => {
     console.log("datatable", dataTable);
     let tot = dataTable.reduce((acc, item) => acc + item.fine, 0);
@@ -78,7 +77,6 @@ export const Taking_Returning = () => {
     (state) => state.gamesWithMissingPart.gamesWithMissingParts
   ).data;
 
-  const totalFine = dataTable.reduce((acc, item) => acc + item.fine, 0);
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
     if (totalFine > 0) setOpen(true);
@@ -481,9 +479,7 @@ export const Taking_Returning = () => {
                     )}
                     <button
                       className={`return-btn ${
-                        returnStatus[item.ReturnID] ? "cancel" : ""
-                      key={i}
-                    
+                        returnStatus[item.ReturnID] ? "cancel" : ""                    
                       }`}
                       onClick={() => handleReturnToggle(item.ReturnID)}
                     >
@@ -605,7 +601,7 @@ export const Taking_Returning = () => {
                                     amountOfPartAfterReturn[item.ReturnID]?.[
                                       p
                                     ] ||
-=
+
                                     "" ||
                                     lastGameWithMiss[item.ReturnID]?.[0]?.rows[
                                       p
