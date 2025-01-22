@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import {
   fetchGetClosets,
   fetchGetFines,
-  fetchGetDebts,
+  // fetchGetDebts,
   fetchGetFinesForMissingParts,
   fetchGetForAges,
   fetchGetGames,
@@ -64,8 +64,8 @@ function App() {
     };
     const fetchDebts = async () => {
       try {
-        const response = await fetchGetDebts();
-        dispatch(setDebts(response));
+        // const response = await fetchGetDebts();
+        // dispatch(setDebts(response));
       } catch (error) {
         console.error(error);
       }

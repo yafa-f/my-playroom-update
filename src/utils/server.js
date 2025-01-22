@@ -1,6 +1,6 @@
 export const path = "https://server-jnz9.onrender.com/";
 
-const fetchData = (route) => {
+export const fetchData = (route) => {
   return fetch(`${path}${route}`)
     .then((response) => {
       console.log("data ", response);
