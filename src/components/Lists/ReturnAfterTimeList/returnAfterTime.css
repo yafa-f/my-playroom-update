@@ -6,8 +6,9 @@ margin-top: -65px;
 }
 .takes {
   background-color: white;
-  width: 55%; 
-  height: 650px;
+  width: 55%; /* Adjust width as needed */
+  height: 570px;
+
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -65,7 +66,7 @@ margin-top: -65px;
 }
 
 .retuen-after-time-table {
-  max-height: 587px; 
+  height: 500px; 
   overflow-y: auto; 
   direction: rtl; 
 }
@@ -152,4 +153,7 @@ margin-top: -65px;
   display: inline-block;
   padding: 3px;
   transform: rotate(-45deg);
+}
+.tat-pdf-icon {
+  margin-left: 10px;
 }

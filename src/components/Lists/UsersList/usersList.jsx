@@ -1,67 +1,70 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { TextField } from "@mui/material";
+import { Button } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from "@mui/icons-material/Edit";
 import { DELETE_USER } from "../../../app/slices/usersSlice";
 import deleteUser from "../../DeleteFunctions/deleteUser";
 import { generatePDF } from "../../exporttopdf/exportToPDF";
 import { setSingleUser } from "../../../app/slices/singleUserSlice";
 import Supervisor from "../../../assets/supervisor_account.svg";
+import InputAdornment from "@mui/material/InputAdornment";
+import "./usersList.css";
+import PersonIcon from "@mui/icons-material/Person";
 import "./usersList.css";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import DoneIcon from "@mui/icons-material/Done";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import { generatePDF } from "../../exporttopdf/exportToPDF";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import IconButton from "@mui/material/IconButton";
-import EditIcon from "@mui/icons-material/Edit";
-import { styled } from "@mui/system";
-import { Button } from "@mui/material";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { setSingleUser } from "../../../app/slices/singleUserSlice";
 
 export const UsersList = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const { name } = location.state || {};
   const users = useSelector((state) => state.user.users);
-  const [menuAnchor, setMenuAnchor] = useState(null);
-  const buttonRef = useRef(null);
-  const [nameOfList, setNameOfList] = useState([]);
-  const [chosenUser, setChosenUser] = useState("");
-  const [filteredRows, setFilteredRows] = useState([]);
-  const [arrowUpAndDown, setArrowUpAndDown] = useState(false);
-  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [filteredUsers, setFilteredUsers] = useState(users.data || []);
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (users && users.data) {
-      setNameOfList(users.data);
-    } else {
-      setNameOfList([]);
-    }
+    setFilteredUsers(users.data || []);
   }, [users]);
 
-  useEffect(() => {
-    if (nameOfList) {
-      setFilteredRows(
-        nameOfList.filter((row) => row["userName"]?.includes(chosenUser))
-      );
-    }
-  }, [nameOfList, chosenUser]);
+  const handleSearchChange = (event) => {
+    const value = event.target.value;
+    setSearchTerm(value);
+    const filtered = users.data.filter((user) =>
+      user.userName.toLowerCase().startsWith(value.toLowerCase())
+    );
+    setFilteredUsers(filtered);
+  };
 
   const handleDeleteUser = async (user) => {
     await deleteUser(user);
     dispatch(DELETE_USER(user));
-    alert("נמחק");
   };
 
+
+  const handleEditClick = (user) => {
+    dispatch(setSingleUser(user));
+    navigate("/singleUser/editUser", { state: { user } });
+  };
+
+  const navigateToAdd = () => {
+    navigate(`/UsersList/newUser`);
+  };
   const exportToPDF = () => {
     const columns = [
       "קוד מנוי",
       "שם מנוי",
       "תאריך מנוי",
-      "טלפון 1",
-      "טלפון 2",
+      "טלפון 1 ",
+      " טלפון 2 ",
       "שולם פקדון?",
       "סוג תשלום",
       "סכום לתשלום",
@@ -71,50 +74,11 @@ export const UsersList = () => {
       "סניף",
       "מייל",
     ];
-    const data = chosenUser ? filteredRows : nameOfList;
-    generatePDF(columns, data, "משתמשים");
+    const data = filteredUsers;
+    const title = "משתמשים";
+    generatePDF(columns, data, title);
   };
 
-  const CustomButton = styled(Button)(({ theme }) => ({
-    borderColor: "transparent",
-    backgroundColor: "white",
-    "&:hover": {
-      borderColor: "transparent",
-      backgroundColor: "white",
-      boxShadow: "none",
-    },
-  }));
-
-  const CustomIconButton = styled(IconButton)(({ theme }) => ({
-    backgroundColor: "transparent",
-    border: "1px solid black",
-    "&:hover": {
-      backgroundColor: "transparent",
-    },
-  }));
-
-  const handleEditClick = (user) => {
-    dispatch(setSingleUser(user));
-    navigate("/singleUser/editUser", { state: { user } });
-  };
-
-  const openMenu = (event) => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setPosition({ top: rect.bottom, left: rect.left });
-    }
-    setMenuAnchor(event.currentTarget);
-    setArrowUpAndDown(!arrowUpAndDown);
-  };
-
-  const closeMenu = (user) => {
-    setChosenUser(user);
-    setMenuAnchor(null);
-  };
-
-  const clearUserName = () => {
-    setChosenUser("");
-  };
 
   const handleDoubleClick = (user) => {
     dispatch(setSingleUser(user));
@@ -145,77 +109,28 @@ export const UsersList = () => {
         >
           + מנוי
         </Button>
-        <div>
-          <CustomButton
-            ref={buttonRef}
-            variant="outlined"
-            sx={{
-              color: "black",
-              borderRadius: 28,
-              width: 180,
-              height: 36,
-              fontWeight: 700,
-              fontSize: 15,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            <div className="arroundOpenMenu">
-              <div className="openMenu" onClick={openMenu}>
-                {chosenUser ? chosenUser : "שם מנוי"}{" "}
-              </div>
-              {chosenUser !== "" && (
-                <CloseRoundedIcon
-                  sx={{ color: "black", marginTop: "9px" }}
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    clearUserName();
-                  }}
-                ></CloseRoundedIcon>
-              )}
-              <div style={{ marginTop: 2 }}>
-                <CustomIconButton
-                  sx={{
-                    backgroundColor: "transparent",
-                    border: "none",
-                    "&:hover": {
-                      backgroundColor: "transparent",
-                      border: "none",
-                    },
-                  }}
-                >
-                  {menuAnchor ? (
-                    <KeyboardArrowUpIcon></KeyboardArrowUpIcon>
-                  ) : (
-                    <KeyboardArrowDownIcon></KeyboardArrowDownIcon>
-                  )}
-                </CustomIconButton>
-              </div>
-            </div>
-          </CustomButton>
-          <Menu
-            sx={{
-              height: 500,
-              position: "absolute",
-              top: position.top,
-              left: position.left,
-            }}
-            anchorEl={menuAnchor}
-            open={Boolean(menuAnchor)}
-            onClose={() => setMenuAnchor(null)}
-          >
-            {filteredRows.map((user) => (
-              <MenuItem
-                sx={{ direction: "rtl" }}
-                key={user.userName}
-                onClick={() => closeMenu(user.userName)}
-              >
-                {user.userName}
-              </MenuItem>
-            ))}
-          </Menu>
-        </div>
+
+        <TextField
+        dir="rtl"
+        size="small"
+        sx={{
+    "& .MuiOutlinedInput-root": {
+      backgroundColor: "white",
+      borderRadius: "28px",
+    },
+  }}
+          placeholder="חיפוש"
+          value={searchTerm}
+          onChange={handleSearchChange}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            ),
+          }}
+        />
+
 
         <div className="usersCaptionWithIcon">
           <div className="menuim">מנויים</div>
@@ -224,21 +139,28 @@ export const UsersList = () => {
       </div>
 
       <div className="u-table-title">
-        <h3 style={{ marginRight: "40px" }}>שם</h3>
-        <h3 style={{ marginRight: "-12px" }}>תאריך מנוי</h3>
-        <h3 style={{ marginRight: "52px" }}>טלפון 1</h3>
-        <h3 style={{ marginRight: "22px" }}>טלפון 2</h3>
-        <h3></h3>
-        <h3></h3>
-        <h3 style={{ marginRight: "130px" }}>פרטי בנק</h3>
-        <h3 style={{ marginRight: "60px" }}>מס' שק</h3>
+        <h3 style={{ marginRight: "105px" }}> שם</h3>
+        <h3 style={{ marginRight: "-27px" }}>תאריך מנוי</h3>
+        <h3 style={{ marginRight: "17px" }}>טלפון 1</h3>
+        <h3 style={{ marginRight: "14px" }}>טלפון 2 </h3>
+        <h3> </h3>
+        <h3> </h3>
+        <h3 style={{ marginRight: "100px" }}> פרטי בנק</h3>
+        <h3 style={{ marginRight: "40px" }}>מס' שק</h3>
+        <div className="user-pdf-icon" onClick={() => exportToPDF()}>
+          <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
+        </div>
+
       </div>
 
       <div className="table">
-        {filteredRows.map((user, i) => {
-          const isDepositPaid =
-            user.depositPaid?.toLowerCase() === "true" ||
-            user.depositPaid === true;
+        <section className="section">
+          {filteredUsers.map((user, i) => (
+            <div key={i}>
+              <div
+                sx={{
+                  fontSize: "15px",
+
 
           return (
             <div

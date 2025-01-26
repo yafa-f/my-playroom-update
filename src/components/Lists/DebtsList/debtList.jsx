@@ -24,13 +24,23 @@ export const DebtList = () => {
   const exportToPDF = () => {
     const columns = ["קוד משתמש", "שם משתמש", "סכום החוב"];
     const title = "חובות";
-    generatePDF(columns, result, title);
+    const rows = result.map((r) => {
+      return {
+        ...r,
+        totalDebt: `${r.totalDebt}ש"ח`,
+      };
+    });
+    generatePDF(columns, rows, title);
   };
 
   const exportToPDFDebtByUser = (item) => {
     const columns = ["קוד משתמש", "שם משתמש", "סכום החוב"];
     const title = `חוב עבור משתמש ${item.userName}`;
-    generatePDF(columns, [item], title);
+    const formatItem = {
+      ...item,
+      totalDebt: `${item.totalDebt}ש"ח`,
+    };
+    generatePDF(columns, [formatItem], title);
   };
 
   const cancelDebt = async (id) => {
@@ -42,38 +52,44 @@ export const DebtList = () => {
   };
 
   return (
-    <div className="debt">
-      <div className="debt-title">
-        <div className="h-3-debt">שם מנוי</div>
-        <div className="h-3-debt">סכום הקנס</div>
-        <div className="pdf-icon" onClick={exportToPDF}>
-          <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
+      <div className="debt">
+        <div className="debt-title">
+          <div className="h-3-debt">שם מנוי</div>
+          <div className="h-3-debt">סכום הקנס</div>
+          <div className="debt-pdf-icon" onClick={() => exportToPDF()}>
+            <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
+          </div>
+        </div>
+        <div className="debt-table">
+          <section className="section-debt">
+            {Array.isArray(result) &&
+              result.map((item, i) => {
+                return (
+                  
+                    <div className="one-item-debt" key={i}>
+                      <div className="debt-user-name">{item.userName}</div>
+                      <div className="sum-of-debt">{`${item.totalDebt} ש"ח `}</div>
+                      <button
+                        onClick={() => cancalDebt(item.userCode)}
+                        className="cancel-debt"
+                      >
+                        לביטול החוב
+                      </button>
+                      <div
+                        className="debt-pdf-icon"
+                        onClick={() => exportToPDFDebtByUser(item)}
+                      >
+                        <PictureAsPdfIcon
+                          sx={{ color: "rgba(6, 120, 252, 1)" }}
+                        />
+                      </div>
+                    </div>
+                );
+              })}
+          </section>
         </div>
       </div>
-      <div className="debt-table">
-        <section className="section">
-          {Array.isArray(result) &&
-            result.map((item, i) => (
-              <div className="one-item-debt" key={i}>
-                <div className="debt-user-name">{item.userName}</div>
-                <div className="sum-of-debt">{`${item.totalDebt} ש"ח `}</div>
-                <button
-                  onClick={() => cancelDebt(item.userCode)}
-                  className="cancel-debt"
-                >
-                  לביטול החוב
-                </button>
-                <div
-                  className="debt-pdf-icon"
-                  onClick={() => exportToPDFDebtByUser(item)}
-                >
-                  <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
-                </div>
-              </div>
-            ))}
-        </section>
-      </div>
-    </div>
+
   );
 };
 
