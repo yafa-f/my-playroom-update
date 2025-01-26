@@ -1,6 +1,7 @@
-import React from "react";
+// import React from "react";
 import "./closetList.css";
 import { useSelector } from "react-redux";
+
 export const ClosetList = () => {
   const closets = useSelector((state) => state.closet.closets);
 
@@ -19,20 +20,16 @@ export const ClosetList = () => {
       <div className="closet-table">
         <section className="section">
           {Array.isArray(closets) &&
-            closets.map((item, i) => {
-              return (
-                <div className="one-item" key={i}>
-                  <div className="close-code">{item.closetCode}</div>
-                  <div className="type-game-in-closet">{item.closetType}</div>
-                  <div className="is-empty-place">
-                    {item.emptyPlace.length > 0 ? "כן" : "לא"}
-                  </div>
-                  <div className="position-of-closet">
-                    {item.closetLocation}
-                  </div>
+            closets.map((item, i) => (
+              <div className="one-item" key={i}>
+                <div className="close-code">{item.closetCode}</div>
+                <div className="type-game-in-closet">{item.closetType}</div>
+                <div className="is-empty-place">
+                  {item.emptyPlace.length > 0 ? "כן" : "לא"}
                 </div>
-              );
-            })}
+                <div className="position-of-closet">{item.closetLocation}</div>
+              </div>
+            ))}
         </section>
       </div>
     </div>

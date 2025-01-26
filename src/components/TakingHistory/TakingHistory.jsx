@@ -6,11 +6,14 @@ import { useSelector } from "react-redux";
 export const TakingHistory = () => {
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
-  const [filteredList, setFilteredList] = useState();
   const singleUser = useSelector((state) => state.singleUser.singleUser);
   const takeOrReturn = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
+  const games = useSelector((state) => state.game.games);
+
+  const [filteredList, setFilteredList] = useState();
+
   useEffect(() => {
     const filteredL = takeOrReturn.filter(
       (item) =>
@@ -19,8 +22,8 @@ export const TakingHistory = () => {
     );
     setFilteredList(filteredL);
   }, [takeOrReturn, singleUser.userCode]);
-    const games = useSelector((state) => state.game.games);
-    const formatDate = (dateString) => {
+
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -35,11 +38,10 @@ export const TakingHistory = () => {
         phone={singleUser.phone}
         cellphone={singleUser.cellphone}
         email={singleUser.email}
-        
-      ></UserTitle>
+      />
       <div className="single-user-take-title-history">
         <div className="single-user-take-logo-history"></div>
-        <div className="single-user-titleTake-history">הסטורית השאלות</div>
+        <div className="single-user-titleTake-history">היסטורית השאלות</div>
       </div>
       <div className="single-table-title-history">
         <div className="single-taket-h3-history">פרטי המשחק</div>
@@ -49,12 +51,11 @@ export const TakingHistory = () => {
       </div>
       <div className="single-user-table-history">
         {filteredList?.map((item, i) => {
-          let game = games.find((game) => game.Id == item.GameCode);
-          let age = forAgesFromStore.find(
+          const game = games.find((game) => game.Id === item.GameCode);
+          const age = forAgesFromStore.find(
             (a) => a.AgeCode === game?.AgeCode
           )?.Age;
-
-          let tchum = typesGamesFromStore.find(
+          const tchum = typesGamesFromStore.find(
             (t) => t.gameTypeCode === game?.GameTypeCode
           )?.gameTipeName;
 
@@ -91,21 +92,17 @@ export const TakingHistory = () => {
                 {formatDate(item.ActualReturnDate)}
               </div>
               <div className="comment-history">
-                {parsedDateB > parsedDateA ? (
+                {parsedDateB > parsedDateA && (
                   <div className="delay-SU-history1">
-                    <div className="delay-icon-SU-history"> </div>
+                    <div className="delay-icon-SU-history"></div>
                     <div className="delay-message-SU-history">איחור</div>
                   </div>
-                ) : (
-                  <div></div>
                 )}
-                {item.IsMissingParts ? (
+                {item.IsMissingParts && (
                   <div className="delay-SU-history2">
                     <div className="delay-icon-SU-history"></div>
                     <div className="delay-message-SU-history">חסרים חלקים</div>
                   </div>
-                ) : (
-                  <div></div>
                 )}
               </div>
               {item.Fine > 0 && (
@@ -115,9 +112,7 @@ export const TakingHistory = () => {
                 </div>
               )}
             </div>
-          ) : (
-            <div></div>
-          );
+          ) : null;
         })}
       </div>
     </div>
