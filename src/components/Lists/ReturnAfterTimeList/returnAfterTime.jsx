@@ -107,7 +107,6 @@ export const ReturnAfterTimeList = () => {
           ))}
         </div>
       )}
-
       <div className="title-icon-caption">
         <WarningIcon color="error" className="warning-logo" />
         <div className="titleReturns">החזרות לאחר הזמן</div>
