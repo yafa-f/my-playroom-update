@@ -42,7 +42,7 @@ export const DebtList = () => {
     generatePDF(columns, [formatItem], title);
   };
 
-  const cancelDebt = async (id) => {
+  const cancalDebt = async (id) => {
     const debtToCancel = debt.find(d => d.userCode === id);
     if (debtToCancel) {
       const deletedOneDebt = await deleteDebt(debtToCancel);
