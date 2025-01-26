@@ -9,7 +9,6 @@ import { DELETE_DEBT } from "../../../app/slices/debtSlice";
 export const DebtList = () => {
   const dispatch = useDispatch();
   const debt = useSelector((state) => state.debt.debts);
-  
   const summedDebts = debt.reduce((acc, item) => {
     const { userCode, userName, debt: debtValue } = item;
     if (!acc[userCode]) {
