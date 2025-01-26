@@ -12,7 +12,28 @@ export const ReturnAfterTimeList = () => {
     { user: "",game: "",  delay: "" },
   ]);
   const users = useSelector((state) => state.user.users).data;
+
   const games = useSelector((state) => state.game.games);
+  
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    setIsMenuOpen(false);
+  };
+
+  const handleClearSelection = () => {
+    setSelectedUser(null);
+  };
+
+  const filteredTakes = selectedUser
+    ? takes.filter((item) => {
+        const user = users.find((u) => u.userCode === item.UserCode);
+        return user?.userName === selectedUser;
+      })
+    : takes;
+
   const calculateDateDifference = (takingDate, returnDate) => {
     const diffTime = Math.abs(new Date(returnDate) - new Date(takingDate));
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -60,8 +81,32 @@ export const ReturnAfterTimeList = () => {
                 }})
     generatePDF(columns, rows, title);
   };
+
   return (
     <div className="takes-and-title">
+      <div className="search-container"></div>
+      <div className="search-button" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+        {selectedUser || "שם מנוי"}
+        <span className={`arrow ${isMenuOpen ? 'up' : 'down'}`}></span>
+      </div>
+      {selectedUser && (
+        <button className="clear-selection" onClick={handleClearSelection}>
+          ❌
+        </button>
+      )}
+      {isMenuOpen && (
+        <div className="user-menu">
+          {users.map((user) => (
+            <div
+              key={user.userCode}
+              onClick={() => handleUserSelect(user.userName)}
+            >
+              {user.userName}
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="title-icon-caption">
         <WarningIcon color="error" className="warning-logo" />
         <div className="titleReturns">החזרות לאחר הזמן</div>
@@ -77,8 +122,8 @@ export const ReturnAfterTimeList = () => {
         </div>
         <div className="retuen-after-time-table">
           <section className="section">
-            {Array.isArray(takes) &&
-              takes
+            {Array.isArray(filteredTakes) &&
+              filteredTakes
                 .filter((item) => !item.hasOwnProperty("ActualReturnDate"))
                 .map((item, i) => {
                   const user = users.find(
@@ -97,16 +142,15 @@ export const ReturnAfterTimeList = () => {
                     delay: delay,
                   } */}
                   {/* setTakeAfterTimePDF(...takeAfterTimePDF,obj); */}
+
                   return (
-                    <>
-                      {delay !== "0 ימים" && (
-                        <div className="one-item-return" key={i}>
-                          <div className="return-user-name">{user}</div>
-                          <div className="return-game-name">{game}</div>
-                          <div className="duration-of-delay">{delay}</div>
-                        </div>
-                      )}
-                    </>
+                    delay !== "0 ימים" && (
+                      <div className="one-item-return" key={index}>
+                        <div className="return-user-name">{user}</div>
+                        <div className="return-game-name">{game}</div>
+                        <div className="duration-of-delay">{delay}</div>
+                      </div>
+                    )
                   );
                 })}
           </section>

@@ -9,7 +9,7 @@ export const BaseScreen = () => {
 
   return (
     <>
-      {myLocation !== "/addTake" ? (
+      {myLocation !== "/addTake" && (
         <div>
           <HomePage />
           <div
@@ -23,9 +23,8 @@ export const BaseScreen = () => {
             <Routing />
           </div>
         </div>
-      ) : (
-        <Routing />
-        )}
+      )}
+      {myLocation === "/addTake" && <Routing />}
     </>
   );
 };

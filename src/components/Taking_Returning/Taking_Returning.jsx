@@ -1,19 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./Taking_Returning.css";
 import { UserTitle } from "../UserScreen/userTitle";
 import { useSelector, useDispatch } from "react-redux";
-import { Button } from "@mui/material";
-import { AccordionDetails, AccordionSummary, Accordion } from "@mui/material";
+import {
+  Button,
+  AccordionDetails,
+  AccordionSummary,
+  Accordion,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  CircularProgress,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
-import Radio from "@mui/material/Radio";
-import RadioGroup from "@mui/material/RadioGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import { useNavigate } from "react-router-dom";
 import UpdateTOR from "../UpdateFunction/UpdateTOR";
 import UpdateGameTOR from "../UpdateFunction/UpdateGameTOR";
 import { UPDATE_GAME } from "../../app/slices/gameSlice";
 import { UPDATE_TOR } from "../../app/slices/takeOrReturnSlice";
-import { useNavigate } from "react-router-dom";
 import UpdateGameWithMissPart from "../UpdateFunction/UpdateGameWithMissPart";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { generatePDF } from "../exporttopdf/exportToPDF";
@@ -22,9 +28,7 @@ import {
   UPDATE_GAMES_WITH_MISSING_PARTS,
 } from "../../app/slices/gamesWiteMissingPartsSlice";
 import NewGameWithMissPartFunction from "../AddFunctions/NewGameWithMissPartFunction";
-import CircularProgress from "@mui/material/CircularProgress";
-import CheckIcon from "@mui/icons-material/Check";
-import CloseIcon from "@mui/icons-material/Close";
+
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -34,6 +38,7 @@ import { ADD_DEBT } from "../../app/slices/debtSlice";
 export const Taking_Returning = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [buttonText, setButtonText] = useState("אישור");
   const [circleFlag, setCircleFlag] = useState(false);
   const [status, setStatus] = useState(null);
@@ -51,7 +56,10 @@ export const Taking_Returning = () => {
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString("en-GB");
   const [selectedValue, setSelectedValue] = useState({});
-  const [totalFine, setTotalFine] = useState();
+  const [newFilteredList, setNewFilteredList] = useState([]);
+  const [lastGameWithMiss, setLastGameWithMiss] = useState({});
+  const [totalFine,setTotalFine] = useState();
+
   useEffect(() => {
     console.log("datatable", dataTable);
     let tot = dataTable.reduce((acc, item) => acc + item.fine, 0);
@@ -63,8 +71,6 @@ export const Taking_Returning = () => {
     (state) => state.takingOrReturning.takingsOrReturnings
   );
   const games = useSelector((state) => state.game.games);
-  const [newFilteredList, setNewFilteredList] = useState([]);
-  const [lastGameWithMiss, setLastGameWithMiss] = useState({});
   const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const gamesWithMissing = useSelector(
@@ -105,9 +111,11 @@ export const Taking_Returning = () => {
     );
     setNewFilteredList(filteredItems);
   }, [games, take, singleUser.userCode]);
+
   const addTake = () => {
     navigate("/addTake");
   };
+
   const handleChangeSelectedValue = (ReturnID, value) => {
     setSelectedValue((prevValues) => ({
       ...prevValues,
@@ -116,7 +124,6 @@ export const Taking_Returning = () => {
     if (value === "חסרים חלקים") {
       const takeC = take.find((t) => t.ReturnID === ReturnID).GameCode;
       const missingGame = gamesWithMissing.find((g) => g.Id === takeC);
-
       if (missingGame) {
         setLastGameWithMiss((prevGame) => ({
           ...prevGame,
@@ -125,6 +132,7 @@ export const Taking_Returning = () => {
       }
     }
   };
+
   const handleInputChange = (ReturnID, partIndex, value) => {
     setAmountOfPartAfterReturn((prev) => ({
       ...prev,
@@ -137,32 +145,38 @@ export const Taking_Returning = () => {
   const addAmountOfPartAfterReturn = (part) => {
     setTableDataPart((prevData) => [...prevData, part]);
   };
+
   const handleSaveData = (ReturnID, gamecode) => {
     setCancelReturn((prevCancl) => ({
       ...prevCancl,
       [ReturnID]: true,
     }));
+
     const currentDate = new Date().toISOString().split("T")[0];
     const tableObject = {
       headers: ["שם החלק", "מס’ חלקים מקורי", "מס’ חלקים לאחר החזרה"],
       rows: tableDataPart,
     };
+
     let newEntry = {
-      ReturnID: ReturnID,
+      ReturnID,
       GameCode: gamecode,
       date: currentDate,
       status: selectedValue[ReturnID],
       fine: finesSum[ReturnID] || 0,
     };
+
     if (selectedValue[ReturnID] === "חסרים חלקים") {
       newEntry.table = tableObject;
     }
+
     setDataTable((prevData) => [...prevData, newEntry]);
     setExpanded((prevExpanded) => ({
       ...prevExpanded,
       [ReturnID]: !prevExpanded[ReturnID],
     }));
   };
+
   const handleReturnToggle = (ReturnID) => {
     if (cancelReturn[ReturnID]) {
       setDataTable((prevData) =>
@@ -187,21 +201,24 @@ export const Taking_Returning = () => {
       }));
     }
   };
+
   const ApprovalReturnGames = async () => {
     setCircleFlag(true);
     setButtonText("החזרת המשחקים בתהליך...");
+
     const results = await Promise.all(
       dataTable.map(async (t) => {
         if (t.status === "חסרים חלקים") {
-          let g = games.find((g) => g.Id == t.GameCode);
+          let g = games.find((g) => g.Id === t.GameCode);
           let missPart = gamesWithMissing?.find(
-            (game) => game.Id == t.GameCode
+            (game) => game.Id === t.GameCode
           );
           let gameWithMiss = {
             Id: g.Id,
             GameName: g.GameName,
             MissingParts: t.table,
           };
+
           if (missPart) {
             const updateGameMiss = await UpdateGameWithMissPart(gameWithMiss);
             if (updateGameMiss) {
@@ -218,17 +235,20 @@ export const Taking_Returning = () => {
             }
           }
         }
+
         let take = {
-          IsMissingParts: t.status == "תקין" ? false : true,
+          IsMissingParts: t.status === "תקין" ? false : true,
           ActualReturnDate: t.date,
           ReturnID: t.ReturnID,
         };
+
         if (t.fine) {
           take.Fine = t.fine;
         }
+
         const updateTOR = await UpdateTOR(take);
         if (updateTOR) {
-          let code = games.find((g) => g.Id == t.GameCode).Id;
+          let code = games.find((g) => g.Id === t.GameCode).Id;
           let game = {
             Id: code,
             CurrentStateOfGame: t.status,
@@ -247,6 +267,7 @@ export const Taking_Returning = () => {
         }
       })
     );
+
     setCircleFlag(false);
     const successMessages = results
       .filter((result) => result.success)
@@ -269,6 +290,7 @@ export const Taking_Returning = () => {
     setDataTable([]);
     setSelectedValue({});
   };
+
   const handleBlurFine = (item) => {
     let a = Number(fineIchur[item]) * Number(weekNum[item]);
     let b = Number(finePart[item]) + a;
@@ -278,6 +300,7 @@ export const Taking_Returning = () => {
         [item]: b,
       }));
   };
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -285,6 +308,7 @@ export const Taking_Returning = () => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
   function calculateDaysBetween(returnDateStr, currentDateStr) {
     const [day1, month1, year1] = returnDateStr.split("/").map(Number);
     const [day2, month2, year2] = currentDateStr.split("/").map(Number);
@@ -294,9 +318,11 @@ export const Taking_Returning = () => {
     const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
     return dayDifference;
   }
+
   const popover = () => {
     setIsVisible(!isVisible);
   };
+
   const exportToPDF = () => {
     const columns = [
       "שם משחק",
@@ -325,11 +351,12 @@ export const Taking_Returning = () => {
         phone={singleUser.phone}
         cellphone={singleUser.cellphone}
         email={singleUser.email}
-      ></UserTitle>
+      />
+     
       <div className="single-user-take-title">
         <div className="single-user-take-logo"></div>
         <div className="single-user-titleTake">משחקים בהשאלה</div>
-        <div className="btn-hashala" onClick={() => addTake()}>
+        <div className="btn-hashala" onClick={addTake}>
           <Button
             sx={{
               width: "150px",
@@ -353,19 +380,22 @@ export const Taking_Returning = () => {
       </div>
       <div className="single-user-table">
         {newFilteredList.map((item, i) => {
-          let game = games.find((game) => game.Id === item.GameCode);
-          let age = forAgesFromStore.find(
+          const game = games.find((game) => game.Id === item.GameCode);
+          const age = forAgesFromStore.find(
             (a) => a.AgeCode === game.AgeCode
           )?.Age;
-          let tchum = typesGamesFromStore.find(
+          const tchum = typesGamesFromStore.find(
+
             (t) => t.gameTypeCode === game.GameTypeCode
           )?.gameTipeName;
           const returnDate = formatDate(item.ReturnDate);
           const delayMessage = calculateDaysBetween(returnDate, formattedDate);
+          
           return (
             <div key={i} style={{ marginBottom: "10px" }}>
               <Accordion
                 expanded={!!expanded[item.ReturnID]}
+               
                 sx={[
                   {
                     ...(expanded[item.ReturnID]
@@ -393,6 +423,7 @@ export const Taking_Returning = () => {
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
+
                   <div className="one-item-SU" key={i}>
                     <div className="game-details-SU">
                       <div className="game-names-SU">{game.GameName}</div>
@@ -411,10 +442,10 @@ export const Taking_Returning = () => {
                     <div className="status-SU">
                       <div
                         className={`SU-CurrentStateOfGame ${
-                          game.CurrentStateOfGame == "תקין" ||
-                          game.CurrentStateOfGame == ""
+                          game.CurrentStateOfGame === "תקין" ||
+                          game.CurrentStateOfGame === ""
                             ? "green"
-                            : game.CurrentStateOfGame == "חסרים חלקים"
+                            : game.CurrentStateOfGame === "חסרים חלקים"
                             ? "red"
                             : ""
                         }`}
@@ -432,6 +463,7 @@ export const Taking_Returning = () => {
                     </div>
                     {delayMessage > 30 ? (
                       <div className="delay-SU">
+
                         <div className="delay-icon-SU"> </div>
                         <div className="delay-message2-SU">
                           איחור מעל חודש
@@ -446,15 +478,15 @@ export const Taking_Returning = () => {
                       <div className="delay-SU"></div>
                     )}
                     <button
-                      key={i}
                       className={`return-btn ${
-                        returnStatus[item.ReturnID] == true ? "cancel" : ""
+                        returnStatus[item.ReturnID] ? "cancel" : ""                    
                       }`}
                       onClick={() => handleReturnToggle(item.ReturnID)}
                     >
                       <div
                         className={`return-btn-text ${
-                          returnStatus[item.ReturnID] == true ? "cancel" : ""
+                          returnStatus[item.ReturnID] ? "cancel" : ""
+                         
                         }`}
                       >
                         <ExpandMoreIcon
@@ -465,7 +497,7 @@ export const Taking_Returning = () => {
                           }}
                         />
                         <div style={{ marginTop: "5px" }}>
-                          {" "}
+
                           {returnStatus[item.ReturnID]
                             ? "ביטול החזרה"
                             : "החזרה"}
@@ -514,7 +546,7 @@ export const Taking_Returning = () => {
 
                   {selectedValue[item.ReturnID] === "חסרים חלקים" && (
                     <>
-                      {" "}
+
                       <table
                         style={{
                           width: "35vw",
@@ -544,8 +576,11 @@ export const Taking_Returning = () => {
                           </tr>
                         </thead>
                         <tbody style={{ width: "37vw" }}>
+
                           {game.Parts.map((part, p, i) => (
+
                             <tr
+                              key={p}
                               style={{
                                 fontSize: "16px",
                                 fontWeight: "400",
@@ -559,11 +594,14 @@ export const Taking_Returning = () => {
                               <td>{part.amount}</td>
                               <td>
                                 <input
+
+
                                   key={item.ReturnID}
                                   value={
                                     amountOfPartAfterReturn[item.ReturnID]?.[
                                       p
                                     ] ||
+
                                     "" ||
                                     lastGameWithMiss[item.ReturnID]?.[0]?.rows[
                                       p
@@ -597,6 +635,8 @@ export const Taking_Returning = () => {
                           ))}
                         </tbody>
                       </table>
+
+
                     </>
                   )}
                   {(delayMessage >= 1 ||
@@ -611,6 +651,7 @@ export const Taking_Returning = () => {
                           marginRight: "12vw",
                         }}
                       >
+
                         <div className="heart">מס' שבועות</div>
                       </div>
                       <div className="calculate-inputs">
@@ -623,12 +664,14 @@ export const Taking_Returning = () => {
                               [item.ReturnID]: e.target.value,
                             }))
                           }
+
                           style={{
                             textAlign: "center",
                             width: "10vw",
                             height: "4vh",
                             borderRadius: "28px",
                           }}
+
                         ></input>
                         x
                         <input
@@ -665,6 +708,7 @@ export const Taking_Returning = () => {
                             borderRadius: "28px",
                             marginLeft: "30px",
                           }}
+                         
                           onBlur={() => handleBlurFine(item.ReturnID)}
                         ></input>
                         סה”כ קנס:

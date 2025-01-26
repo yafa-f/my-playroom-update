@@ -9,6 +9,7 @@ import { DELETE_DEBT } from "../../../app/slices/debtSlice";
 export const DebtList = () => {
   const dispatch = useDispatch();
   const debt = useSelector((state) => state.debt.debts);
+  
   const summedDebts = debt.reduce((acc, item) => {
     const { userCode, userName, debt: debtValue } = item;
     if (!acc[userCode]) {
@@ -19,6 +20,7 @@ export const DebtList = () => {
   }, {});
 
   const result = Object.values(summedDebts);
+
   const exportToPDF = () => {
     const columns = ["קוד משתמש", "שם משתמש", "סכום החוב"];
     const title = "חובות";
@@ -30,6 +32,7 @@ export const DebtList = () => {
     });
     generatePDF(columns, rows, title);
   };
+
   const exportToPDFDebtByUser = (item) => {
     const columns = ["קוד משתמש", "שם משתמש", "סכום החוב"];
     const title = `חוב עבור משתמש ${item.userName}`;
@@ -39,14 +42,15 @@ export const DebtList = () => {
     };
     generatePDF(columns, [formatItem], title);
   };
-  const cancalDebt = (id) => {
-    debt.map(async (d) => {
-      if (d.userCode === id) {
-        const deletedOneDebt = await deleteDebt(d);
-        if (deletedOneDebt) dispatch(DELETE_DEBT(d));
-      }
-    });
+
+  const cancelDebt = async (id) => {
+    const debtToCancel = debt.find(d => d.userCode === id);
+    if (debtToCancel) {
+      const deletedOneDebt = await deleteDebt(debtToCancel);
+      if (deletedOneDebt) dispatch(DELETE_DEBT(debtToCancel));
+    }
   };
+
   return (
       <div className="debt">
         <div className="debt-title">
@@ -85,5 +89,7 @@ export const DebtList = () => {
           </section>
         </div>
       </div>
+
   );
 };
+
