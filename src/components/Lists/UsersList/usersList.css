@@ -124,7 +124,7 @@ h3 {
   line-height: 27px;
   color: rgba(6, 120, 252, 1);
   margin-left: 6vw;
-  margin-right: 30px;
+  margin-right: 20px;
   white-space: nowrap;
   width: 0.01vw;
   width: 2px;
@@ -167,10 +167,10 @@ h3 {
   height: 72px;
   align-items: center;
 }
-
 .user-data {
-  width: 130px;
+  width: 100px;
   font-size: 15px;
+  display: inline-flex;
 }
 .user-data-icon {
   width: "1px";
@@ -179,7 +179,7 @@ h3 {
 }
 .user-pdf-icon {
   margin-top: 20px;
-  margin-right: 2vw;
+  margin-right: 5vw;
 }
 .openMenu {
   width: 100%;
