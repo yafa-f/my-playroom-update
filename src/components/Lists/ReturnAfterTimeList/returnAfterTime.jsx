@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import WarningIcon from "@mui/icons-material/Warning";
 import { generatePDF } from "../../exporttopdf/exportToPDF";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+
 export const ReturnAfterTimeList = () => {
   const takes = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
@@ -145,7 +146,7 @@ export const ReturnAfterTimeList = () => {
 
                   return (
                     delay !== "0 ימים" && (
-                      <div className="one-item-return" key={index}>
+                      <div className="one-item-return" key={i}>
                         <div className="return-user-name">{user}</div>
                         <div className="return-game-name">{game}</div>
                         <div className="duration-of-delay">{delay}</div>
