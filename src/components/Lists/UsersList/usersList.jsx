@@ -8,16 +8,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
 import { DELETE_USER } from "../../../app/slices/usersSlice";
 import deleteUser from "../../DeleteFunctions/deleteUser";
-import { generatePDF } from "../../exporttopdf/exportToPDF";
-import { setSingleUser } from "../../../app/slices/singleUserSlice";
 import Supervisor from "../../../assets/supervisor_account.svg";
 import InputAdornment from "@mui/material/InputAdornment";
 import "./usersList.css";
 import PersonIcon from "@mui/icons-material/Person";
-import "./usersList.css";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import DoneIcon from "@mui/icons-material/Done";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { generatePDF } from "../../exporttopdf/exportToPDF";
@@ -49,7 +44,6 @@ export const UsersList = () => {
     dispatch(DELETE_USER(user));
   };
 
-
   const handleEditClick = (user) => {
     dispatch(setSingleUser(user));
     navigate("/singleUser/editUser", { state: { user } });
@@ -79,7 +73,6 @@ export const UsersList = () => {
     generatePDF(columns, data, title);
   };
 
-
   const handleDoubleClick = (user) => {
     dispatch(setSingleUser(user));
     navigate("/singleUser", { state: { user } });
@@ -103,9 +96,7 @@ export const UsersList = () => {
             wordWrap: "break-word",
             marginLeft: "-23.2vw",
           }}
-          onClick={() => {
-            navigate(`/UsersList/newUser`);
-          }}
+          onClick={navigateToAdd}
         >
           + מנוי
         </Button>
@@ -131,13 +122,11 @@ export const UsersList = () => {
           }}
         />
 
-
         <div className="usersCaptionWithIcon">
           <div className="menuim">מנויים</div>
-          <img src={Supervisor} alt="Supervisor" />
+          <img src={Supervisor.toString()}></img>
         </div>
       </div>
-
       <div className="u-table-title">
         <h3 style={{ marginRight: "105px" }}> שם</h3>
         <h3 style={{ marginRight: "-27px" }}>תאריך מנוי</h3>
@@ -150,9 +139,7 @@ export const UsersList = () => {
         <div className="user-pdf-icon" onClick={() => exportToPDF()}>
           <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
         </div>
-
       </div>
-
       <div className="table">
         <section className="section">
           {filteredUsers.map((user, i) => (
@@ -161,71 +148,121 @@ export const UsersList = () => {
                 sx={{
                   fontSize: "15px",
 
-
-          return (
-            <div
-              key={i}
-              className="user-row"
-              onDoubleClick={() => handleDoubleClick(user)}
-            >
-              <div
-                className="user-data"
-                style={{
-                  fontWeight: 600,
-                  marginRight: 15,
+                  height: "15vh",
+                  direction: "rtl",
+                  borderBottom: "2px rgba(6, 120, 252, 0.20) solid",
                 }}
               >
-                {user.userName}
-              </div>
-              <div className="user-data">{user.userDate}</div>
-              <div className="user-data">{user.cellphone}</div>
-              <div className="user-data">{user.phone}</div>
-              <div
-                className="user-data"
-                style={{ display: "inline-flex", width: "160px" }}
-              >
-                {isDepositPaid ? (
-                  <DoneIcon color="success" />
-                ) : (
-                  <CloseRoundedIcon color="warning" />
-                )}
-                {isDepositPaid ? "שולם פקדון" : "לא שולם פקדון"}
-              </div>
-              <div
-                className="user-attribute"
-                style={{ display: "inline-flex", width: "210px" }}
-              >
-                <div className="coinsImg" />
-                <div className="total">{user.totalPayment || "0.00"} ש"ח</div>
-                <div className="line" />
-                <div className="type">{user.paymentType}</div>
-              </div>
-              <div />
-              <div
-                className="user-data"
-                style={{ width: "180px" }}
-              >{`${user.bankNumber}-${user.branchNumber}-${user.accountNumber}`}</div>
-              <div className="user-data" style={{ width: "100px" }}>
-                {user.checkNumber}
-              </div>
-              <div className="user-data">
-                <Button
-                  className="user-data-icon"
-                  onClick={() => handleEditClick(user)}
-                >
-                  <EditIcon />
-                </Button>
-                <Button
-                  className="user-data-icon"
-                  onClick={() => handleDeleteUser(user)}
-                >
-                  <DeleteOutlineIcon />
-                </Button>
+                <div className="user-column">
+                  <div className="user-details">
+                    <div>
+                      <div style={{ marginRight: "8px" }}>
+                        <PersonIcon color="#686464"></PersonIcon>
+                      </div>
+                    </div>
+                    <button
+                      className="user-attribute"
+                      style={{
+                        fontWeight: 600,
+                        fontSize: "15px",
+                        width: "128px",
+                        backgroundColor: "white",
+                        borderColor: "transparent",
+                      }}
+                      onDoubleClick={() => handleDoubleClick(user)}
+                    >
+                      {user.userName}
+                    </button>
+                    <div
+                      className="user-attribute"
+                      style={{ width: "140px", marginRight: "10px" }}
+                    >
+                      {user.userDate}
+                    </div>
+                    <div
+                      className="user-attribute"
+                      style={{ marginRight: "-47px" }}
+                    >
+                      {user.cellphone}
+                    </div>
+                    <div className="user-attribute">{user.phone}</div>
+                    {user.depositPaid?.toLowerCase() === "true" ||
+                    user.depositPaid === true ? (
+                      <div
+                        className="user-attribute"
+                        style={{ display: "inline-flex", marginLeft: "20px" }}
+                      >
+                        {" "}
+                        <DoneIcon color="success"></DoneIcon>שולם פקדון
+                      </div>
+                    ) : (
+                      <div
+                        className="user-attribute"
+                        style={{
+                          display: "inline-flex",
+                          marginLeft: "30px",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {" "}
+                        <CloseRoundedIcon
+                          sx={{ color: "red" }}
+                        ></CloseRoundedIcon>
+                        לא שולם פקדון{" "}
+                      </div>
+                    )}
+                    <div
+                      className="user-attribute"
+                      style={{ display: "inline-flex", width: "160px" }}
+                    >
+                      <div className="coinsImg"></div>
+                      <div className="total">
+                        {user.totalPayment ? user.totalPayment : "0.00"} ש"ח
+                      </div>
+                      <div className="line"> </div>
+                      <div className="type">{user.paymentType}</div>
+                    </div>
+                    <div
+                      className="user-attribute"
+                      style={{ width: "170px", marginRight: "20px" }}
+                    >
+                      {user.bankNumber}-{user.branchNumber}-{user.accountNumber}
+                    </div>
+                    <div className="user-attribute">{user.checkNumber}</div>
+                    <Button
+                      style={{
+                        width: "1px",
+                        height: "2px",
+                        marginRight: "-60px",
+                      }}
+                      onClick={() => {
+                        handleEditClick(user);
+                      }}
+                    >
+                      <EditIcon></EditIcon>{" "}
+                    </Button>{" "}
+                    <Button
+                      style={{
+                        width: "1px",
+                        height: "2px",
+                        marginRight: "-10px",
+                      }}
+                      onClick={() => {
+                        handleDeleteUser(user);
+                      }}
+                    >
+                      <DeleteOutlineIcon></DeleteOutlineIcon>{" "}
+                    </Button>{" "}
+                  </div>
+                </div>
               </div>
             </div>
-          );
-        })}
+          ))}
+        </section>
       </div>
     </div>
   );
 };
+
+
+
