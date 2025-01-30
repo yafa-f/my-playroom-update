@@ -35,6 +35,7 @@ export const ViewEditAddUser = () => {
   return (
     <div className="screen" style={{ display: "grid" }}>
       {renderUserTitle()}
+      
       <div
         className="depdet"
         style={{ marginLeft: "-52px", marginTop: "40px" }}

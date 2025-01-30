@@ -52,6 +52,7 @@ export const ViewSingleUser = () => {
       <button className="edit-button" onClick={editUser}>
         <EditIcon sx={{ color: "#0678FC" }} />
       </button>
+      
       <DepositAndDetailsComp
         userCode={userCode}
         userName={userName}
