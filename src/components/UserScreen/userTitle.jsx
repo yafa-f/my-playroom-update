@@ -18,6 +18,7 @@ export const UserTitle = ({ name, phone, cellphone, email }) => {
             {cellphone} {phone}
           </div>
         </div>
+        
         <div className="email-info">
           <MailIcon className="icon mail-icon" />
           <div className="email">{email}</div>
