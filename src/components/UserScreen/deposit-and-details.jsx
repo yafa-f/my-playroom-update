@@ -77,4 +77,3 @@ const DetailRow = ({ attribute, value }) => (
     <div className="detail">{value}</div>
   </div>
 );
-
