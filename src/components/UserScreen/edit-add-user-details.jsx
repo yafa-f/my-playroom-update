@@ -332,6 +332,7 @@ export const EditAddUserDetails = (props) => {
                 setUserData({ ...userData, userName: event.target.value })
               }
             ></input>
+            
           </div>
           <div className="detail-with-attribute">
             <div className="detail-attribute">מייל</div>{" "}

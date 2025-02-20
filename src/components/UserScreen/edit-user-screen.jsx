@@ -8,7 +8,6 @@ import "./userScreen.css";
 export const EditUserScreen = () => {
   const location = useLocation();
   const user = location.state?.user;
-
   return (
     <div className="screen">
       <UserTitle

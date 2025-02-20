@@ -71,9 +71,14 @@ export const DepositAndDetailsComp = ({
   );
 };
 
+
 const DetailRow = ({ attribute, value }) => (
   <div className="detail-with-attribute">
     <div className="detail-attribute">{attribute}</div>
     <div className="detail">{value}</div>
   </div>
 );
+
+
+
+
