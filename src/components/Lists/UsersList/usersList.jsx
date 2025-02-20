@@ -222,6 +222,3 @@ export const UsersList = () => {
     </div>
   );
 };
-
-
-
