@@ -134,8 +134,13 @@ export const UsersList = () => {
         <h3 style={{ marginRight: "14px" }}>טלפון 2 </h3>
         <h3> </h3>
         <h3> </h3>
-        <h3 style={{ marginRight: "140px" }}> פרטי בנק</h3>
-        <h3 style={{ marginRight: "80px" }}>מס' שק</h3>
+        <h3 style={{ marginRight: "140px" }}> 
+        {/* פרטי בנק */}
+        </h3>
+        <h3 style={{ marginRight: "80px" }}
+        >
+        {/* מס' שק */}
+        </h3>
         <div className="user-pdf-icon" onClick={() => exportToPDF()}>
           <PictureAsPdfIcon sx={{ color: "rgba(6, 120, 252, 1)" }} />
         </div>
@@ -188,9 +193,11 @@ export const UsersList = () => {
               <div
                 className="user-data"
                 style={{ width: "180px" }}
-              >{`${user.bankNumber}-${user.branchNumber}-${user.accountNumber}`}</div>
+              >
+              {/* {`${user.bankNumber}-${user.branchNumber}-${user.accountNumber}`} */}
+              </div>
               <div className="user-data" style={{ width: "100px" }}>
-                {user.checkNumber}
+                {/* {user.checkNumber} */}
               </div>
               <div className="user-data">
                 <Button
@@ -215,6 +222,3 @@ export const UsersList = () => {
     </div>
   );
 };
-
-
-

@@ -80,3 +80,5 @@ const DetailRow = ({ attribute, value }) => (
 );
 
 
+
+
