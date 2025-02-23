@@ -295,7 +295,7 @@ export const EditAddUserDetails = (props) => {
             width: "70px",
             height: "30px",
             borderRadius: "28px",
-            marginTop: "30px",
+            marginTop: "10px",
             backgroundColor: "#0678fc",
             fontWeight: "700",
             display: "block",

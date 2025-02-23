@@ -38,7 +38,7 @@ export const ViewEditAddUser = () => {
       
       <div
         className="depdet"
-        style={{ marginLeft: "-52px", marginTop: "40px" }}
+        style={{ marginLeft: "-52px", marginTop: "20px" }}
       >
         <EditAddUserDetails user={user} />
       </div>
