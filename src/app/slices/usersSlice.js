@@ -17,16 +17,16 @@ export const UserSlice = createSlice({
       state.users = action.payload;
     },
     ADD_USER: (state, action) => {
-      state.users.data.push(action.payload);
+      state.users.push(action.payload);
     },
     DELETE_USER: (state, action) => {
-      state.users.data = state.users.data.filter(
+      state.users = state.users.filter(
         (user) => user._id !== action.payload._id
       );
     },
     UPDATE_USER: (state, action) => {
       const { _id, ...newValues } = action.payload;
-      const updatedUsers = state.users.data.map((user) => {
+      const updatedUsers = state.users.map((user) => {
         if (user._id === _id) {
           return { ...user, ...newValues };
         }
@@ -34,7 +34,7 @@ export const UserSlice = createSlice({
         return user;
       });
 
-      state.users.data = updatedUsers;
+      state.users = updatedUsers;
     },
   },
 });

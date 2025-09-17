@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +11,6 @@ import deleteUser from "../../DeleteFunctions/deleteUser";
 import Supervisor from "../../../assets/supervisor_account.svg";
 import InputAdornment from "@mui/material/InputAdornment";
 import "./usersList.css";
-import PersonIcon from "@mui/icons-material/Person";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DoneIcon from "@mui/icons-material/Done";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -22,27 +21,30 @@ import { setSingleUser } from "../../../app/slices/singleUserSlice";
 export const UsersList = () => {
   const dispatch = useDispatch();
   const users = useSelector((state) => state.user.users);
-  const [filteredUsers, setFilteredUsers] = useState(users.data || []);
+  const [filteredUsers, setFilteredUsers] = useState(users || []);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
-
+console.log("users",users);
   useEffect(() => {
-    setFilteredUsers(users.data || []);
+    setFilteredUsers(users || []);
   }, [users]);
 
   const handleSearchChange = (event) => {
     const value = event.target.value;
     setSearchTerm(value);
-    const filtered = users.data.filter((user) =>
+    const filtered = users.filter((user) =>
       user.userName.toLowerCase().startsWith(value.toLowerCase())
     );
     setFilteredUsers(filtered);
   };
+const handleDeleteUser = async (user) => {
+  const isDeleted = await deleteUser(user);
 
-  const handleDeleteUser = async (user) => {
-    await deleteUser(user);
-    dispatch(DELETE_USER(user));
-  };
+  if (isDeleted) {
+    dispatch(DELETE_USER(user)); // מחיקה מה־Redux רק אם נמחק בהצלחה
+  }
+};
+
 
   const handleEditClick = (user) => {
     dispatch(setSingleUser(user));
@@ -54,7 +56,6 @@ export const UsersList = () => {
   };
   const exportToPDF = () => {
     const columns = [
-      "קוד מנוי",
       "שם מנוי",
       "תאריך מנוי",
       "טלפון 1 ",

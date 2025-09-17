@@ -1,6 +1,6 @@
 
 import { configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
+import { persistStore, persistReducer, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {UserSlice} from "./slices/usersSlice";
 import {GameSlice} from "./slices/gameSlice";
@@ -8,6 +8,9 @@ import {ClosetSlice} from "./slices/closetSlice";
 import {FineSlice} from "./slices/fineSlice";
 import {FinesForMissingPartsSlice} from "./slices/finesForMissingPartsSlice";
 import {TypeGameSlice} from "./slices/typeGameSlice";
+import {ActuliGameSlice} from "./slices/actuliGameSlice";
+import {GameSkillsSlice} from "./slices/gameSkillsSlice";
+
 import {TORSlice} from "./slices/takeOrReturnSlice";
 import {ForAgeSlice} from "./slices/forAgeSlice";
 import {SingleUserSlice} from "./slices/singleUserSlice";
@@ -25,7 +28,9 @@ const rootReducer = {
   closet: ClosetSlice.reducer,
   fine: FineSlice.reducer,
   fineForMissingParts: FinesForMissingPartsSlice.reducer,
-  typeGame: TypeGameSlice.reducer,
+  typeGame: TypeGameSlice.reducer, 
+  actualiGames: ActuliGameSlice.reducer,
+  gameSkills: GameSkillsSlice.reducer,
   takingOrReturning: TORSlice.reducer,
   forAge: ForAgeSlice.reducer,
   singleUser: persistReducer(persistConfig, SingleUserSlice.reducer),
@@ -36,6 +41,11 @@ const rootReducer = {
 
 export const reduxStore = configureStore({
   reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
 });
-
 export const persistor = persistStore(reduxStore);

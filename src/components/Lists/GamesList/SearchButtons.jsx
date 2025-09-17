@@ -5,71 +5,68 @@ import { useSelector } from "react-redux";
 import "./gamesList.css";
 
 export const SearchButtons = (props) => {
-  const [selectArray, setSelectArray] = useState();
+  const [selectArray, setSelectArray] = useState([]);
   const [chosenUsers, setChosenUsers] = useState([]);
-  const typesGames = useSelector((state) => state.typeGame.typesGames);
-  const forAges = useSelector((state) => state.forAge.forAges).data;
-  const closets = useSelector((state) => state.closet.closets);
-  const take = useSelector(
-    (state) => state.takingOrReturning.takingsOrReturnings
-  );
-  const users = useSelector((state) => state.user.users).data;
-  const games = useSelector((state) => state.game.games);
+  const typesGames = useSelector((state) => state.typeGame.typesGames) || [];
+  const actuliGame =
+    useSelector((state) => state.actualiGames.actualiGames) || [];
+  const gameSkills = useSelector((state) => state.gameSkills.gameSkills) || [];
+  const forAges = useSelector((state) => state.forAge.forAges) || [];
+  const closets = useSelector((state) => state.closet.closets) || [];
+
+  const take =
+    useSelector((state) => state.takingOrReturning.takingsOrReturnings) || [];
+  const users = useSelector((state) => state.user.users) || [];
+  const games = useSelector((state) => state.game.games) || [];
 
   useEffect(() => {
     switch (props.name) {
-      case "שם מנוי":
-        {
-          const filterTake = take.filter(
-            (item) => item.ActualReturnDate === undefined
-          );
-          const userCodes = filterTake.map((item) => item.UserCode);
-          const matchingUsers = users
-            ?.filter((user) => userCodes.includes(user.userCode))
-            .map((user) => user.userName);
-          setSelectArray(matchingUsers);
-        }
-        break;
-      case "שם המשחק":
-        {
-          const filterTake = take.filter(
-            (item) => item.ActualReturnDate === undefined
-          );
-          const gameCodes = filterTake.map((item) => item.GameCode);
-          const matchingGames = games
-            .filter((game) => gameCodes.includes(game.Id))
-            .map((game) => game.GameName);
-          setSelectArray(matchingGames);
-        }
-        break;
       case "תחום":
         {
-          const type = typesGames.map((item) => item.gameTipeName);
+          const type = typesGames.map((item) => item.GameType) || [];
           setSelectArray(type);
+        }
+        break;
+      case "אקטואליה":
+        {
+          const actuali = actuliGame.map((item) => item.ActuliGame) || [];
+          setSelectArray(actuali);
+        }
+        break;
+      case "מיומנות":
+        {
+          const skill = gameSkills.map((item) => item.GameSkills) || [];
+          setSelectArray(skill);
         }
         break;
       case "טווח גילאים":
         {
-          const age = forAges?.map((item) => item.Age);
+          const age = forAges.map((item) => item.age);
           setSelectArray(age);
         }
         break;
-      case "סטטוס משחק":
-        setSelectArray(["תקין", "חסרים חלקים"]);
-        break;
+
       case "מס’ ארון":
         {
-          const closetCodes = closets.map((item) => item.closetCode);
+          const closetCodes = closets.map((item) => item.closet);
           setSelectArray(closetCodes);
         }
         break;
-      case "סטטוס השאלה":
-        setSelectArray(["מושאל", "במשחקייה"]);
-        break;
+
       default:
         setSelectArray([]);
     }
-  }, [props.name, typesGames, forAges, closets, take, users, games]);
+  }, [
+    props.name,
+    typesGames,
+    actuliGame,
+    gameSkills,
+    forAges,
+    closets,
+    take,
+    users,
+    games,
+  ]);
   const handleChange = (event, value) => {
     setChosenUsers(value);
     props.onFilterChange(props.name, value); // העברת הערכים הנבחרים

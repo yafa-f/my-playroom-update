@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 
 export const TakeList = () => {
   const games = useSelector((state) => state.game.games);
-  const users = useSelector((state) => state.user.users).data;
+  const users = useSelector((state) => state.user.users);
   const [tableArr, setTableArr] = useState();
   const take = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
@@ -53,11 +53,11 @@ export const TakeList = () => {
           case "שם מנוי": {
             const filteredUsers = users?.find(
               (user) => user.userName === filters[filter]
-            )?.userCode;
+            )?._id;
             filtereTake = filtereTake.filter(
               (row) =>
-                typeof row["UserCode"] === "string" &&
-                row["UserCode"] === filteredUsers
+                typeof row["_id"] === "string" &&
+                row["_id"] === filteredUsers
             );
             break;
           }
@@ -66,10 +66,10 @@ export const TakeList = () => {
               (game) => game.GameName === filters[filter]
             );
             const gameCodesAsStrings = filteredGame?.map((game) =>
-              game?.Id?.toString()
+              game?._id
             );
             filtereTake = filtereTake.filter((game) =>
-              gameCodesAsStrings.includes(game.GameCode)
+              gameCodesAsStrings.includes(game.Game_id)
             );
             break;
           }
@@ -87,8 +87,8 @@ export const TakeList = () => {
     const columns = ["שם משחק", "בהשאלה אצל", "תאריך השאלה", "תאריך החזרה"];
     const title = "משחקים בהשאלה";
     const rows = tableArr.map((item) => {
-      let gameName = games.find((g) => g.Id === item.GameCode)?.GameName;
-      let userName = users.find((u) => u.userCode === item.UserCode).userName;
+      let gameName = games.find((g) => g._id === item.Game_id)?.GameName;
+      let userName = users.find((u) => u._id === item._id).userName;
       return {
         gameName: gameName,
         userName: userName,
@@ -109,7 +109,7 @@ export const TakeList = () => {
         .map((game) => game.Id.toString());
 
       filteredTake = filteredTake.filter((item) =>
-        filteredGameCodes.includes(item.GameCode)
+        filteredGameCodes.includes(item.Game_id)
       );
     }
 
@@ -158,10 +158,10 @@ export const TakeList = () => {
           {Array.isArray(tableArr) &&
             tableArr.map((item, i) => {
               const currentUser = users.find(
-                (user) => user.userCode === item.UserCode
+                (user) => user._id === item.User_id
               );
               const currentGame = games.find(
-                (game) => game.Id === item.GameCode
+                (game) => game._id === item.Game_id
               );
               const returnDate = formatDate(item.ReturnDate);
               const delayMessage = calculateDaysBetween(

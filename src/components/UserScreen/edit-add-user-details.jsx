@@ -40,24 +40,8 @@ export const EditAddUserDetails = (props) => {
       ? false
       : true
   );
-  const [localUsers, setLocalUsers] = useState(
-    useSelector((state) => state.user.users)
-  );
-  const generateUserCode = (userToUpdate, localUsers) => {
-    if (userToUpdate.userCode) {
-      return userToUpdate.userCode;
-    }
 
-    const codes = localUsers.data.map((user) => Number(user.userCode));
-
-    let randomNumber;
-
-    do {
-      randomNumber = Math.floor(Math.random() * 10000) + 1;
-    } while (codes.includes(randomNumber));
-
-    return randomNumber;
-  };
+ 
   const handleSaveClick = () => {
     if (isEdit === true) {
       handleUpdateUser();
@@ -80,7 +64,6 @@ export const EditAddUserDetails = (props) => {
     if (addResponse) {
       const rearrangedUserData = {
         _id: addResponse._id,
-        userCode: addResponse.userCode,
         userName: addResponse.userName,
         userDate: addResponse.userDate,
         phone: addResponse.phone,
@@ -93,6 +76,8 @@ export const EditAddUserDetails = (props) => {
         checkNumber: addResponse.checkNumber,
         branchNumber: addResponse.branchNumber,
         email: addResponse.email,
+          cityCode: addResponse.cityCode,
+
       };
       dispatch(ADD_USER(rearrangedUserData));
       setStatus("success");
@@ -137,7 +122,6 @@ export const EditAddUserDetails = (props) => {
   };
 
   const [userData, setUserData] = useState({
-    userCode: generateUserCode(userToUpdate, localUsers),
     userName: "",
     userDate: "",
     cellphone: "",
@@ -150,14 +134,18 @@ export const EditAddUserDetails = (props) => {
     checkNumber: "",
     branchNumber: "",
     email: "",
+    cityCode: localStorage.getItem("cityCode") || "", // <-- כאן
+
   });
 
-  useEffect(() => {
-    if (isEdit && userToUpdate) {
-      setUserData(singleUser);
-    }
-  }, [isEdit, userToUpdate]);
-
+useEffect(() => {
+  if (isEdit && userToUpdate) {
+    setUserData({
+      ...singleUser,
+      cityCode: singleUser.cityCode || localStorage.getItem("cityCode") || "",
+    });
+  }
+}, [isEdit, userToUpdate, singleUser]);
   return (
     <div className="deposit-and-details">
       <div className="deposit-and-save">

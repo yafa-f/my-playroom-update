@@ -15,16 +15,16 @@ export const GamesWithMissingPartsSlice = createSlice({
       state.gamesWithMissingParts = action.payload;
     },
     ADD_GAMES_WITH_MISSING_PARTS: (state, action) => {
-      state.gamesWithMissingParts.data.push(action.payload);
+      state.gamesWithMissingParts.push(action.payload);
     },
     DELETE_GAMES_WITH_MISSING_PARTS: (state, action) => {
-      state.gamesWithMissingParts = state.gamesWithMissingParts.data.filter(
+      state.gamesWithMissingParts = state.gamesWithMissingParts.filter(
         (game) => game._id !== action.payload._id
       );
     },
     UPDATE_GAMES_WITH_MISSING_PARTS: (state, action) => {
       const { Id, ...newValues } = action.payload;
-      const updatedGamesWithMissingParts = state.gamesWithMissingParts.data.map(
+      const updatedGamesWithMissingParts = state.gamesWithMissingParts.map(
         (game) => {
           if (game.Id === Id) {
             return { ...game, ...newValues };
@@ -32,7 +32,7 @@ export const GamesWithMissingPartsSlice = createSlice({
           return game;
         }
       );
-      state.gamesWithMissingParts.data = updatedGamesWithMissingParts;
+      state.gamesWithMissingParts = updatedGamesWithMissingParts;
     },
   },
 });
