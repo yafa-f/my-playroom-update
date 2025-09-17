@@ -1,4 +1,3 @@
-// import React from "react";
 import "./closetList.css";
 import { useSelector } from "react-redux";
 

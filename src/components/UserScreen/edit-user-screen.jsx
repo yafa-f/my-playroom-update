@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import { useLocation } from "react-router-dom";
 import { UserTitle } from "./userTitle";

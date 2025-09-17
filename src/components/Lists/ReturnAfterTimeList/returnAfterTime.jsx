@@ -9,10 +9,8 @@ export const ReturnAfterTimeList = () => {
   const takes = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
-  const [takeAfterTimePDF, setTakeAfterTimePDF] = useState([
-    { user: "",game: "",  delay: "" },
-  ]);
-  const users = useSelector((state) => state.user.users).data;
+  
+  const users = useSelector((state) => state.user.users);
 
   const games = useSelector((state) => state.game.games);
   
@@ -30,7 +28,7 @@ export const ReturnAfterTimeList = () => {
 
   const filteredTakes = selectedUser
     ? takes.filter((item) => {
-        const user = users.find((u) => u.userCode === item.UserCode);
+        const user = users.find((u) => u._id === item._id);
         return user?.userName === selectedUser;
       })
     : takes;
@@ -66,10 +64,10 @@ export const ReturnAfterTimeList = () => {
    const rows= takes.filter((item) => !item.hasOwnProperty("ActualReturnDate"))
                 .map((item, i) => {
                   const user = users.find(
-                    (u) => u.userCode === item.UserCode
+                    (u) => u._id === item.User_id
                   )?.userName;
                   const game = games.find(
-                    (g) => g.Id === item.GameCode
+                    (g) => g._ === item.Game_id
                   )?.GameName;
                   const delay = calculateDateDifference(
                     item.TakingDate,
@@ -99,7 +97,7 @@ export const ReturnAfterTimeList = () => {
         <div className="user-menu">
           {users.map((user) => (
             <div
-              key={user.userCode}
+              key={user._id}
               onClick={() => handleUserSelect(user.userName)}
             >
               {user.userName}
@@ -127,21 +125,16 @@ export const ReturnAfterTimeList = () => {
                 .filter((item) => !item.hasOwnProperty("ActualReturnDate"))
                 .map((item, i) => {
                   const user = users.find(
-                    (u) => u.userCode === item.UserCode
+                    (u) => u._id === item._id
                   )?.userName;
                   const game = games.find(
-                    (g) => g.Id === item.GameCode
+                    (g) => g._id === item.Game_id
                   )?.GameName;
                   const delay = calculateDateDifference(
                     item.TakingDate,
                     item.ReturnDate
                   );
-                  {/* let obj={
-                    user: user,
-                    game: game,
-                    delay: delay,
-                  } */}
-                  {/* setTakeAfterTimePDF(...takeAfterTimePDF,obj); */}
+                
 
                   return (
                     delay !== "0 ימים" && (

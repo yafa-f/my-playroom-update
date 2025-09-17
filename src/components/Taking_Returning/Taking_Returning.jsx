@@ -58,7 +58,7 @@ export const Taking_Returning = () => {
   const [selectedValue, setSelectedValue] = useState({});
   const [newFilteredList, setNewFilteredList] = useState([]);
   const [lastGameWithMiss, setLastGameWithMiss] = useState({});
-  const [totalFine,setTotalFine] = useState();
+  const [totalFine, setTotalFine] = useState();
 
   useEffect(() => {
     console.log("datatable", dataTable);
@@ -70,12 +70,15 @@ export const Taking_Returning = () => {
   const take = useSelector(
     (state) => state.takingOrReturning.takingsOrReturnings
   );
+  console.log("jkl", take);
+  console.log("singleUser", singleUser);
+
   const games = useSelector((state) => state.game.games);
-  const forAgesFromStore = useSelector((state) => state.forAge.forAges).data;
+  const forAgesFromStore = useSelector((state) => state.forAge.forAges);
   const typesGamesFromStore = useSelector((state) => state.typeGame.typesGames);
   const gamesWithMissing = useSelector(
     (state) => state.gamesWithMissingPart.gamesWithMissingParts
-  ).data;
+  );
 
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => {
@@ -88,7 +91,7 @@ export const Taking_Returning = () => {
   };
   const handleCloseDebt = async () => {
     let debtObj = {
-      userCode: singleUser.userCode,
+      User_id: singleUser._id,
       userName: singleUser.userName,
       debt: totalFine,
       date: new Date().toISOString().split("T")[0],
@@ -103,14 +106,17 @@ export const Taking_Returning = () => {
   useEffect(() => {
     const filteredItems = take.filter(
       (item) =>
-        item.UserCode === singleUser.userCode &&
+        item.User_id === singleUser._id &&
         item.ActualReturnDate === undefined &&
         games.some(
-          (game) => game.Id === item.GameCode && game.IsAvailable === "FALSE"
+          (game) =>
+            // game._id === item.Game_id &&
+            game.IsAvailable === false
         )
     );
+    console.log("filteredItems", filteredItems);
     setNewFilteredList(filteredItems);
-  }, [games, take, singleUser.userCode]);
+  }, [games, take, singleUser._id]);
 
   const addTake = () => {
     navigate("/addTake");
@@ -122,8 +128,8 @@ export const Taking_Returning = () => {
       [ReturnID]: value,
     }));
     if (value === "חסרים חלקים") {
-      const takeC = take.find((t) => t.ReturnID === ReturnID).GameCode;
-      const missingGame = gamesWithMissing.find((g) => g.Id === takeC);
+      const takeC = take.find((t) => t.ReturnID === ReturnID).Game_id;
+      const missingGame = gamesWithMissing.find((g) => g._id === takeC);
       if (missingGame) {
         setLastGameWithMiss((prevGame) => ({
           ...prevGame,
@@ -160,7 +166,7 @@ export const Taking_Returning = () => {
 
     let newEntry = {
       ReturnID,
-      GameCode: gamecode,
+      Game_id: gamecode,
       date: currentDate,
       status: selectedValue[ReturnID],
       fine: finesSum[ReturnID] || 0,
@@ -209,12 +215,12 @@ export const Taking_Returning = () => {
     const results = await Promise.all(
       dataTable.map(async (t) => {
         if (t.status === "חסרים חלקים") {
-          let g = games.find((g) => g.Id === t.GameCode);
+          let g = games.find((g) => g._id === t.Game_id);
           let missPart = gamesWithMissing?.find(
-            (game) => game.Id === t.GameCode
+            (game) => game._id === t.Game_id
           );
           let gameWithMiss = {
-            Id: g.Id,
+            Id: g._id,
             GameName: g.GameName,
             MissingParts: t.table,
           };
@@ -248,11 +254,11 @@ export const Taking_Returning = () => {
 
         const updateTOR = await UpdateTOR(take);
         if (updateTOR) {
-          let code = games.find((g) => g.Id === t.GameCode).Id;
+          let code = games.find((g) => g._id === t.Game_id)._id;
           let game = {
             Id: code,
             CurrentStateOfGame: t.status,
-            IsAvailable: "TRUE",
+            IsAvailable: true,
           };
           const updateGameTor = await UpdateGameTOR(game);
           if (updateGameTor) {
@@ -261,17 +267,15 @@ export const Taking_Returning = () => {
             console.error("Failed to add object");
           }
           dispatch(UPDATE_TOR(updateTOR));
-          return { code: t.GameCode, success: true };
+          return { code: t.Game_id, success: true };
         } else {
-          return { code: t.GameCode, success: false };
+          return { code: t.Game_id, success: false };
         }
       })
     );
 
     setCircleFlag(false);
-    const successMessages = results
-      .filter((result) => result.success)
-      .map((result) => result.name);
+
     const failureMessages = results
       .filter((result) => !result.success)
       .map((result) => result.name);
@@ -332,7 +336,7 @@ export const Taking_Returning = () => {
       "תאריך מיועד להחזרה",
     ];
     const rows = newFilteredList.map((item) => {
-      let g = games.find((g) => g.Id === item.GameCode)?.GameName;
+      let g = games.find((g) => g._id === item.Game_id)?.GameName;
       return {
         name: g,
         status: item.IsMissingParts ? "חסרים חלקים" : "תקין",
@@ -352,7 +356,7 @@ export const Taking_Returning = () => {
         cellphone={singleUser.cellphone}
         email={singleUser.email}
       />
-     
+
       <div className="single-user-take-title">
         <div className="single-user-take-logo"></div>
         <div className="single-user-titleTake">משחקים בהשאלה</div>
@@ -380,22 +384,15 @@ export const Taking_Returning = () => {
       </div>
       <div className="single-user-table">
         {newFilteredList.map((item, i) => {
-          const game = games.find((game) => game.Id === item.GameCode);
-          const age = forAgesFromStore.find(
-            (a) => a.AgeCode === game.AgeCode
-          )?.Age;
-          const tchum = typesGamesFromStore.find(
-
-            (t) => t.gameTypeCode === game.GameTypeCode
-          )?.gameTipeName;
+          const game = games.find((game) => game._id === item.Game_id);
+        
           const returnDate = formatDate(item.ReturnDate);
           const delayMessage = calculateDaysBetween(returnDate, formattedDate);
-          
+
           return (
             <div key={i} style={{ marginBottom: "10px" }}>
               <Accordion
                 expanded={!!expanded[item.ReturnID]}
-               
                 sx={[
                   {
                     ...(expanded[item.ReturnID]
@@ -423,19 +420,18 @@ export const Taking_Returning = () => {
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
-
                   <div className="one-item-SU" key={i}>
                     <div className="game-details-SU">
                       <div className="game-names-SU">{game.GameName}</div>
                       <div className="game-names-second-SU">
                         <div className="age-SU">
                           <div className="child-logo-SU"></div>
-                          {age}
+                          {game.Age}
                         </div>
                         <div className="pas-SU">|</div>
                         <div className="type-SU">
                           <div className="tchum-SU">תחום:</div>
-                          <div>{tchum}</div>
+                          <div>{game.GameType}</div>
                         </div>
                       </div>
                     </div>
@@ -463,7 +459,6 @@ export const Taking_Returning = () => {
                     </div>
                     {delayMessage > 30 ? (
                       <div className="delay-SU">
-
                         <div className="delay-icon-SU"> </div>
                         <div className="delay-message2-SU">
                           איחור מעל חודש
@@ -479,14 +474,13 @@ export const Taking_Returning = () => {
                     )}
                     <button
                       className={`return-btn ${
-                        returnStatus[item.ReturnID] ? "cancel" : ""                    
+                        returnStatus[item.ReturnID] ? "cancel" : ""
                       }`}
                       onClick={() => handleReturnToggle(item.ReturnID)}
                     >
                       <div
                         className={`return-btn-text ${
                           returnStatus[item.ReturnID] ? "cancel" : ""
-                         
                         }`}
                       >
                         <ExpandMoreIcon
@@ -497,7 +491,6 @@ export const Taking_Returning = () => {
                           }}
                         />
                         <div style={{ marginTop: "5px" }}>
-
                           {returnStatus[item.ReturnID]
                             ? "ביטול החזרה"
                             : "החזרה"}
@@ -546,7 +539,6 @@ export const Taking_Returning = () => {
 
                   {selectedValue[item.ReturnID] === "חסרים חלקים" && (
                     <>
-
                       <table
                         style={{
                           width: "35vw",
@@ -576,9 +568,7 @@ export const Taking_Returning = () => {
                           </tr>
                         </thead>
                         <tbody style={{ width: "37vw" }}>
-
                           {game.Parts.map((part, p, i) => (
-
                             <tr
                               key={p}
                               style={{
@@ -590,18 +580,15 @@ export const Taking_Returning = () => {
                                 gridTemplateColumns: "5vw 5vw 5vw",
                               }}
                             >
-                              <td>{part.name}</td>
-                              <td>{part.amount}</td>
+                              <td> {part["שם החלק"]}</td>
+                              <td> {part["כמות"]}</td>
                               <td>
                                 <input
-
-
                                   key={item.ReturnID}
                                   value={
                                     amountOfPartAfterReturn[item.ReturnID]?.[
                                       p
                                     ] ||
-
                                     "" ||
                                     lastGameWithMiss[item.ReturnID]?.[0]?.rows[
                                       p
@@ -635,8 +622,6 @@ export const Taking_Returning = () => {
                           ))}
                         </tbody>
                       </table>
-
-
                     </>
                   )}
                   {(delayMessage >= 1 ||
@@ -651,7 +636,6 @@ export const Taking_Returning = () => {
                           marginRight: "12vw",
                         }}
                       >
-
                         <div className="heart">מס' שבועות</div>
                       </div>
                       <div className="calculate-inputs">
@@ -664,14 +648,12 @@ export const Taking_Returning = () => {
                               [item.ReturnID]: e.target.value,
                             }))
                           }
-
                           style={{
                             textAlign: "center",
                             width: "10vw",
                             height: "4vh",
                             borderRadius: "28px",
                           }}
-
                         ></input>
                         x
                         <input
@@ -708,7 +690,6 @@ export const Taking_Returning = () => {
                             borderRadius: "28px",
                             marginLeft: "30px",
                           }}
-                         
                           onBlur={() => handleBlurFine(item.ReturnID)}
                         ></input>
                         סה”כ קנס:
@@ -733,7 +714,7 @@ export const Taking_Returning = () => {
                     </>
                   )}
                   <button
-                    onClick={() => handleSaveData(item.ReturnID, item.GameCode)}
+                    onClick={() => handleSaveData(item.ReturnID, item.Game_id)}
                     style={{
                       color: "rgba(255, 255, 255, 1)",
                       backgroundColor: "rgba(6, 120, 252, 1)",

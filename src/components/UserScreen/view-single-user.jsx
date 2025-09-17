@@ -30,7 +30,7 @@ export const ViewSingleUser = () => {
     phone,
     cellphone,
     email,
-    userCode,
+    // userCode,
     userDate,
     branchNumber,
     checkNumber,
@@ -54,7 +54,6 @@ export const ViewSingleUser = () => {
       </button>
       
       <DepositAndDetailsComp
-        userCode={userCode}
         userName={userName}
         userDate={userDate}
         phone={phone}

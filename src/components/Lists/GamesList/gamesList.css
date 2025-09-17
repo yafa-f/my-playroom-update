@@ -242,7 +242,7 @@
 }
 .search-buttons-game {
   display: inline-flex;
-  gap: 10px;
+  gap: 5px;
   direction: rtl;
-  margin-left: 7vw;
+  margin-left: 3vw;
 }

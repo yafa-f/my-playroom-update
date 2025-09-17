@@ -3,7 +3,7 @@ import './agesList.css';
 import { useSelector } from "react-redux";
 
 export const AgesList = () => {
-  const ages = useSelector((state) => state.forAge.forAges).data;
+  const ages = useSelector((state) => state.forAge.forAges);
 
   return (
     <div className="ages">

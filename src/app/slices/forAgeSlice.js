@@ -23,13 +23,13 @@ export const ForAgeSlice = createSlice({
     },
     UPDATE_FOR_AGE: (state, action) => {
       const { _id, ...newValues } = action.payload;
-      const updatedForAges = state.forAges.data.map((age) => {
+      const updatedForAges = state.forAges.map((age) => {
         if (age._id === _id) {
           return { ...age, ...newValues };
         }
         return age;
       });
-      state.forAges.data = updatedForAges;
+      state.forAges = updatedForAges;
     },
   },
 });

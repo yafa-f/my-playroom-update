@@ -11,7 +11,7 @@ import { generatePDF } from "../../exporttopdf/exportToPDF";
 export const GamesWithMissingPartsList = () => {
   const gamesMissing = useSelector(
     (state) => state.gamesWithMissingPart.gamesWithMissingParts
-  ).data;
+  );
   const dispatch = useDispatch();
   const [MAX_HEIGHT] = useState(2);
 

@@ -1,7 +1,6 @@
 import "./userScreen.css";
 import "../Lists/UsersList/usersList.css";
 import Supervisor from "../../assets/supervisor_account.svg";
-import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { UserTitle } from "./userTitle";
@@ -46,3 +45,5 @@ export const ViewEditAddUser = () => {
     </div>
   );
 };
+
+

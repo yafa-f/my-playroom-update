@@ -4,7 +4,6 @@ const initialState = {
   currentTakeOrReturn: {},
   takingsOrReturnings: [],
 };
-
 export const TORSlice = createSlice({
   name: "takingOrReturning",
 

@@ -2,9 +2,9 @@
 import { path } from "../../utils/server";
 
 const UpdateUser = async (user) => {
-  const { userCode } = user;
+  const { _id } = user;
   try {
-    const response = await fetch(`${path}userRoutes/${userCode}`, {
+    const response = await fetch(`${path}userRoutes/${_id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

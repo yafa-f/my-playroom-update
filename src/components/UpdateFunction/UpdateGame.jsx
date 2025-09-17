@@ -1,10 +1,10 @@
 import { path } from "../../utils/server";
 
 const UpdateGame = async (game) => {
-  const { GameCode } = game;
+  const { _id } = game;
   const bool = false;
   try {
-    const response = await fetch(`${path}gamesListRoutes/${GameCode}`,
+    const response = await fetch(`${path}gamesListRoutes/${_id}`,
       {
         method: "PUT",
         headers: {

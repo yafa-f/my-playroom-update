@@ -10,11 +10,11 @@ export const DebtList = () => {
   const dispatch = useDispatch();
   const debt = useSelector((state) => state.debt.debts);
   const summedDebts = debt.reduce((acc, item) => {
-    const { userCode, userName, debt: debtValue } = item;
-    if (!acc[userCode]) {
-      acc[userCode] = { userCode, userName, totalDebt: 0 };
+    const { _id, userName, debt: debtValue } = item;
+    if (!acc[_id]) {
+      acc[_id] = { _id, userName, totalDebt: 0 };
     }
-    acc[userCode].totalDebt += debtValue;
+    acc[_id].totalDebt += debtValue;
     return acc;
   }, {});
 
@@ -43,7 +43,7 @@ export const DebtList = () => {
   };
 
   const cancalDebt = async (id) => {
-    const debtToCancel = debt.find(d => d.userCode === id);
+    const debtToCancel = debt.find(d => d._id === id);
     if (debtToCancel) {
       const deletedOneDebt = await deleteDebt(debtToCancel);
       if (deletedOneDebt) dispatch(DELETE_DEBT(debtToCancel));
@@ -69,7 +69,7 @@ export const DebtList = () => {
                       <div className="debt-user-name">{item.userName}</div>
                       <div className="sum-of-debt">{`${item.totalDebt} ש"ח `}</div>
                       <button
-                        onClick={() => cancalDebt(item.userCode)}
+                        onClick={() => cancalDebt(item._id)}
                         className="cancel-debt"
                       >
                         לביטול החוב
